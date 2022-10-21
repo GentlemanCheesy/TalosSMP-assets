@@ -1,0 +1,69 @@
+every 3 seconds:
+    loop all players:
+        loop all items in loop-player's inventory:
+            if loop-item is not a shulker box:
+                if nbt of loop-item does not contain "slimefun_item":
+                    if nbt of loop-item contains "CheesyCraft:""WarpPipe""":
+                        set nbt of loop-item to nbt of {saveditems::WarpPipe}
+                    if nbt of loop-item contains "CheesyCraft:""WarpPipeRed""":
+                        set nbt of loop-item to nbt of {saveditems::WarpPipered}
+                    if nbt of loop-item contains "CheesyCraft:""WarpPipeBlue""":
+                        set nbt of loop-item to nbt of {saveditems::WarpPipeblue}
+                    if nbt of loop-item contains "CheesyCraft:""WarpPipeWhite""":
+                        set nbt of loop-item to nbt of {saveditems::WarpPipewhite}
+                    if nbt of loop-item contains "CheesyCraft:""HostilitySensor""":
+                        set nbt of loop-item to nbt of {saveditems::HostilitySensor}
+                    if nbt of loop-item contains "CheesyCraft:""HoglinBank""":
+                        set nbt of loop-item to nbt of {saveditems::HoglinBank}
+                    if nbt of loop-item contains "CheesyCraft:""WoodenFluidTank""":
+                        set nbt of loop-item to nbt of {saveditems::WoodenFluidTank2}
+                    if nbt of loop-item contains "CheesyCraft:""StoneFluidTank""":
+                        set nbt of loop-item to nbt of {saveditems::StoneFluidTank}
+                    if nbt of loop-item contains "CheesyCraft:""BlackstoneFluidTank""":
+                        set nbt of loop-item to nbt of {saveditems::blackstoneFluidTank}
+                    if nbt of loop-item contains "CheesyCraft:""ObsidianFluidTank""":
+                        set nbt of loop-item to nbt of {saveditems::ObsidianFluidTank}
+                    if nbt of loop-item contains "CheesyCraft:""FishTank""":
+                        set nbt of loop-item to nbt of {saveditems::FishTank}
+                    if nbt of loop-item contains "CheesyCraft:""AxolotlTank""":
+                        set nbt of loop-item to nbt of {saveditems::AxolotlTank}
+                    if nbt of loop-item contains "CheesyCraft:""FrostyTank""":
+                        set nbt of loop-item to nbt of {saveditems::FrostyTank}
+                    if nbt of loop-item contains "CheesyCraft:""MobSensor""":
+                        set nbt of loop-item to nbt of {saveditems::MobSensor}
+                    if nbt of loop-item contains "CheesyCraft:""PlayerSensor""":
+                        set nbt of loop-item to nbt of {saveditems::PlayerSensor}
+                    if nbt of loop-item contains "CheesyCraft:""ItemSensor""":
+                        set nbt of loop-item to nbt of {saveditems::ItemSensor}
+                    if nbt of loop-item contains "CheesyCraft:""VexalSensor""":
+                        set nbt of loop-item to nbt of {saveditems::VexalSensor}
+                    if nbt of loop-item contains "CheesyCraft:""AdvancedItemSensor""":
+                        set nbt of loop-item to nbt of {saveditems::AdvancedItemSensor}
+                    if nbt of loop-item contains "CheesyCraft:""AdvancedPlayerSensor""":
+                        set nbt of loop-item to nbt of {saveditems::MobSensor}
+                    if nbt of loop-item contains "CheesyCraft:""DisplayCase""":
+                        set nbt of loop-item to nbt of {saveditems::DisplayCase}
+                    if nbt of loop-item contains "CheesyCraft:""VexalTrader""":
+                        set nbt of loop-item to nbt of {saveditems::VexalTrader}
+                    if nbt of loop-item contains "CheesyCraft:""VexalTransmitter""":
+                        set nbt of loop-item to nbt of {saveditems::VexalTransmitter}
+                    if nbt of loop-item contains "CheesyCraft:""VexalConduit""":
+                        set nbt of loop-item to nbt of {saveditems::VexalConduit}
+                    if nbt of loop-item contains "CheesyCraft:""SuperMagnet""":
+                        set nbt of loop-item to nbt of {saveditems::SuperMagnet}
+                    if nbt of loop-item contains "CheesyCraft:""PowerBankI""":
+                        set nbt of loop-item to nbt of {saveditems::PowerBankI}
+                    if nbt of loop-item contains "CheesyCraft:""Slaughterbox""":
+                        set nbt of loop-item to nbt of {saveditems::Slaughterbox}
+                    if nbt of loop-item contains "CheesyCraft:""TidePoolGenerator""":
+                        set nbt of loop-item to nbt of {saveditems::TidePoolGenerator}
+                    if nbt of loop-item contains "CheesyCraft:""SearingEngine""":
+                        set nbt of loop-item to nbt of {saveditems::SearingEngine}
+                    if nbt of loop-item contains "CheesyCraft:""DrinkBlender""":
+                        set nbt of loop-item to nbt of {saveditems::DrinkBlender}
+                    if nbt of loop-item contains "CheesyCraft:""MossManager""":
+                        set nbt of loop-item to nbt of {saveditems::MossManager}
+                    if nbt of loop-item contains "CheesyCraft:""ElectricOxidizer""":
+                        set nbt of loop-item to nbt of {saveditems::ElectricOxidizer}
+                    if nbt of loop-item contains "CheesyCraft:""ElectricRefurbisher""":
+                        set nbt of loop-item to nbt of {saveditems::ElectricRefurbisher}

@@ -1,0 +1,876 @@
+#on load:
+#    set {_l} to material choice of every log
+#    register new shaped recipe for {saveditems::WoodenFluidTank2} using {_l}, empty bucket, {_l}, glass, barrel, glass, {_l}, glass, and {_l} with id "wooden_fluid_tank"
+#    register new shaped recipe for {saveditems::StoneFluidTank} using smooth stone, empty bucket, smooth stone, stone, {saveditems::WoodenFluidTank2}, stone, smooth stone, stone, and smooth stone with id "stone_fluid_tank"
+#    register new shaped recipe for {saveditems::BlackstoneFluidTank} using polished blackstone, empty bucket, polished blackstone, iron ingot, {saveditems::StoneFluidTank}, iron ingot, polished blackstone, iron ingot, and polished blackstone with id "blackstone_fluid_tank"
+#    register new shaped recipe for {saveditems::ObsidianFluidTank} using obsidian, empty bucket, obsidian, diamond, {saveditems::BlackstoneFluidTank}, diamond, obsidian, diamond, and obsidian with id "obsidian_fluid_tank"
+
+on place:
+    if event-block is acacia bark:
+        if nbt of player's held item contains "CheesyCraft:""WoodenFluidTank""":
+            set {place.woodenfluidtank::%event-block's location%} to true
+            if uncoloured line 2 of player's held item's lore contains "Empty":
+                set {fluid.woodenfluidtank::%event-block's location%} to "Empty"
+                set {amount.woodenfluidtank::%event-block's location%} to 0
+            else:
+                if uncoloured line 2 of player's held item's lore contains "Milk":
+                    set {fluid.woodenfluidtank::%event-block's location%} to "Milk"
+                if uncoloured line 2 of player's held item's lore contains "Water":
+                    set {fluid.woodenfluidtank::%event-block's location%} to "Water"
+                if uncoloured line 2 of player's held item's lore contains "Honey":
+                    set {fluid.woodenfluidtank::%event-block's location%} to "Honey"
+                set {_woodenfluidtank::*} to uncoloured line 2 of player's held item's lore
+                loop {_woodenfluidtank::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of %text%"
+                    set {amount.woodenfluidtank::%event-block's location%} to ({_value::1} * 3)
+
+on break:
+    if {place.woodenfluidtank::%event-block's location%} is true:
+        cancel the drops
+        set {_i} to {saveditems::WoodenFluidTank2}
+        if {fluid.woodenfluidtank::%event-block's location%} is not "Empty":
+            set {_n} to ({amount.woodenfluidtank::%event-block's location%} / 3)
+            set line 2 of lore of {_i} to "&f%{_n}% &f/ 24 Buckets of %{fluid.woodenfluidtank::%event-block's location%}%"
+        drop {_i} at event-block's location
+        clear {place.woodenfluidtank::%event-block's location%}
+        clear {amount.woodenfluidtank::%event-block's location%}
+        clear {fluid.woodenfluidtank::%event-block's location%}
+
+on right click:
+    if clicked block is acacia bark:
+        if event-player can build at location of event-block:
+            if {place.woodenfluidtank::%clicked block's location%} is true:
+                if player's held item is any axe:
+                    cancel event
+                if "%player's held item%" contains "Water Bucket":
+                    if {fluid.woodenfluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.woodenfluidtank::%event-block's location%} is 0:
+                            set {fluid.woodenfluidtank::%event-block's location%} to "Water"
+                        if {amount.woodenfluidtank::%event-block's location%} is less than or equal to 69:
+                            add 3 to {amount.woodenfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                        cancel event
+                    stop
+                if player's held item is Milk Bucket:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.woodenfluidtank::%event-block's location%} is "Empty" or "Milk":
+                        if {amount.woodenfluidtank::%event-block's location%} is 0:
+                            set {fluid.woodenfluidtank::%event-block's location%} to "Milk"
+                        if {amount.woodenfluidtank::%event-block's location%} is less than or equal to 69:
+                            add 3 to {amount.woodenfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if "%player's held item's type%" is "bucket":
+                    if {fluid.woodenfluidtank::%event-block's location%} is "Water" or "Milk":
+                        if {amount.woodenfluidtank::%event-block's location%} is more than or equal to 3:
+                            if {fluid.woodenfluidtank::%event-block's location%} is "Water":
+                                add -3 to {amount.woodenfluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 water bucket
+                                cancel event
+                                if {amount.woodenfluidtank::%event-block's location%} is 0:
+                                    set {fluid.woodenfluidtank::%event-block's location%} to "Empty"
+                            if {fluid.woodenfluidtank::%event-block's location%} is "Milk":
+                                add -3 to {amount.woodenfluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 milk bucket
+                                cancel event
+                                if {amount.woodenfluidtank::%event-block's location%} is 0:
+                                    set {fluid.woodenfluidtank::%event-block's location%} to "Empty"
+                        else:
+                            if {amount.woodenfluidtank::%event-block's location%} is 0:
+                                send "&cThis tank is currently empty!"
+                            if {amount.woodenfluidtank::%event-block's location%} is more than 0:
+                                send "&cThis tank doesn't have enough liquid for a full bucket!"
+                    else:
+                        if {fluid.woodenfluidtank::%event-block's location%} is "Empty":
+                            send "&cThis tank is empty!"
+                        if {fluid.woodenfluidtank::%event-block's location%} is "Honey":
+                            send "&cCan not put this into a bucket!"
+                    stop
+                else if 1 of player's held item is Honey Bottle:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.woodenfluidtank::%event-block's location%} is "Empty" or "Honey":
+                        if {amount.woodenfluidtank::%event-block's location%} is 0:
+                            set {fluid.woodenfluidtank::%event-block's location%} to "Honey"
+                        if {amount.woodenfluidtank::%event-block's location%} is less than or equal to 71:
+                            add 1 to {amount.woodenfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is Water Bottle:
+                    if {fluid.woodenfluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.woodenfluidtank::%event-block's location%} is 0:
+                            set {fluid.woodenfluidtank::%event-block's location%} to "Water"
+                        if {amount.woodenfluidtank::%event-block's location%} is less than or equal to 71:
+                            add 1 to {amount.woodenfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is glass bottle:
+                    if {amount.woodenfluidtank::%event-block's location%} is more than or equal to 1:
+                        if {fluid.woodenfluidtank::%event-block's location%} is "Water":
+                            add -1 to {amount.woodenfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 water bottle
+                            cancel event
+                            if {amount.woodenfluidtank::%event-block's location%} is 0:
+                                set {fluid.woodenfluidtank::%event-block's location%} to "Empty"
+                                stop
+                        if {fluid.woodenfluidtank::%event-block's location%} is "Honey":
+                            add -1 to {amount.woodenfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 honey bottle
+                            cancel event
+                            if {amount.woodenfluidtank::%event-block's location%} is 0:
+                                set {fluid.woodenfluidtank::%event-block's location%} to "Empty"
+                                stop
+                        else:
+                            if {fluid.woodenfluidtank::%event-block's location%} is "Empty":
+                                send "&cThis tank is empty!"
+                            if {fluid.woodenfluidtank::%event-block's location%} is "Milk":
+                                send "&cCan not put this into a bottle!"
+                    else:
+                        send "&cThis tank is currently empty!"
+                    stop
+                else:
+                    if nbt of player's tool does not contain "CheesyCraft:""SpongeStaff""":
+                        if {fluid.woodenfluidtank::%event-block's location%} is "Empty":
+                            send "&aThis Fluid Tank is empty!"
+                            cancel event
+                        else:
+                            set {_n} to ({amount.woodenfluidtank::%event-block's location%} / 3)
+                            send "&aThis Fluid Tank contains %{_n}% &a/ 24 Buckets of %{fluid.woodenfluidtank::%event-block's location%}%"
+                            cancel event
+
+on place:
+    if event-block is smooth stone:
+        if nbt of player's held item contains "CheesyCraft:""StoneFluidTank""":
+            set {place.stonefluidtank::%event-block's location%} to true
+            if uncoloured line 2 of player's held item's lore contains "Empty":
+                set {fluid.stonefluidtank::%event-block's location%} to "Empty"
+                set {amount.stonefluidtank::%event-block's location%} to 0
+            else:
+                if uncoloured line 2 of player's held item's lore contains "Milk":
+                    set {fluid.stonefluidtank::%event-block's location%} to "Milk"
+                if uncoloured line 2 of player's held item's lore contains "Water":
+                    set {fluid.stonefluidtank::%event-block's location%} to "Water"
+                if uncoloured line 2 of player's held item's lore contains "Honey":
+                    set {fluid.stonefluidtank::%event-block's location%} to "Honey"
+                set {_stonefluidtank::*} to uncoloured line 2 of player's held item's lore
+                loop {_stonefluidtank::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of %text%"
+                    set {amount.stonefluidtank::%event-block's location%} to ({_value::1} * 3)
+
+on break:
+    if {place.stonefluidtank::%event-block's location%} is true:
+        cancel the drops
+        set {_i} to {saveditems::stonefluidtank}
+        if {fluid.stonefluidtank::%event-block's location%} is not "Empty":
+            set {_n} to ({amount.stonefluidtank::%event-block's location%} / 3)
+            set line 2 of lore of {_i} to "&f%{_n}% &f/ 48 Buckets of %{fluid.stonefluidtank::%event-block's location%}%"
+        drop {_i} at event-block's location
+        clear {place.stonefluidtank::%event-block's location%}
+        clear {amount.stonefluidtank::%event-block's location%}
+        clear {fluid.stonefluidtank::%event-block's location%}
+
+on right click:
+    if clicked block is smooth stone:
+        if event-player can build at location of event-block:
+            if {place.stonefluidtank::%clicked block's location%} is true:
+                if player's held item is any axe:
+                    cancel event
+                if "%player's held item%" contains "Water Bucket":
+                    if {fluid.stonefluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.stonefluidtank::%event-block's location%} is 0:
+                            set {fluid.stonefluidtank::%event-block's location%} to "Water"
+                        if {amount.stonefluidtank::%event-block's location%} is less than or equal to 141:
+                            add 3 to {amount.stonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                        cancel event
+                    stop
+                if player's held item is Milk Bucket:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.stonefluidtank::%event-block's location%} is "Empty" or "Milk":
+                        if {amount.stonefluidtank::%event-block's location%} is 0:
+                            set {fluid.stonefluidtank::%event-block's location%} to "Milk"
+                        if {amount.stonefluidtank::%event-block's location%} is less than or equal to 141:
+                            add 3 to {amount.stonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if "%player's held item's type%" is "bucket":
+                    if {fluid.stonefluidtank::%event-block's location%} is "Water" or "Milk":
+                        if {amount.stonefluidtank::%event-block's location%} is more than or equal to 3:
+                            if {fluid.stonefluidtank::%event-block's location%} is "Water":
+                                add -3 to {amount.stonefluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 water bucket
+                                cancel event
+                                if {amount.stonefluidtank::%event-block's location%} is 0:
+                                    set {fluid.stonefluidtank::%event-block's location%} to "Empty"
+                            if {fluid.stonefluidtank::%event-block's location%} is "Milk":
+                                add -3 to {amount.stonefluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 milk bucket
+                                cancel event
+                                if {amount.stonefluidtank::%event-block's location%} is 0:
+                                    set {fluid.stonefluidtank::%event-block's location%} to "Empty"
+                        else:
+                            if {amount.stonefluidtank::%event-block's location%} is 0:
+                                send "&cThis tank is currently empty!"
+                            if {amount.stonefluidtank::%event-block's location%} is more than 0:
+                                send "&cThis tank doesn't have enough liquid for a full bucket!"
+                    else:
+                        if {fluid.stonefluidtank::%event-block's location%} is "Empty":
+                            send "&cThis tank is empty!"
+                        if {fluid.stonefluidtank::%event-block's location%} is "Honey":
+                            send "&cCan not put this into a bucket!"
+                    stop
+                else if 1 of player's held item is Honey Bottle:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.stonefluidtank::%event-block's location%} is "Empty" or "Honey":
+                        if {amount.stonefluidtank::%event-block's location%} is 0:
+                            set {fluid.stonefluidtank::%event-block's location%} to "Honey"
+                        if {amount.stonefluidtank::%event-block's location%} is less than or equal to 143:
+                            add 1 to {amount.stonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is Water Bottle:
+                    if {fluid.stonefluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.stonefluidtank::%event-block's location%} is 0:
+                            set {fluid.stonefluidtank::%event-block's location%} to "Water"
+                        if {amount.stonefluidtank::%event-block's location%} is less than or equal to 143:
+                            add 1 to {amount.stonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is glass bottle:
+                    if {amount.stonefluidtank::%event-block's location%} is more than or equal to 1:
+                        if {fluid.stonefluidtank::%event-block's location%} is "Water":
+                            add -1 to {amount.stonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 water bottle
+                            cancel event
+                            if {amount.stonefluidtank::%event-block's location%} is 0:
+                                set {fluid.stonefluidtank::%event-block's location%} to "Empty"
+                                stop
+                        if {fluid.stonefluidtank::%event-block's location%} is "Honey":
+                            add -1 to {amount.stonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 honey bottle
+                            cancel event
+                            if {amount.stonefluidtank::%event-block's location%} is 0:
+                                set {fluid.stonefluidtank::%event-block's location%} to "Empty"
+                                stop
+                        else:
+                            if {fluid.stonefluidtank::%event-block's location%} is "Empty":
+                                send "&cThis tank is empty!"
+                            if {fluid.stonefluidtank::%event-block's location%} is "Milk":
+                                send "&cCan not put this into a bottle!"
+                    else:
+                        send "&cThis tank is currently empty!"
+                    stop
+                else:
+                    if nbt of player's tool does not contain "CheesyCraft:""SpongeStaff""":
+                        if {fluid.stonefluidtank::%event-block's location%} is "Empty":
+                            send "&aThis Fluid Tank is empty!"
+                            cancel event
+                        else:
+                            set {_n} to ({amount.stonefluidtank::%event-block's location%} / 3)
+                            send "&aThis Fluid Tank contains %{_n}% &a/ 48 Buckets of %{fluid.stonefluidtank::%event-block's location%}%"
+                            cancel event
+
+on place:
+    if event-block is polished blackstone:
+        if nbt of player's held item contains "CheesyCraft:""Blackstonefluidtank""":
+            set {place.blackstonefluidtank::%event-block's location%} to true
+            if uncoloured line 2 of player's held item's lore contains "Empty":
+                set {fluid.blackstonefluidtank::%event-block's location%} to "Empty"
+                set {amount.blackstonefluidtank::%event-block's location%} to 0
+            else:
+                if uncoloured line 2 of player's held item's lore contains "Milk":
+                    set {fluid.blackstonefluidtank::%event-block's location%} to "Milk"
+                if uncoloured line 2 of player's held item's lore contains "Water":
+                    set {fluid.blackstonefluidtank::%event-block's location%} to "Water"
+                if uncoloured line 2 of player's held item's lore contains "Honey":
+                    set {fluid.blackstonefluidtank::%event-block's location%} to "Honey"
+                if uncoloured line 2 of player's held item's lore contains "Lava":
+                    set {fluid.blackstonefluidtank::%event-block's location%} to "Lava"
+                set {_blackstonefluidtank::*} to uncoloured line 2 of player's held item's lore
+                loop {_blackstonefluidtank::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of %text%"
+                    set {amount.blackstonefluidtank::%event-block's location%} to ({_value::1} * 3)
+
+on break:
+    if {place.blackstonefluidtank::%event-block's location%} is true:
+        cancel the drops
+        set {_i} to {saveditems::blackstonefluidtank}
+        if {fluid.blackstonefluidtank::%event-block's location%} is not "Empty":
+            set {_n} to ({amount.blackstonefluidtank::%event-block's location%} / 3)
+            set line 2 of lore of {_i} to "&f%{_n}% &f/ 48 Buckets of %{fluid.blackstonefluidtank::%event-block's location%}%"
+        drop {_i} at event-block's location
+        clear {place.blackstonefluidtank::%event-block's location%}
+        clear {amount.blackstonefluidtank::%event-block's location%}
+        clear {fluid.blackstonefluidtank::%event-block's location%}
+
+on right click:
+    if clicked block is polished blackstone:
+        if event-player can build at location of event-block:
+            if {place.blackstonefluidtank::%clicked block's location%} is true:
+                if player's held item is any axe:
+                    cancel event
+                if "%player's held item%" contains "Water Bucket":
+                    if {fluid.blackstonefluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                            set {fluid.blackstonefluidtank::%event-block's location%} to "Water"
+                        if {amount.blackstonefluidtank::%event-block's location%} is less than or equal to 141:
+                            add 3 to {amount.blackstonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                        cancel event
+                    stop
+                if "%player's held item%" contains "Lava Bucket":
+                    if {fluid.blackstonefluidtank::%event-block's location%} is "Empty" or "Lava":
+                        if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                            set {fluid.blackstonefluidtank::%event-block's location%} to "Lava"
+                        if {amount.blackstonefluidtank::%event-block's location%} is less than or equal to 141:
+                            add 3 to {amount.blackstonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                        cancel event
+                    stop
+                if player's held item is Milk Bucket:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.blackstonefluidtank::%event-block's location%} is "Empty" or "Milk":
+                        if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                            set {fluid.blackstonefluidtank::%event-block's location%} to "Milk"
+                        if {amount.blackstonefluidtank::%event-block's location%} is less than or equal to 141:
+                            add 3 to {amount.blackstonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if "%player's held item's type%" is "bucket":
+                    if {fluid.blackstonefluidtank::%event-block's location%} is "Water" or "Milk" or "Lava":
+                        if {amount.blackstonefluidtank::%event-block's location%} is more than or equal to 3:
+                            if {fluid.blackstonefluidtank::%event-block's location%} is "Water":
+                                add -3 to {amount.blackstonefluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 water bucket
+                                cancel event
+                                if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                                    set {fluid.blackstonefluidtank::%event-block's location%} to "Empty"
+                            if {fluid.blackstonefluidtank::%event-block's location%} is "Milk":
+                                add -3 to {amount.blackstonefluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 milk bucket
+                                cancel event
+                                if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                                    set {fluid.blackstonefluidtank::%event-block's location%} to "Empty"
+                            if {fluid.blackstonefluidtank::%event-block's location%} is "Lava":
+                                add -3 to {amount.blackstonefluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 lava bucket
+                                cancel event
+                                if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                                    set {fluid.blackstonefluidtank::%event-block's location%} to "Empty"
+                        else:
+                            if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                                send "&cThis tank is currently empty!"
+                            if {amount.blackstonefluidtank::%event-block's location%} is more than 0:
+                                send "&cThis tank doesn't have enough liquid for a full bucket!"
+                    else:
+                        if {fluid.blackstonefluidtank::%event-block's location%} is "Empty":
+                            send "&cThis tank is empty!"
+                        if {fluid.blackstonefluidtank::%event-block's location%} is "Honey":
+                            send "&cCan not put this into a bucket!"
+                    stop
+                else if 1 of player's held item is Honey Bottle:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.blackstonefluidtank::%event-block's location%} is "Empty" or "Honey":
+                        if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                            set {fluid.blackstonefluidtank::%event-block's location%} to "Honey"
+                        if {amount.blackstonefluidtank::%event-block's location%} is less than or equal to 143:
+                            add 1 to {amount.blackstonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is Water Bottle:
+                    if {fluid.blackstonefluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                            set {fluid.blackstonefluidtank::%event-block's location%} to "Water"
+                        if {amount.blackstonefluidtank::%event-block's location%} is less than or equal to 143:
+                            add 1 to {amount.blackstonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is glass bottle:
+                    if {amount.blackstonefluidtank::%event-block's location%} is more than or equal to 1:
+                        if {fluid.blackstonefluidtank::%event-block's location%} is "Water":
+                            add -1 to {amount.blackstonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 water bottle
+                            cancel event
+                            if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                                set {fluid.blackstonefluidtank::%event-block's location%} to "Empty"
+                                stop
+                        if {fluid.blackstonefluidtank::%event-block's location%} is "Honey":
+                            add -1 to {amount.blackstonefluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 honey bottle
+                            cancel event
+                            if {amount.blackstonefluidtank::%event-block's location%} is 0:
+                                set {fluid.blackstonefluidtank::%event-block's location%} to "Empty"
+                                stop
+                        else:
+                            if {fluid.blackstonefluidtank::%event-block's location%} is "Empty":
+                                send "&cThis tank is empty!"
+                            if {fluid.blackstonefluidtank::%event-block's location%} is "Milk":
+                                send "&cCan not put this into a bottle!"
+                    else:
+                        send "&cThis tank is currently empty!"
+                    stop
+                else:
+                    if nbt of player's tool does not contain "CheesyCraft:""SpongeStaff""":
+                        if {fluid.blackstonefluidtank::%event-block's location%} is "Empty":
+                            send "&aThis Fluid Tank is empty!"
+                            cancel event
+                        else:
+                            set {_n} to ({amount.blackstonefluidtank::%event-block's location%} / 3)
+                            send "&aThis Fluid Tank contains %{_n}% &a/ 48 Buckets of %{fluid.blackstonefluidtank::%event-block's location%}%"
+                            cancel event
+
+on place:
+    if event-block is obsidian:
+        if nbt of player's held item contains "CheesyCraft:""ObsidianFluidTank""":
+            set {place.obsidianfluidtank::%event-block's location%} to true
+            if uncoloured line 2 of player's held item's lore contains "Empty":
+                set {fluid.obsidianfluidtank::%event-block's location%} to "Empty"
+                set {amount.obsidianfluidtank::%event-block's location%} to 0
+            else:
+                if uncoloured line 2 of player's held item's lore contains "Milk":
+                    set {fluid.obsidianfluidtank::%event-block's location%} to "Milk"
+                if uncoloured line 2 of player's held item's lore contains "Water":
+                    set {fluid.obsidianfluidtank::%event-block's location%} to "Water"
+                if uncoloured line 2 of player's held item's lore contains "Honey":
+                    set {fluid.obsidianfluidtank::%event-block's location%} to "Honey"
+                if uncoloured line 2 of player's held item's lore contains "Lava":
+                    set {fluid.obsidianfluidtank::%event-block's location%} to "Lava"
+                set {_obsidianfluidtank::*} to uncoloured line 2 of player's held item's lore
+                loop {_obsidianfluidtank::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of %text%"
+                    set {amount.obsidianfluidtank::%event-block's location%} to ({_value::1} * 3)
+
+on break:
+    if {place.obsidianfluidtank::%event-block's location%} is true:
+        cancel the drops
+        set {_i} to {saveditems::obsidianfluidtank}
+        if {fluid.obsidianfluidtank::%event-block's location%} is not "Empty":
+            set {_n} to ({amount.obsidianfluidtank::%event-block's location%} / 3)
+            set line 2 of lore of {_i} to "&f%{_n}% &f/ 72 Buckets of %{fluid.obsidianfluidtank::%event-block's location%}%"
+        drop {_i} at event-block's location
+        clear {place.obsidianfluidtank::%event-block's location%}
+        clear {amount.obsidianfluidtank::%event-block's location%}
+        clear {fluid.obsidianfluidtank::%event-block's location%}
+
+on right click:
+    if clicked block is obsidian:
+        if event-player can build at location of event-block:
+            if {place.obsidianfluidtank::%clicked block's location%} is true:
+                if player's held item is any axe:
+                    cancel event
+                if "%player's held item%" contains "Water Bucket":
+                    if {fluid.obsidianfluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                            set {fluid.obsidianfluidtank::%event-block's location%} to "Water"
+                        if {amount.obsidianfluidtank::%event-block's location%} is less than or equal to 213:
+                            add 3 to {amount.obsidianfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                        cancel event
+                    stop
+                if "%player's held item%" contains "Lava Bucket":
+                    if {fluid.obsidianfluidtank::%event-block's location%} is "Empty" or "Lava":
+                        if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                            set {fluid.obsidianfluidtank::%event-block's location%} to "Lava"
+                        if {amount.obsidianfluidtank::%event-block's location%} is less than or equal to 213:
+                            add 3 to {amount.obsidianfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                        cancel event
+                    stop
+                if player's held item is Milk Bucket:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.obsidianfluidtank::%event-block's location%} is "Empty" or "Milk":
+                        if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                            set {fluid.obsidianfluidtank::%event-block's location%} to "Milk"
+                        if {amount.obsidianfluidtank::%event-block's location%} is less than or equal to 213:
+                            add 3 to {amount.obsidianfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 empty bucket
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if "%player's held item's type%" is "bucket":
+                    if {fluid.obsidianfluidtank::%event-block's location%} is "Water" or "Milk" or "Lava":
+                        if {amount.obsidianfluidtank::%event-block's location%} is more than or equal to 3:
+                            if {fluid.obsidianfluidtank::%event-block's location%} is "Water":
+                                add -3 to {amount.obsidianfluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 water bucket
+                                cancel event
+                                if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                                    set {fluid.obsidianfluidtank::%event-block's location%} to "Empty"
+                            if {fluid.obsidianfluidtank::%event-block's location%} is "Milk":
+                                add -3 to {amount.obsidianfluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 milk bucket
+                                cancel event
+                                if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                                    set {fluid.obsidianfluidtank::%event-block's location%} to "Empty"
+                            if {fluid.obsidianfluidtank::%event-block's location%} is "Lava":
+                                add -3 to {amount.obsidianfluidtank::%event-block's location%}
+                                remove 1 of player's held item from player's inventory
+                                give player 1 lava bucket
+                                cancel event
+                                if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                                    set {fluid.obsidianfluidtank::%event-block's location%} to "Empty"
+                        else:
+                            if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                                send "&cThis tank is currently empty!"
+                            if {amount.obsidianfluidtank::%event-block's location%} is more than 0:
+                                send "&cThis tank doesn't have enough liquid for a full bucket!"
+                    else:
+                        if {fluid.obsidianfluidtank::%event-block's location%} is "Empty":
+                            send "&cThis tank is empty!"
+                        if {fluid.obsidianfluidtank::%event-block's location%} is "Honey":
+                            send "&cCan not put this into a bucket!"
+                    stop
+                else if 1 of player's held item is Honey Bottle:
+                    if name of player's held item is set:
+                        send "&cYou cannot use this item with a Fluid Tank!"
+                        cancel event
+                        stop
+                    if {fluid.obsidianfluidtank::%event-block's location%} is "Empty" or "Honey":
+                        if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                            set {fluid.obsidianfluidtank::%event-block's location%} to "Honey"
+                        if {amount.obsidianfluidtank::%event-block's location%} is less than or equal to 215:
+                            add 1 to {amount.obsidianfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is Water Bottle:
+                    if {fluid.obsidianfluidtank::%event-block's location%} is "Empty" or "Water":
+                        if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                            set {fluid.obsidianfluidtank::%event-block's location%} to "Water"
+                        if {amount.obsidianfluidtank::%event-block's location%} is less than or equal to 215:
+                            add 1 to {amount.obsidianfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 glass bottle
+                            cancel event
+                    else:
+                        send "&cThis tank already holds another type of liquid!"
+                    stop
+                else if 1 of player's held item is glass bottle:
+                    if {amount.obsidianfluidtank::%event-block's location%} is more than or equal to 1:
+                        if {fluid.obsidianfluidtank::%event-block's location%} is "Water":
+                            add -1 to {amount.obsidianfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 water bottle
+                            cancel event
+                            if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                                set {fluid.obsidianfluidtank::%event-block's location%} to "Empty"
+                                stop
+                        if {fluid.obsidianfluidtank::%event-block's location%} is "Honey":
+                            add -1 to {amount.obsidianfluidtank::%event-block's location%}
+                            remove 1 of player's held item from player's inventory
+                            give player 1 honey bottle
+                            cancel event
+                            if {amount.obsidianfluidtank::%event-block's location%} is 0:
+                                set {fluid.obsidianfluidtank::%event-block's location%} to "Empty"
+                                stop
+                        else:
+                            if {fluid.obsidianfluidtank::%event-block's location%} is "Empty":
+                                send "&cThis tank is empty!"
+                            if {fluid.obsidianfluidtank::%event-block's location%} is "Milk":
+                                send "&cCan not put this into a bottle!"
+                    else:
+                        send "&cThis tank is currently empty!"
+                    stop
+                else:
+                    if nbt of player's tool does not contain "CheesyCraft:""SpongeStaff""":
+                        if {fluid.obsidianfluidtank::%event-block's location%} is "Empty":
+                            send "&aThis Fluid Tank is empty!"
+                            cancel event
+                        else:
+                            set {_n} to ({amount.obsidianfluidtank::%event-block's location%} / 3)
+                            send "&aThis Fluid Tank contains %{_n}% &a/ 72 Buckets of %{fluid.obsidianfluidtank::%event-block's location%}%"
+                            cancel event
+
+on place:
+    if event-block is blue ice:
+        if nbt of player's held item contains "CheesyCraft:""FrostyTank""":
+            set {place.frostyfluidtank::%event-block's location%} to true
+            if uncoloured line 2 of player's held item's lore contains "Empty":
+                set {fluid.frostyfluidtank::%event-block's location%} to "Empty"
+                set {amount.frostyfluidtank::%event-block's location%} to 0
+            else:
+                if uncoloured line 2 of player's held item's lore contains "Powder Snow":
+                    set {fluid.frostyfluidtank::%event-block's location%} to "Powder Snow"
+                set {_frostyfluidtank::*} to uncoloured line 2 of player's held item's lore
+                loop {_frostyfluidtank::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of %text%"
+                    set {amount.frostyfluidtank::%event-block's location%} to ({_value::1} * 3)
+
+on break:
+    if {place.frostyfluidtank::%event-block's location%} is true:
+        cancel the drops
+        set {_i} to {saveditems::frostytank}
+        if {fluid.frostyfluidtank::%event-block's location%} is not "Empty":
+            set {_n} to ({amount.frostyfluidtank::%event-block's location%} / 3)
+            set line 2 of lore of {_i} to "&f%{_n}% &f/ 48 Buckets of %{fluid.frostyfluidtank::%event-block's location%}%"
+        drop {_i} at event-block's location
+        clear {place.frostyfluidtank::%event-block's location%}
+        clear {amount.frostyfluidtank::%event-block's location%}
+        clear {fluid.frostyfluidtank::%event-block's location%}
+
+on right click:
+    if clicked block is blue ice:
+        if {place.frostyfluidtank::%clicked block's location%} is true:
+            if player's held item is powder snow bucket:
+                if {fluid.frostyfluidtank::%event-block's location%} is "Empty" or "Powder Snow":
+                    if {amount.frostyfluidtank::%event-block's location%} is 0:
+                        set {fluid.frostyfluidtank::%event-block's location%} to "Powder Snow"
+                    if {amount.frostyfluidtank::%event-block's location%} is less than or equal to 141:
+                        add 3 to {amount.frostyfluidtank::%event-block's location%}
+                        remove 1 of player's held item from player's held item
+                        give player 1 empty bucket
+                        cancel event
+                stop
+            else if player's held item is empty bucket:
+                if {amount.frostyfluidtank::%event-block's location%} is more than or equal to 3:
+                    if {fluid.frostyfluidtank::%event-block's location%} is "Powder Snow":
+                        add -3 to {amount.frostyfluidtank::%event-block's location%}
+                        remove 1 of player's held item from player's held item
+                        give player 1 powder snow bucket
+                        cancel event
+                        if {amount.frostyfluidtank::%event-block's location%} is 0:
+                            set {fluid.frostyfluidtank::%event-block's location%} to "Empty"
+                        stop
+                if {amount.frostyfluidtank::%event-block's location%} is more than 0:
+                    send "&cThis tank doesn't have enough liquid for a full bucket!"
+                else:
+                    if {fluid.frostyfluidtank::%event-block's location%} is "Empty":
+                        send "&cThis tank is empty!"
+            else:
+                if {fluid.frostyfluidtank::%event-block's location%} is "Empty":
+                    send "&aThis Fluid Tank is empty!"
+                    cancel event
+                else:
+                    set {_n} to ({amount.frostyfluidtank::%event-block's location%} / 3)
+                    send "&aThis Fluid Tank contains %{_n}% &a/ 48 Buckets of %{fluid.frostyfluidtank::%event-block's location%}%"
+                    cancel event
+
+on place:
+    if event-block is pink stained glass:
+        if nbt of player's held item contains "CheesyCraft:""AxolotlTank""":
+            set {place.axolotltank::%event-block's location%} to true
+            loop 20 times:
+                add 1 to {_num}
+                set {_value} to tag "PublicBukkitValues;Axolotl%{_num}%" of nbt of player's held item
+                set {_value2} to tag "PublicBukkitValues;AxolotlData%{_num}%" of nbt of player's held item
+                set {_value} to {_value} parsed as item
+                set {axolotltank.%event-block's location%::%{_num}%} to {_value} with nbt {_value2}
+                
+on break:
+    if {place.axolotltank::%event-block's location%} is true:
+        cancel the drops
+        set {_i} to {saveditems::AxolotlTank}
+        loop {axolotltank.%event-block's location%::*}:
+            add 1 to {_num}
+            add "{PublicBukkitValues: {""Axolotl%{_num}%"":""%loop-value%""}}" to nbt of {_i}
+            add "{PublicBukkitValues: {""AxolotlData%{_num}%"":""%nbt of loop-value%""}}" to nbt of {_i}
+        if {_num} is more than 0:
+            set line 2 of lore of {_i} to "&f%{_num}% &f/ 20 Axolotl Buckets"
+        drop {_i} at event-block's location
+        clear {place.axolotltank::%event-block's location%}
+        clear {axolotltank.%event-block's location%::*}
+
+on right click:
+    if clicked block is pink stained glass:
+        if event-player can build at location of event-block:
+            if {place.axolotltank::%clicked block's location%} is true:
+                if player's held item's type is axolotl bucket:
+                    if {axolotltank.%event-block's location%::*} is not set:
+                        cancel event
+                        set {axolotltank.%event-block's location%::1} to event-item
+                        set player's held item to empty bucket
+                        stop
+                    loop {axolotltank.%event-block's location%::*}:
+                        add 1 to {_num}
+                    if {_num} is not greater than 19:
+                        cancel event
+                        set {axolotltank.%event-block's location%::%({_num} + 1)%} to event-item
+                        set player's held item to empty bucket
+                    if {_num} is greater than 19:
+                        send "&cThis tank is full!"
+                        cancel event
+                    stop
+                else if player's held item's type is empty bucket:
+                    if {axolotltank.%event-block's location%::*} is not set:
+                        send "&cThis tank is empty!"
+                        stop
+                    loop {axolotltank.%event-block's location%::*}:
+                        add 1 to {_num}
+                    if {_num} is greater than 0:
+                        give player {axolotltank.%event-block's location%::%{_num}%}
+                        remove 1 of player's held item from player's held item
+                        delete {axolotltank.%event-block's location%::%{_num}%}
+                        cancel event
+                    stop
+                else:
+                    loop {axolotltank.%event-block's location%::*}:
+                        add 1 to {_num}
+                    if {_num} is not set:
+                        send "&aThis Axolotl Tank is empty!"
+                        cancel event
+                    else:
+                        send "&aThis Axolotl Tank contains %{_num}% &a/ 20 Axolotl Buckets"
+                        cancel event
+                        
+on place:
+    if event-block is blue stained glass:
+        if nbt of player's held item contains "CheesyCraft:""FishTank""":
+            set {place.fishtank::%event-block's location%} to true
+            loop 20 times:
+                add 1 to {_num}
+                set {_value} to tag "PublicBukkitValues;Fish%{_num}%" of nbt of player's held item
+                set {_value2} to tag "PublicBukkitValues;FishData%{_num}%" of nbt of player's held item
+                set {_value} to {_value} parsed as item
+                set {fishtank.%event-block's location%::%{_num}%} to {_value} with nbt {_value2}
+                
+on break:
+    if {place.fishtank::%event-block's location%} is true:
+        cancel the drops
+        set {_i} to {saveditems::FishTank}
+        loop {fishtank.%event-block's location%::*}:
+            add 1 to {_num}
+            add "{PublicBukkitValues: {""Fish%{_num}%"":""%loop-value%""}}" to nbt of {_i}
+            add "{PublicBukkitValues: {""FishData%{_num}%"":""%nbt of loop-value%""}}" to nbt of {_i}
+        if {_num} is more than 0:
+            set line 2 of lore of {_i} to "&f%{_num}% &f/ 20 Fish Buckets"
+        drop {_i} at event-block's location
+        clear {place.fishtank::%event-block's location%}
+        clear {fishtank.%event-block's location%::*}
+
+on right click:
+    if clicked block is blue stained glass:
+        if event-player can build at location of event-block:
+            if {place.fishtank::%clicked block's location%} is true:
+                if check [player's held item's type is any fish bucket]->[player's held item's type is not a axolotl bucket]:
+                    if {fishtank.%event-block's location%::*} is not set:
+                        cancel event
+                        set {fishtank.%event-block's location%::1} to event-item
+                        set player's held item to empty bucket
+                        stop
+                    loop {fishtank.%event-block's location%::*}:
+                        add 1 to {_num}
+                    if {_num} is not greater than 19:
+                        cancel event
+                        set {fishtank.%event-block's location%::%({_num} + 1)%} to event-item
+                        set player's held item to empty bucket
+                    if {_num} is greater than 19:
+                        send "&cThis tank is full!"
+                        cancel event
+                    stop
+                else if player's held item's type is empty bucket:
+                    if {fishtank.%event-block's location%::*} is not set:
+                        send "&cThis tank is empty!"
+                        stop
+                    loop {fishtank.%event-block's location%::*}:
+                        add 1 to {_num}
+                    if {_num} is greater than 0:
+                        give player {fishtank.%event-block's location%::%{_num}%}
+                        remove 1 of player's held item from player's held item
+                        delete {fishtank.%event-block's location%::%{_num}%}
+                        cancel event
+                    stop
+                else:
+                    loop {fishtank.%event-block's location%::*}:
+                        add 1 to {_num}
+                    if {_num} is not set:
+                        send "&aThis Fish Tank is empty!"
+                        cancel event
+                    else:
+                        send "&aThis Fish Tank contains %{_num}% &a/ 20 Fish Buckets"
+                        cancel event

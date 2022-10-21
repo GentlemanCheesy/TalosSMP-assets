@@ -1,0 +1,169 @@
+on place of player wall head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipe""":
+        cancel event
+            
+on place of player head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipe""":
+        set {WarpPipe.place::%event-block's location%} to true
+        set {WarpPipe.loc::%event-block's location%} to location of event-block
+        add 1 to {pipenum}
+        set {WarpPipeID::%event-block's location%} to {pipenum}
+            
+on break of player head:
+    if {WarpPipe.place::%event-block's location%} is true:
+        clear {WarpPipe.place::%event-block's location%}
+        clear {WarpPipe.loc::%event-block's location%}
+        cancel the drops
+        drop {saveditems::WarpPipe}
+        clear {WarpPipeID::%event-block's location%}
+
+on toggle sneak:
+    if player is not sneaking:
+        if {WarpPipe.place::%location of block at player%} is true:
+            if {PipesIDs.%player's uuid%.%world%::*} does not contain {WarpPipeID::%location of block at player%}:
+                add location of block at player to {Pipes.%player's uuid%.%world%::*}
+                add {WarpPipeID::%location of block at player%} to {PipesIDs.%player's uuid%.%world%::*} 
+            loop {Pipes.%player's uuid%.%world%::*}:
+                if loop-value is not location of block at player:
+                    if {PipesIDs.%player's uuid%.%world%::*} contains {WarpPipeID::%loop-value%}:
+                        add loop-value to {_PipesLoc::*}
+            set {_randomwarppipe} to random element out of {_PipesLoc::*}
+            set {_yaw} to player's yaw
+            set {_pitch} to player's pitch
+            set yaw of {_randomwarppipe} to {_yaw}
+            set pitch of {_randomwarppipe} to {_pitch}
+            teleport player to {_randomwarppipe}
+            
+on place of player wall head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipeRed""":
+        cancel event
+            
+on place of player head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipeRed""":
+        set {WarpPipered.place::%event-block's location%} to true
+        set {WarpPipered.loc::%event-block's location%} to location of event-block
+        add 1 to {pipenumred}
+        set {WarpPipeIDred::%event-block's location%} to {pipenumred}
+            
+on break of player head:
+    if {WarpPipered.place::%event-block's location%} is true:
+        clear {WarpPipered.place::%event-block's location%}
+        clear {WarpPipered.loc::%event-block's location%}
+        cancel the drops
+        drop {saveditems::WarpPipeRed}
+        clear {WarpPipeIDred::%event-block's location%}
+
+on toggle sneak:
+    if player is not sneaking:
+        if {WarpPipered.place::%location of block at player%} is true:
+            if {PipesIDsred.%player's uuid%.%world%::*} does not contain {WarpPipeIDred::%location of block at player%}:
+                add location of block at player to {Pipesred.%player's uuid%.%world%::*}
+                add {WarpPipeIDred::%location of block at player%} to {PipesIDsred.%player's uuid%.%world%::*} 
+            loop {Pipesred.%player's uuid%.%world%::*}:
+                if loop-value is not location of block at player:
+                    if {PipesIDsred.%player's uuid%.%world%::*} contains {WarpPipeIDred::%loop-value%}:
+                        add loop-value to {_PipesLoc::*}
+            set {_randomwarppipe} to random element out of {_PipesLoc::*}
+            set {_yaw} to player's yaw
+            set {_pitch} to player's pitch
+            set yaw of {_randomwarppipe} to {_yaw}
+            set pitch of {_randomwarppipe} to {_pitch}
+            teleport player to {_randomwarppipe}
+            
+on place of player wall head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipeWhite""":
+        cancel event
+            
+on place of player head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipeWhite""":
+        set {WarpPipe.placeWhite::%event-block's location%} to true
+        set {WarpPipe.locWhite::%event-block's location%} to location of event-block
+        add 1 to {pipenumWhite}
+        set {WarpPipeIDWhite::%event-block's location%} to {pipenumWhite}
+            
+on break of player head:
+    if {WarpPipe.placeWhite::%event-block's location%} is true:
+        clear {WarpPipe.placeWhite::%event-block's location%}
+        clear {WarpPipe.locWhite::%event-block's location%}
+        cancel the drops
+        drop {saveditems::WarpPipeWhite}
+        clear {WarpPipeIDWhite::%event-block's location%}
+
+on toggle sneak:
+    if player is not sneaking:
+        if {WarpPipe.placeWhite::%location of block at player%} is true:
+            if {PipesIDsWhite.%player's uuid%.%world%::*} does not contain {WarpPipeIDWhite::%location of block at player%}:
+                add location of block at player to {PipesWhite.%player's uuid%.%world%::*}
+                add {WarpPipeIDWhite::%location of block at player%} to {PipesIDsWhite.%player's uuid%.%world%::*} 
+            loop {PipesWhite.%player's uuid%.%world%::*}:
+                if loop-value is not location of block at player:
+                    if {PipesIDsWhite.%player's uuid%.%world%::*} contains {WarpPipeIDWhite::%loop-value%}:
+                        add loop-value to {_PipesLoc::*}
+            set {_randomwarppipe} to random element out of {_PipesLoc::*}
+            set {_yaw} to player's yaw
+            set {_pitch} to player's pitch
+            set yaw of {_randomwarppipe} to {_yaw}
+            set pitch of {_randomwarppipe} to {_pitch}
+            teleport player to {_randomwarppipe}
+            
+on place of player wall head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipeBlue""":
+        cancel event
+            
+on place of player head:
+    if nbt of player's held item contain "CheesyCraft:""WarpPipeBlue""":
+        set {WarpPipe.placeBlue::%event-block's location%} to true
+        set {WarpPipe.locBlue::%event-block's location%} to location of event-block
+        add 1 to {pipenumBlue}
+        set {WarpPipeIDBlue::%event-block's location%} to {pipenumBlue}
+            
+on break of player head:
+    if {WarpPipe.placeBlue::%event-block's location%} is true:
+        clear {WarpPipe.placeBlue::%event-block's location%}
+        clear {WarpPipe.locBlue::%event-block's location%}
+        cancel the drops
+        drop {saveditems::WarpPipeBlue}
+        clear {WarpPipeIDBlue::%event-block's location%}
+
+on toggle sneak:
+    if player is not sneaking:
+        if {WarpPipe.placeBlue::%location of block at player%} is true:
+            if {PipesIDsBlue.%player's uuid%.%world%::*} does not contain {WarpPipeIDBlue::%location of block at player%}:
+                add location of block at player to {PipesBlue.%player's uuid%.%world%::*}
+                add {WarpPipeIDBlue::%location of block at player%} to {PipesIDsBlue.%player's uuid%.%world%::*} 
+            loop {PipesBlue.%player's uuid%.%world%::*}:
+                if loop-value is not location of block at player:
+                    if {PipesIDsBlue.%player's uuid%.%world%::*} contains {WarpPipeIDBlue::%loop-value%}:
+                        add loop-value to {_PipesLoc::*}
+            set {_randomwarppipe} to random element out of {_PipesLoc::*}
+            set {_yaw} to player's yaw
+            set {_pitch} to player's pitch
+            set yaw of {_randomwarppipe} to {_yaw}
+            set pitch of {_randomwarppipe} to {_pitch}
+            teleport player to {_randomwarppipe}
+            
+on right click:
+    if event-item is any shulker box:
+        stop
+    if nbt of player's held item contains "CheesyCraft:""WarpingWrench""":
+        cancel event
+        if {WarpPipe.placeBlue::%event-block's location%} is true:
+            send "&cRemoved personal Warp Pipe connection!"
+            remove {WarpPipeIDBlue::%event-block's location%} from {PipesIDsBlue.%player's uuid%.%world%::*} 
+            chance of 10%:
+                remove 1 of player's held item from player's held item
+        if {WarpPipe.place::%event-block's location%} is true:
+            send "&cRemoved personal Warp Pipe connection!"
+            remove {WarpPipeID::%event-block's location%} from {PipesIDs.%player's uuid%.%world%::*} 
+            chance of 10%:
+                remove 1 of player's held item from player's held item
+        if {WarpPipered.place::%event-block's location%} is true:
+            send "&cRemoved personal Warp Pipe connection!"
+            remove {WarpPipeIDred::%event-block's location%} from {PipesIDsred.%player's uuid%.%world%::*} 
+            chance of 10%:
+                remove 1 of player's held item from player's held item
+        if {WarpPipe.placeWhite::%event-block's location%} is true:
+            send "&cRemoved personal Warp Pipe connection!"
+            remove {WarpPipeIDWhite::%event-block's location%} from {PipesIDsWhite.%player's uuid%.%world%::*} 
+            chance of 10%:
+                remove 1 of player's held item from player's held item

@@ -1,0 +1,147 @@
+on place of glass block:
+    if nbt of player's held item contains "CheesyCraft:""DisplayCase""":
+        set {showcase.place::%event-block's location%} to true
+        set {showcase.loc::%event-block's location%} to event-block's location
+        set {displaydisabled::%event-block's location%} to false
+
+on break of glass block:
+    if {showcase.place::%event-block's location%} is true:
+        cancel the drops
+        clear {showcase.loc::%event-block's location%}
+        clear {showcase.place::%event-block's location%}
+        delete holo {showcaseitem::%event-block's location%::showcaseitem}
+        delete holo {showcasename::%event-block's location%::showcasename}
+        drop {saveditems::DisplayCase}
+        clear {displayitem::%event-block's location%::showcaseitem}
+        clear {displayname::%event-block's location%::showcasename}
+        clear {displayname.disabled::%event-block's location%}
+
+on right click:
+    if player is not sneaking:
+        if {showcase.place::%event-block's location%} is true:
+            cancel event
+            create a gui with virtual dropper inventory named "&6Display Case"
+            set {_l} to event-block's location
+            edit gui last gui:
+                make gui slot 0 with black stained glass pane named "&0 "
+                make gui slot 1 with black stained glass pane named "&0 "
+                make gui slot 2 with black stained glass pane named "&0 "
+                make gui slot 3 with black stained glass pane named "&0 "
+                if {displayitem::%event-block's location%::showcaseitem} is set:
+                    make gui slot 4 with {displayitem::%event-block's location%::showcaseitem}:
+                        if gui click type is left mouse button with shift:
+                            if gui player is op:
+                                close gui player's inventory
+                                give player gui item
+                        else if gui click type is left mouse button:
+                            if player can build at location of {_l}:    
+                                if player's cursor slot is not air:
+                                    cancel event
+                                    delete holo {showcaseitem::%{_l}%::showcaseitem}
+                                    delete holo {showcasename::%{_l}%::showcasename}
+                                    clear {displayname::%{_l}%::showcasename}
+                                    set {displayitem::%{_l}%::showcaseitem} to 1 of player's cursor slot
+                                    set {displayname::%{_l}%::showcasename} to name of player's cursor slot
+                                    create holo with line {displayitem::%{_l}%::showcaseitem} at location 0.25 above {_l} and store it in {showcaseitem::%{_l}%::showcaseitem}
+                                    #create a hologram at location 0.25 above event-block with id "showcases.%event-block's location%"
+                                    #add {displayitem::%event-block's location%::showcaseitem} to the hologram with id "showcases.%event-block's location%"
+                                    if {displayname::%{_l}%::showcasename} is set:
+                                        if {displayname.disabled::%{_l}%} is not true:
+                                            create holo with line "%{displayname::%{_l}%::showcasename}%" at location 0.85 above {_l} and store it in {showcasename::%{_l}%::showcasename}
+                                        #create a hologram at location 0.85 above event-block with id "showcasesname.%event-block's location%"
+                                        #add line "%{displayname::%event-block's location%::showcasename}%" to the hologram with id "showcasesname.%event-block's location%"
+                                    wait 1 tick
+                                    close gui player's inventory
+                else:
+                    make gui slot 4 with air:
+                        if gui click type is left mouse button with shift:
+                            if gui player is op:
+                                close gui player's inventory
+                                give player gui item
+                        else if gui click type is left mouse button:
+                            if player can build at location of {_l}:    
+                                if player's cursor slot is not air:
+                                    cancel event
+                                    delete holo {showcaseitem::%{_l}%::showcaseitem}
+                                    delete holo {showcasename::%{_l}%::showcasename}
+                                    clear {displayname::%{_l}%::showcasename}
+                                    set {displayitem::%{_l}%::showcaseitem} to 1 of player's cursor slot
+                                    set {displayname::%{_l}%::showcasename} to name of player's cursor slot
+                                    create holo with line {displayitem::%{_l}%::showcaseitem} at location 0.25 above {_l} and store it in {showcaseitem::%{_l}%::showcaseitem}
+                                    #create a hologram at location 0.25 above event-block with id "showcases.%event-block's location%"
+                                    #add {displayitem::%event-block's location%::showcaseitem} to the hologram with id "showcases.%event-block's location%"
+                                    if {displayname::%{_l}%::showcasename} is set:
+                                        if {displayname.disabled::%{_l}%} is not true:
+                                            create holo with line "%{displayname::%{_l}%::showcasename}%" at location 0.85 above {_l} and store it in {showcasename::%{_l}%::showcasename}
+                                        #create a hologram at location 0.85 above event-block with id "showcasesname.%event-block's location%"
+                                        #add line "%{displayname::%event-block's location%::showcasename}%" to the hologram with id "showcasesname.%event-block's location%"
+                                    wait 1 tick
+                                    close gui player's inventory
+                make gui slot 5 with black stained glass pane named "&0 "
+                make gui slot 6 with black stained glass pane named "&0 "
+                make gui slot 7 with black stained glass pane named "&0 "
+                if {displayname::%event-block's location%::showcasename} is set:
+                    if player can build at location of {_l}: 
+                        make gui slot 8 with black wool named "&fToggle Name Showcase":
+                            if {showcasename::%{_l}%::showcasename} is set:
+                                set {displaydisabled::%{_l}%} to true
+                                delete holo {showcasename::%{_l}%::showcasename}
+                                delete {showcasename::%{_l}%::showcasename}
+                                close gui player's inventory
+                                stop
+                            if {showcasename::%{_l}%::showcasename} is not set:
+                                set {displaydisabled::%{_l}%} to false
+                                create holo with line {displayname::%{_l}%::showcasename} at location 0.85 above {_l} and store it in {showcasename::%{_l}%::showcasename}
+                                close gui player's inventory
+                else:
+                    make gui slot 8 with black stained glass pane named "&0 "
+            open the last gui to the player
+                  
+on right click:
+    if player is sneaking:
+        if event-player can build at location of event-block:
+            if {showcase.place::%event-block's location%} is true:
+                if player's tool is not air:
+                    if player can build at location of clicked block:
+                        cancel event
+                        delete holo {showcaseitem::%event-block's location%::showcaseitem}
+                        delete holo {showcasename::%event-block's location%::showcasename}
+                        clear {displayname::%event-block's location%::showcasename}
+                        set {displayitem::%event-block's location%::showcaseitem} to 1 of player's tool
+                        set {displayname::%event-block's location%::showcasename} to name of player's tool
+                        create holo with line {displayitem::%event-block's location%::showcaseitem} at location 0.25 above event-block and store it in {showcaseitem::%event-block's location%::showcaseitem}
+                        #create a hologram at location 0.25 above event-block with id "showcases.%event-block's location%"
+                        #add {displayitem::%event-block's location%::showcaseitem} to the hologram with id "showcases.%event-block's location%"
+                        if {displayname::%event-block's location%::showcasename} is set:
+                            if {displayname.disabled::%event-block's location%} is not true:
+                                create holo with line "%{displayname::%event-block's location%::showcasename}%" at location 0.85 above event-block and store it in {showcasename::%event-block's location%::showcasename}
+                            #create a hologram at location 0.85 above event-block with id "showcasesname.%event-block's location%"
+                            #add line "%{displayname::%event-block's location%::showcasename}%" to the hologram with id "showcasesname.%event-block's location%"
+    
+on right click:
+    if player is sneaking:
+        if event-player can build at location of event-block:
+            if {showcase.place::%event-block's location%} is true:
+                if player's tool is air:
+                    if player can build at location of clicked block:
+                        cancel event
+                        delete holo {showcaseitem::%event-block's location%::showcaseitem}
+                        delete holo {showcasename::%event-block's location%::showcasename}
+                        delete {displayitem::%event-block's location%::showcaseitem}
+                        delete {displayname::%event-block's location%::showcasename}
+
+on load:
+    loop {showcase.loc::*}:
+        delete holo {showcaseitem::%loop-value%::showcaseitem}
+        create holo with line {displayitem::%loop-value%::showcaseitem} at location 0.25 above loop-value and store it in {showcaseitem::%loop-value%::showcaseitem}
+        #create a hologram at location 0.25 above block at loop-value with id "showcases.%loop-value%"
+        #add {displayitem::%loop-value%::showcaseitem} to the hologram with id "showcases.%loop-value%"
+        if {displayname::%loop-value%::showcasename} is set:
+            if {displayname.disabled::%loop-value%} is false:
+                delete holo {showcasename::%loop-value%::showcasename}
+                create holo with line "%{displayname::%loop-value%::showcasename}%" at location 0.85 above loop-value and store it in {showcasename::%loop-value%::showcasename}
+            if {displayname.disabled::%loop-value%} is not set:
+                delete holo {showcasename::%loop-value%::showcasename}
+                create holo with line "%{displayname::%loop-value%::showcasename}%" at location 0.85 above loop-value and store it in {showcasename::%loop-value%::showcasename}
+            #create a hologram at location 0.85 above block at loop-value with id "showcasesname.%loop-value%"
+            #add line "%{displayname::%loop-value%::showcasename}%" to the hologram with id "showcasesname.%loop-value%"

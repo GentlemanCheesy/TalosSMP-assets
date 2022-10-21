@@ -1,0 +1,115 @@
+on place of player head or player wall head:
+    if nbt of player's held item contains "CheesyCraft:""CrimsonTalisman""":
+        cancel event
+
+on place of player head or player wall head:
+    if nbt of player's held item contains "CheesyCraft:""WarpedTalisman""":
+        cancel event
+
+on place of player head or player wall head:
+    if nbt of player's held item contains "CheesyCraft:""InfernoLantern""":
+        cancel event
+
+on shoot:
+    if nbt of shooter's held item contains "Skill:""NovaBorn""":
+        set {novaborn::%event-projectile%} to true
+    else if nbt of shooter's offhand item contains "Skill:""NovaBorn""":
+        if shooter's offhand item is not a shulker box:
+            set {novaborn::%event-projectile%} to true
+        
+on death:
+    if {novaborn::%event-projectile%} is true:
+        clear {novaborn::%event-projectile%}
+        apply fire resistance to the attacker for 5 seconds
+    else if nbt of attacker's tool contains "Skill:""NovaBorn""":
+        if attacker's held item is not a shulker box:
+            apply fire resistance to the attacker for 5 seconds
+
+on place of player head or player wall head:
+    if nbt of player's held item contains "CheesyCraft:""CrimsonFlesh""":
+        cancel event
+
+on mine:
+    if player's held item is not a shulker box:
+        if nbt of player's held item contains "Skill:""DigestiveAlchemy""":
+            cancel drops
+            chance of 6%:
+                set {_random} to a random integer between 1 and 125
+                if {_random} is 1:
+                    drop turtle helmet at event-block
+                if {_random} is 2:
+                    drop dragon breath at event-block
+                if {_random} is between 2 and 6:
+                    drop magma cream at event-block
+                if {_random} is between 7 and 11:
+                    drop ghast tear at event-block
+                if {_random} is between 12 and 16:
+                    drop phantom membrane at event-block
+                if {_random} is between 17 and 21:
+                    drop blaze powder at event-block
+                if {_random} is between 22 and 26:
+                    drop nether wart at event-block
+                if {_random} is between 27 and 33:
+                    drop golden carrot at event-block
+                if {_random} is between 34 and 40:
+                    drop rabbit foot at event-block
+                if {_random} is between 41 and 47:
+                    drop gunpowder at event-block
+                if {_random} is between 48 and 60:
+                    drop glowstone dust at event-block
+                if {_random} is between 61 and 73:
+                    drop redstone dust at event-block
+                if {_random} is between 74 and 86:
+                    drop sugar at event-block
+                if {_random} is between 87 and 99:
+                    drop fermented spider eye at event-block
+                if {_random} is between 100 and 112:
+                    drop spider eye at event-block
+                if {_random} is between 113 and 125:
+                    drop pufferfish at event-block
+
+on piston extend:
+    wait 1 tick
+    if block data tag "facing" of event-block is "down":
+        if moved blocks is not set:
+            if block 2 meters below event-block is smithing table:
+                loop dropped items in radius 1 of location 1 meter below event-block:
+                    set {_i} to item of loop-value 
+                    if loop-value is a pickaxe or axe or shovel or hoe:
+                        if nbt of {_i} contains "Skill:""DigestiveAlchemy""":
+                            continue
+                        else:
+                            loop dropped items in radius 1 of location 1 meter below event-block:
+                                set {_i2} to item of loop-value-2
+                                if 1 of {_i2} is {saveditems::CrimsonFlesh}:
+                                    add "" and "%line 5 of lore of {saveditems::CrimsonFlesh}%" and "%line 6 of lore of {saveditems::CrimsonFlesh}%" and "%line 7 of lore of {saveditems::CrimsonFlesh}%" and "%line 8 of lore of {saveditems::CrimsonFlesh}%" and "%line 9 of lore of {saveditems::CrimsonFlesh}%" to lore of {_i}
+                                    add "{Skill:DigestiveAlchemy}" to nbt of {_i}
+                                    set item of loop-value-1 to {_i}
+                                    add -1 to item amount of item of loop-value-2
+                                    make a fake explosion at location of loop-value-1
+                                    exit loop
+                    continue
+
+on piston extend:
+    wait 1 tick
+    if block data tag "facing" of event-block is "down":
+        if moved blocks is not set:
+            if block 2 meters below event-block is smithing table:
+                loop dropped items in radius 1 of location 1 meter below event-block:
+                    set {_i} to item of loop-value 
+                    if {_i} is a sword or axe or bow or crossbow or trident:
+                        if nbt of {_i} contains "Skill:""NovaBorn""":
+                            continue
+                        else:
+                            loop dropped items in radius 1 of location 1 meter below event-block:
+                                set {_i2} to item of loop-value-2
+                                if 1 of {_i2} is {saveditems::InfernoLantern}:
+                                    add "" and "%line 5 of lore of {saveditems::InfernoLantern}%" and "%line 6 of lore of {saveditems::InfernoLantern}%" and "%line 7 of lore of {saveditems::InfernoLantern}%" and "%line 8 of lore of {saveditems::InfernoLantern}%" to lore of {_i}
+                                    add "{Skill:NovaBorn}" to nbt of {_i}
+                                    set item of loop-value-1 to {_i}
+                                    add -1 to item amount of item of loop-value-2
+                                    make a fake explosion at location of loop-value-1
+                                    exit loop
+                    continue
+                    
+                    

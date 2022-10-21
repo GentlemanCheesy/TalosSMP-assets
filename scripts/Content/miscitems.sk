@@ -1,0 +1,396 @@
+on mine:
+    if player's tool is any pickaxe or any shovel:
+        if nbt of player's tool contains "CheesyCraft:""PrismPickaxe""" or "CheesyCraft:""PrismShovel""":
+            chance of 50%:
+                loop all blocks in radius 1 of event-block:
+                    if loop-block is solid:
+                        if {slimefun.blocks::%loop-block's location%} is not true:
+                            if loop-block's location is not event-block's location:
+                                if block hardness of loop-block > -1:
+                                    add loop-block's location to {_loc::*}
+                set {_l} to random element out of {_loc::*}  
+                if nbt of player's tool contains "Skill:""DigestiveAlchemy""":
+                    set block at location of {_l} to air
+                    chance of 6%:
+                        set {_random} to a random integer between 1 and 125
+                        if {_random} is 1:
+                            drop turtle helmet at {_l}
+                        if {_random} is 2:
+                            drop dragon breath at {_l}
+                        if {_random} is between 2 and 6:
+                            drop magma cream at {_l}
+                        if {_random} is between 7 and 11:
+                            drop ghast tear at {_l}
+                        if {_random} is between 12 and 16:
+                            drop phantom membrane at {_l}
+                        if {_random} is between 17 and 21:
+                            drop blaze powder at {_l}
+                        if {_random} is between 22 and 26:
+                            drop nether wart at {_l}
+                        if {_random} is between 27 and 33:
+                            drop golden carrot at {_l}
+                        if {_random} is between 34 and 40:
+                            drop rabbit foot at {_l}
+                        if {_random} is between 41 and 47:
+                            drop gunpowder at {_l}
+                        if {_random} is between 48 and 60:
+                            drop glowstone dust at {_l}
+                        if {_random} is between 61 and 73:
+                            drop redstone dust at {_l}
+                        if {_random} is between 74 and 86:
+                            drop sugar at {_l}
+                        if {_random} is between 87 and 99:
+                            drop fermented spider eye at {_l}
+                        if {_random} is between 100 and 112:
+                            drop spider eye at {_l}
+                        if {_random} is between 113 and 125:
+                            drop pufferfish at {_l}
+                else:
+                    break block at {_l} naturally using player's tool
+                clear {_loc::*}
+            wait 1 tick
+            while {_l} is set:
+                wait 1 tick
+                chance of 50%:
+                    loop all blocks in radius 1 of {_l}:
+                        if loop-block is solid:
+                            if {slimefun.blocks::%loop-block's location%} is not true:
+                                if loop-block's location is not {_l}:
+                                    if block hardness of loop-block > -1:
+                                        add loop-block's location to {_loc::*}
+                    set {_l} to random element out of {_loc::*}  
+                    clear {_loc::*}  
+                    if nbt of player's tool contains "Skill:""DigestiveAlchemy""":
+                        set block at location of {_l} to air
+                        chance of 6%:
+                            set {_random} to a random integer between 1 and 125
+                            if {_random} is 1:
+                                drop turtle helmet at {_l}
+                            if {_random} is 2:
+                                drop dragon breath at {_l}
+                            if {_random} is between 2 and 6:
+                                drop magma cream at {_l}
+                            if {_random} is between 7 and 11:
+                                drop ghast tear at {_l}
+                            if {_random} is between 12 and 16:
+                                drop phantom membrane at {_l}
+                            if {_random} is between 17 and 21:
+                                drop blaze powder at {_l}
+                            if {_random} is between 22 and 26:
+                                drop nether wart at {_l}
+                            if {_random} is between 27 and 33:
+                                drop golden carrot at {_l}
+                            if {_random} is between 34 and 40:
+                                drop rabbit foot at {_l}
+                            if {_random} is between 41 and 47:
+                                drop gunpowder at {_l}
+                            if {_random} is between 48 and 60:
+                                drop glowstone dust at {_l}
+                            if {_random} is between 61 and 73:
+                                drop redstone dust at {_l}
+                            if {_random} is between 74 and 86:
+                                drop sugar at {_l}
+                            if {_random} is between 87 and 99:
+                                drop fermented spider eye at {_l}
+                            if {_random} is between 100 and 112:
+                                drop spider eye at {_l}
+                            if {_random} is between 113 and 125:
+                                drop pufferfish at {_l}
+                    else:
+                        break block at {_l} naturally using player's tool
+                else:
+                    clear {_l}
+                    clear {_loc::*} 
+
+on place:
+    if nbt of player's held item contains "slimefun_item":
+        set {slimefun.blocks::%event-block's location%} to true
+
+on break:
+    if {slimefun.blocks::%event-block's location%} is true:
+        clear {slimefun.blocks::%event-block's location%}
+
+on place of hopper:
+    if nbt of player's held item contain "CheesyCraft:""HopperMod""":
+        cancel event
+
+on place of comparator:
+    if nbt of player's held item contain "CheesyCraft:""RedstoneSwitchMod""" or "CheesyCraft:""RedstoneActivationMod""":
+        cancel event
+
+on death:
+    if victim is a guardian:
+        set {_chance} to 5
+        if level of looting of the attacker's tool >= 1:
+            if level of looting of the attacker's tool <= 3:
+                add (level of looting of the attacker's tool * 5) to {_chance}
+            else:
+                add 15 to {_chance}
+        chance of {_chance}%:
+            drop {saveditems::PristinePrismarineShard} at location of victim
+            
+on damage:
+    if attacker is player:
+        if damage was caused by thorns:
+            if nbt of attacker's held item contains "CheesyCraft:""Roseblood""":
+                if attacker's held item is any sword:
+                    set damage to damage * 3
+        
+on toggle gliding:
+    if nbt of player's chestplate slot contains "CheesyCraft:""PrismaticDragonWings""":
+        if gliding of player is on:
+            delete {gliding::%player%}
+            add 0 to {wingsbonus::%player%}
+            apply speed to player for "%{wingsbonus::%player%}% seconds" parsed as timespan
+            apply jump boost 2 to player for "%{wingsbonus::%player%}% seconds" parsed as timespan
+            clear {wingsbonus::%player%}
+        if gliding of player is off:
+            set {gliding::%player%} to true
+        
+every 1 second:
+    loop all players:
+        if {gliding::%loop-player%} is true:
+            add 1 to {wingsbonus::%loop-player%}
+            
+on right click with firework rocket:
+    if nbt of player's held item contains "CheesyCraft:""Infiniburner""":
+        if clicked entity is set:
+            cancel event
+        if event-block is set:
+            cancel event
+        else if gliding of player is on:
+            set {_i} to player's tool
+            set {_s} to index of player's current hotbar slot
+            wait 1 tick
+            set slot {_s} of player to {_i}
+    else if nbt of player's offhand tool contains "CheesyCraft:""Infiniburner""":
+        if clicked entity is set:
+            cancel event
+        if event-block is set:
+            cancel event
+        else if gliding of player is on:
+            set {_i} to player's offhand tool
+            set {_s} to 40
+            wait 1 tick
+            set slot {_s} of player to {_i}
+
+on left click with firework rocket:
+    if nbt of player's held item contains "CheesyCraft:""Infiniburner""":
+        cancel event
+        
+on right click with hopper:
+    if nbt of player's held item contains "CheesyCraft:""FunnelMod""":
+        cancel event        
+        
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""OverworldOrb""":
+        cancel event
+        if {overworld::%player%::overworld} is not set:
+            set {overworldorbitem::%player%} to 1 of player's tool
+            create holo with line {overworldorbitem::%player%} at location 0.25 above player and store it in {overworld::%player%::overworld}
+            make the last created hologram follow player with offset 3 meter above
+         
+on player world change:
+    if {overworld::%player%::overworld} is set:
+        create holo with line {overworldorbitem::%player%} at location 0.25 above player and store it in {overworld::%player%::overworld}
+        make the last created hologram follow player with offset 3 meter above
+            
+on leave:
+    clear {overworld::%player%::overworld}
+    
+on right click:
+    if player's held item is lightning rod:
+        if nbt of player's held item contains "CheesyCraft:""ZeusDialup""":
+            cancel event
+            if player's helmet is air:
+                set player's helmet to 1 of player's held item
+                remove 1 of player's held item from player's held item
+            else:
+                send "&cUnequip your current helmet first."
+    
+on right click:
+    if player's held item is amethyst shard:
+        if nbt of player's held item contains "CheesyCraft:""VexalPhone""":
+            cancel event
+            if player is sneaking:
+                if inventory of clicked block is set:
+                    if {slimefun.blocks::%clicked block's location%} is not true:
+                        set {vexalphone::%player's uuid%} to clicked block
+            else:
+                open {vexalphone::%player's uuid%} to player
+    
+on lightning:
+    loop all players in radius 100 of location of event-entity:
+        if nbt of loop-player's helmet contains "CheesyCraft:""ZeusDialup""":
+            set {_value} to tag "CP" of nbt of loop-player's helmet
+            if {_value} + 10 <= 5000:
+                set {_num} to {_value} + 10
+                add "{""CP"": %{_num}%}" to nbt of loop-player's helmet
+                set line 7 of lore of loop-player's helmet to "&8→ &6⚡ &75000 CP Capacity &8Holding %{_num}% &8CP" 
+                
+every 1 second:
+    loop {powerbank.location::*}:
+        if chunk at loop-value is loaded:
+            loop all players in radius 1.5 of loop-value:
+                loop all items in loop-player's inventory:
+                    if nbt of loop-item contains "CheesyCraft:""ZeusDialup""":
+                        if loop-item is lightning rod:
+                            if {powerbank.power::%loop-value-1%} < {powerbank.powertotal::%loop-value-1%}:
+                                set {_value} to tag "CP" of nbt of loop-item
+                                set {_num} to {powerbank.powertotal::%loop-value-1%} - {powerbank.power::%loop-value-1%}
+                                if {_value} > {_num}:
+                                    set {_num} to {_value} - {_num}
+                                else:
+                                    set {_num} to {_value}
+                                add {_num} to {powerbank.power::%loop-value-1%}
+                                set {_value} to {_value} - {_num}
+                                add "{""CP"": %{_value}%}" to nbt of loop-item
+                                if {_value} is 0:
+                                    set line 7 of lore of loop-item to "&8→ &6⚡ &75000 CP Capacity"
+                                else:
+                                    set line 7 of lore of loop-item to "&8→ &6⚡ &75000 CP Capacity &8Holding %{_value}% &8CP" 
+                    
+on damage:
+    if nbt of attacker's tool contains "CheesyCraft:""MineSweeper""":
+        if damage cause is sweep attack:
+            set {_loc1} to location of victim
+            set {_loc2} to location of attacker
+            set y-coordinate of {_loc1} to 1
+            set y-coordinate of {_loc2} to 1
+            set {_speed} to 2 + ((enchantment level of sweeping edge on attacker's tool + enchantment level of knockback on attacker's tool) * 2)
+            push victim (direction from {_loc2} to {_loc1}) at speed {_speed}
+ 
+on piston extend:
+    wait 1 tick
+    if block data tag "facing" of event-block is "down":
+        if moved blocks is not set:
+            if block 2 meters below event-block is smithing table:
+                loop dropped items in radius 1 of location 1 meter below event-block:
+                    set {_i} to item of loop-value 
+                    if nbt of {_i} contains "CheesyCraft:""SpongeStaff""":
+                        loop dropped items in radius 1 of location 1 meter below event-block:
+                            set {_i2} to item of loop-value-2
+                            if 1 of {_i2} is {saveditems::MysticalPatina}:
+                                if item amount of {_i2} >= 10:
+                                    set item of loop-value-1 to {saveditems::ScaldingStaff}
+                                    add -10 to item amount of item of loop-value-2
+                                    make a fake explosion at location of loop-value-1
+                                    exit loop
+                    continue
+                    
+on piston extend:
+    wait 1 tick
+    if block data tag "facing" of event-block is "down":
+        if moved blocks is not set:
+            if block 2 meters below event-block is smithing table:
+                loop dropped items in radius 1 of location 1 meter below event-block:
+                    set {_i} to item of loop-value 
+                    if nbt of {_i} contains "CheesyCraft:""InfusedFlute""":
+                        loop dropped items in radius 1 of location 1 meter below event-block:
+                            set {_i2} to item of loop-value-2
+                            if 1 of {_i2} is {saveditems::MysticalPatina}:
+                                if item amount of {_i2} >= 10:
+                                    set item of loop-value-1 to {saveditems::WarpingFlute}
+                                    add -10 to item amount of item of loop-value-2
+                                    make a fake explosion at location of loop-value-1
+                                    exit loop
+                    continue
+                    
+on piston extend:
+    wait 1 tick
+    if block data tag "facing" of event-block is "down":
+        if moved blocks is not set:
+            if block 2 meters below event-block is smithing table:
+                loop dropped items in radius 1 of location 1 meter below event-block:
+                    set {_i} to item of loop-value 
+                    if {_i} is unmodified shield:
+                        loop dropped items in radius 1 of location 1 meter below event-block:
+                            set {_i2} to item of loop-value-2
+                            if 1 of {_i2} is {saveditems::MysticalPatina}:
+                                if item amount of {_i2} >= 10:
+                                    set item of loop-value-1 to {saveditems::ShockShield}
+                                    add -10 to item amount of item of loop-value-2
+                                    make a fake explosion at location of loop-value-1
+                                    exit loop
+                    continue
+                        
+on right click:
+    if nbt of player's held item contains "CheesyCraft:""SlimeShot""":
+        set {bowdraw::%player%} to now
+        give player 1 arrow
+        while nbt of player's held item contains "CheesyCraft:""SlimeShot""":
+            if {bowdraw::%player%} is not set:
+                remove 1 arrow from player's inventory
+                stop
+            wait 1 tick
+        delete {bowdraw::%player%}
+        remove 1 arrow from player's inventory
+    else if nbt of player's offhand tool contains "CheesyCraft:""SlimeShot""":
+        set {bowdraw::%player%} to now
+        give player 1 arrow
+        while nbt of player's offhand tool contains "CheesyCraft:""SlimeShot""":
+            if {bowdraw::%player%} is not set:
+                remove 1 arrow from player's inventory
+                stop
+            wait 1 tick
+        delete {bowdraw::%player%}
+        remove 1 arrow from player's inventory
+
+on swap hand items:
+    if {bowdraw::%player%} is false:
+        cancel event
+
+on shoot:
+    if nbt of shooter's held item contains "CheesyCraft:""SlimeShot""":
+        set {_lvl} to level of punch of shooter's held item
+        if difference between {bowdraw::%shooter%} and now >= 1 second:
+            push shooter upwards at speed 0.5 * ({_lvl} / 2 + 1)
+            push shooter backwards at speed 0.75 * ({_lvl} + 1)
+        else:
+            push shooter upwards at speed 0.3 * ({_lvl} / 2 + 1)
+            push shooter backwards at speed 0.4 * ({_lvl} + 1)
+        delete event-projectile
+        delete {bowdraw::%shooter%}
+    else if nbt of shooter's offhand tool contains "CheesyCraft:""SlimeShot""":
+        set {_lvl} to level of punch of shooter's offhand tool
+        if difference between {bowdraw::%shooter%} and now >= 1 second:
+            push shooter upwards at speed 0.5 * ({_lvl} / 2 + 1)
+            push shooter backwards at speed 0.75 * ({_lvl} + 1)
+        else:
+            push shooter upwards at speed 0.3 * ({_lvl} / 2 + 1)
+            push shooter backwards at speed 0.4 * ({_lvl} + 1)
+        delete event-projectile
+        delete {bowdraw::%shooter%}
+        
+        
+on damage:
+    if victim is player:
+        if damage cause is fall:
+            if nbt of boots of victim contains "CheesyCraft:""SpringShoes""":
+                cancel event
+                push victim upwards at speed 0.15 * final damage
+                
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contains "CheesyCraft:""WardstaticMod""":
+            cancel event
+            send "&7Set the max number of uses by entering an integer in chat."
+            set {wardstatic.answer::%player%} to true
+            set {_i} to player's held item
+            while {wardstatic.answer::%player%} is true:
+                wait 1 tick
+                if player's held item is not {_i}:
+                    delete {wardstatic.answer::%player%}
+                    send "&cCanceled input!"
+        
+on chat:
+    if {wardstatic.answer::%player%} is true:
+        delete {wardstatic.answer::%player%}
+        cancel event
+        wait 1 tick
+        if message parsed as an integer is a integer:
+            add "{Max:%message parsed as an integer%}" to nbt of player's held item
+            add "{Total:0}" to nbt of player's held item
+            send "&fInput Accepted!"
+            stop
+        send "&cIncorrect input, please use a integer. Make sure to type it correctly." to player

@@ -1,0 +1,274 @@
+on place of player wall head:
+    if nbt of player's held item contain "CheesyCraft:""SuperMagnet""":
+        cancel event
+        
+on place of player head:
+    if nbt of player's held item contain "CheesyCraft:""SuperMagnet""":
+        set {magnet.place::%event-block's location%} to true
+        set {magnet.location::%event-block's location%} to event-block's location
+
+on break of player head:
+    if {magnet.place::%event-block's location%} is true:
+        cancel the drops
+        clear {magnet.place::%event-block's location%}
+        clear {magnet.location::%event-block's location%}
+        drop {saveditems::supermagnet}
+        loop all items in gui with id "Magnet.%event-block's location%":
+            if index of loop-item is 3 or 4 or 5:
+                drop loop-item
+        delete gui with id "Magnet.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {magnet.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "Magnet.%event-block's location%" is not set:
+                    create a gui with id "Magnet.%event-block's location%" with virtual dropper inventory named "Super Magnet" with shape "w_w" and "xxx" and "www":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                open gui with id "Magnet.%event-block's location%" to player
+                while name of player's current inventory contains "Super Magnet":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+                
+
+every 1 second:
+    loop {magnet.location::*}:
+        loop {powerbank.location::*}:
+            if distance between loop-value-1 and loop-value-2 <= 8:
+                if {powerbank.power::%loop-value-2%} >= 1:                
+                    edit gui with id "Magnet.%loop-value-1%":
+                        make gui slot 1 with lime stained glass pane named "&aCurrent Setup" with lore "" and "&7This Magnet has power!"
+                    exit loop
+                else:
+                    edit gui with id "Magnet.%loop-value-1%":
+                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Magnet has no power."
+                    exit loop
+            else:
+                edit gui with id "Magnet.%loop-value-1%":
+                    make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Magnet needs a Power Bank nearby first."
+                continue loop
+                    
+every 1 second:                 
+    loop {magnet.location::*}:
+        if chunk at loop-value is loaded:
+            if {SuperMagnet.maxed::%loop-value%} is true:
+                continue loop
+            loop (3, 4, and 5):
+                if nbt of slot loop-value-2 of gui with id "Magnet.%loop-value-1%" contains "RedstoneSwitchMod":
+                    if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                        loop {powerbank.location::*}:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-3
+                            if {_c1::*} = {_c2::*}:
+                                if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneSwitchMod":
+                                    if check [block at loop-value-3 is not redstone powered]->[block at loop-value-3 is not indirectly redstone powered]:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                else if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneActivationMod":
+                                    if block at loop-value-3 is redstone powered:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                    if block at loop-value-3 is indirectly redstone powered:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                else:
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        loop all dropped items in radius 11 around loop-value-1:
+                                            if distance between loop-value-4 and loop-value-1 > 1:
+                                                if {powerbank.power::%loop-value-3%} >= 1:  
+                                                    teleport loop-value-4 to block above loop-value-1   
+                                                    add -1 to {powerbank.power::%loop-value-3%}
+                                                    set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                    exit loop
+                    exit loop
+                if nbt of slot loop-value-2 of gui with id "Magnet.%loop-value-1%" contains "RedstoneActivationMod":
+                    if block at loop-value-1 is redstone powered:
+                        loop {powerbank.location::*}:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-3
+                            if {_c1::*} = {_c2::*}:
+                                if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneSwitchMod":
+                                    if check [block at loop-value-3 is not redstone powered]->[block at loop-value-3 is not indirectly redstone powered]:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                else if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneActivationMod":
+                                    if block at loop-value-3 is redstone powered:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                    if block at loop-value-3 is indirectly redstone powered:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                else:
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        loop all dropped items in radius 11 around loop-value-1:
+                                            if distance between loop-value-4 and loop-value-1 > 1:
+                                                if {powerbank.power::%loop-value-3%} >= 1:  
+                                                    teleport loop-value-4 to block above loop-value-1   
+                                                    add -1 to {powerbank.power::%loop-value-3%}
+                                                    set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                    exit loop
+                    if block at loop-value-1 is indirectly redstone powered:
+                        loop {powerbank.location::*}:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-3
+                            if {_c1::*} = {_c2::*}:
+                                if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneSwitchMod":
+                                    if check [block at loop-value-3 is not redstone powered]->[block at loop-value-3 is not indirectly redstone powered]:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                else if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneActivationMod":
+                                    if block at loop-value-3 is redstone powered:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                    if block at loop-value-3 is indirectly redstone powered:
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            loop all dropped items in radius 11 around loop-value-1:
+                                                if distance between loop-value-4 and loop-value-1 > 1:
+                                                    if {powerbank.power::%loop-value-3%} >= 1:  
+                                                        teleport loop-value-4 to block above loop-value-1   
+                                                        add -1 to {powerbank.power::%loop-value-3%}
+                                                        set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                else:
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        loop all dropped items in radius 11 around loop-value-1:
+                                            if distance between loop-value-4 and loop-value-1 > 1:
+                                                if {powerbank.power::%loop-value-3%} >= 1:  
+                                                    teleport loop-value-4 to block above loop-value-1   
+                                                    add -1 to {powerbank.power::%loop-value-3%}
+                                                    set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                    exit loop
+                    exit loop
+                else:
+                    loop {powerbank.location::*}:
+                        set {_c1::*} to region at loop-value-1
+                        set {_c2::*} to region at loop-value-3
+                        if {_c1::*} = {_c2::*}:
+                            if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneSwitchMod":
+                                if check [block at loop-value-3 is not redstone powered]->[block at loop-value-3 is not indirectly redstone powered]:
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        loop all dropped items in radius 11 around loop-value-1:
+                                            if distance between loop-value-4 and loop-value-1 > 1:
+                                                if {powerbank.power::%loop-value-3%} >= 1:  
+                                                    teleport loop-value-4 to block above loop-value-1   
+                                                    add -1 to {powerbank.power::%loop-value-3%}
+                                                    set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                    exit loop
+                            else if nbt of slot loop-value-2 of gui with id "powerbank.%loop-value-3%" contains "RedstoneActivationMod":
+                                if block at loop-value-3 is redstone powered:
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        loop all dropped items in radius 11 around loop-value-1:
+                                            if distance between loop-value-4 and loop-value-1 > 1:
+                                                if {powerbank.power::%loop-value-3%} >= 1:  
+                                                    teleport loop-value-4 to block above loop-value-1   
+                                                    add -1 to {powerbank.power::%loop-value-3%}
+                                                    set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                if block at loop-value-3 is indirectly redstone powered:
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        loop all dropped items in radius 11 around loop-value-1:
+                                            if distance between loop-value-4 and loop-value-1 > 1:
+                                                if {powerbank.power::%loop-value-3%} >= 1:  
+                                                    teleport loop-value-4 to block above loop-value-1   
+                                                    add -1 to {powerbank.power::%loop-value-3%}
+                                                    set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                    exit loop
+                            else:
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    loop all dropped items in radius 11 around loop-value-1:
+                                        if distance between loop-value-4 and loop-value-1 > 1:
+                                            if {powerbank.power::%loop-value-3%} >= 1:  
+                                                teleport loop-value-4 to block above loop-value-1   
+                                                add -1 to {powerbank.power::%loop-value-3%}
+                                                set {SuperMagnet.activated2::%loop-value-1%} to true
+                                                exit loop
+                                            
+every 2 ticks:
+    loop {magnet.location::*}:
+        if chunk at loop-value is loaded:
+            loop 6 times:
+                set {_n} to loop-number - 1
+                if {_n} is 3 or 4 or 5:
+                    if nbt of slot {_n} of gui with id "Magnet.%loop-value-1%" contains "CheesyCraft:""WardstaticMod""":
+                        set {_total} to tag "Total" of nbt of slot {_n} of gui with id "Magnet.%loop-value-1%"
+                        set {_max} to tag "Max" of nbt of slot {_n} of gui with id "Magnet.%loop-value-1%"
+                        if {_total} = {_max}:
+                            set {SuperMagnet.maxed::%loop-value-1%} to true
+                        if {_total} < {_max}:
+                            if {SuperMagnet.activated2::%loop-value-1%} is true:
+                                add "{Total:%{_total} + 1%}" to nbt of slot {_n} of gui with id "Magnet.%loop-value-1%"
+                        loop all blocks in radius 1 of loop-value-1:
+                            if loop-value-3 is sculk:
+                                delete {SuperMagnet.maxed::%loop-value-1%}
+                                add "{Total:0}" to nbt of slot {_n} of gui with id "Magnet.%loop-value-1%"
+                        delete {SuperMagnet.activated2::%loop-value-1%}
+                
+every 2 ticks:
+    loop {magnet.location::*}:
+        if nbt of slot 3 of gui with id "Magnet.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 3 of gui with id "Magnet.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 3 of gui with id "Magnet.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 4 of gui with id "Magnet.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 4 of gui with id "Magnet.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 4 of gui with id "Magnet.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 5 of gui with id "Magnet.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 5 of gui with id "Magnet.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 5 of gui with id "Magnet.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        delete {SuperMagnet.maxed::%loop-value%}

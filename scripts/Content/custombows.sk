@@ -1,0 +1,137 @@
+on right click:
+    if nbt of player's held item contains "CheesyCraft:""PoisonShot""" or "CheesyCraft:""Squidshot""" or "CheesyCraft:""ShoshBow""":
+        set {bowdraw::%player%} to now
+    
+on shoot:
+    if nbt of shooter's held item contains "CheesyCraft:""PoisonShot""":
+        set {_lvl} to level of power of shooter's held item
+        if difference between {bowdraw::%shooter%} and now >= 1 second: 
+            set {dmg::%event-projectile%} to tag "BaseDamage" of nbt of shooter's held item
+            set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+        else:
+            set {dmg::%event-projectile%} to 5
+            set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+        if nbt of projectile contains "poison":
+            set {poisonshot::%event-projectile%} to true
+
+on shoot:
+    if nbt of shooter's held item contains "CheesyCraft:""Squidshot""":
+        set {_lvl} to level of power of shooter's held item
+        if difference between {bowdraw::%shooter%} and now >= 1 second: 
+            set {dmg::%event-projectile%} to tag "BaseDamage" of nbt of shooter's held item
+            set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+        else:
+            set {dmg::%event-projectile%} to 1
+            set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+        set {_value} to tag "PublicBukkitValues;ItemNumID" of nbt of shooter's held item
+        set {t::%event-projectile%} to 0
+        if {ammo1::%{_value}%::1} is ink sac:
+            set {squidshotblind::%event-projectile%} to true
+            set {ammo1::%{_value}%::1} to "%(item amount of {ammo1::%{_value}%::1} - 1)% %1 of {ammo1::%{_value}%::1}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if "%{ammo1::%{_value}%::1}%" is "glow ink sac":
+            set {squidshotglow::%event-projectile%} to true
+            set {ammo1::%{_value}%::1} to "%(item amount of {ammo1::%{_value}%::1} - 1)% %1 of {ammo1::%{_value}%::1}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if {ammo1::%{_value}%::1} is phantom membrane:
+            set {squidshotslow::%event-projectile%} to true
+            set {ammo1::%{_value}%::1} to "%(item amount of {ammo1::%{_value}%::1} - 1)% %1 of {ammo1::%{_value}%::1}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if {ammo1::%{_value}%::1} is pufferfish:
+            set {squidshotpoison::%event-projectile%} to true
+            set {ammo1::%{_value}%::1} to "%(item amount of {ammo1::%{_value}%::1} - 1)% %1 of {ammo1::%{_value}%::1}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if {ammo2::%{_value}%::2} is ink sac:
+            set {squidshotblind::%event-projectile%} to true
+            set {ammo2::%{_value}%::2} to "%(item amount of {ammo2::%{_value}%::2} - 1)% %1 of {ammo2::%{_value}%::2}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if "%{ammo2::%{_value}%::2}%" is "glow ink sac":
+            set {squidshotglow::%event-projectile%} to true
+            set {ammo2::%{_value}%::2} to "%(item amount of {ammo2::%{_value}%::2} - 1)% %1 of {ammo2::%{_value}%::2}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if {ammo2::%{_value}%::2} is phantom membrane:
+            set {squidshotslow::%event-projectile%} to true
+            set {ammo2::%{_value}%::2} to "%(item amount of {ammo2::%{_value}%::2} - 1)% %1 of {ammo2::%{_value}%::2}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if {ammo2::%{_value}%::2} is pufferfish:
+            set {squidshotpoison::%event-projectile%} to true
+            set {ammo2::%{_value}%::2} to "%(item amount of {ammo2::%{_value}%::2} - 1)% %1 of {ammo2::%{_value}%::2}%" parsed as item
+            add 5 to {t::%event-projectile%}
+        if nbt of {ammo1::%{_value}%::1} contains "CheesyCraft:""InkPhial""":
+            set {ammo1::%{_value}%::1} to (item amount of {ammo1::%{_value}%::1} - 1) of {ammo1::%{_value}%::1}
+            set {t::%event-projectile%} to (3 * {t::%event-projectile%})
+        if nbt of {ammo2::%{_value}%::2} contains "CheesyCraft:""InkPhial""":
+            set {ammo2::%{_value}%::2} to (item amount of {ammo2::%{_value}%::2} - 1) of {ammo2::%{_value}%::2}
+            set {t::%event-projectile%} to (3 * {t::%event-projectile%})
+        
+on place:
+    if player's held item is player head item:
+        if nbt of player's held item contains "CheesyCraft:""InkPhial""":
+            cancel event
+
+on damage:
+    if {squidshotblind::%event-projectile%} is true:
+        clear {squidshotblind::%event-projectile%}
+        apply blindness 1 to the victim for "%{t::%event-projectile%}% seconds" parsed as timespan
+    if {squidshotglow::%event-projectile%} is true:
+        clear {squidshotglow::%event-projectile%}
+        apply glowing 1 to the victim for "%{t::%event-projectile%}% seconds" parsed as timespan
+    if {squidshotslow::%event-projectile%} is true:
+        clear {squidshotslow::%event-projectile%}
+        apply slowness 1 to the victim for "%{t::%event-projectile%}% seconds" parsed as timespan
+    if {squidshotpoison::%event-projectile%} is true:
+        clear {squidshotpoison::%event-projectile%}
+        apply poison 2 to the victim for "%{t::%event-projectile%}% seconds" parsed as timespan
+
+on tool break:
+    if event-item is bow:
+        if nbt of event-item contains "CheesyCraft:""Squidshot""":
+            set {_value} to tag "ItemNumID" of nbt of event-item
+            drop {ammo1::%{_value}%::1} at location of player
+            clear {ammo1::%{_value}%::1}
+            drop {ammo2::%{_value}%::2} at location of player
+            clear {ammo2::%{_value}%::2}
+
+on death:
+    if victim is glow squid:
+        set {_chance} to 10
+        if level of looting of the attacker's tool >= 1:
+            if level of looting of the attacker's tool <= 3:
+                add (level of looting of the attacker's tool * 5) to {_chance}
+            else:
+                add 15 to {_chance}
+        chance of {_chance}%:
+            drop {saveditems::Squidshot} at location of victim
+
+on left click:
+        if player's held item is bow:
+                if nbt of player's held item contains "CheesyCraft:""Squidshot""":
+                        if nbt of player's held item does not contain "ItemNumID:" and "PublicBukkitValues":
+                                add 1 to {num::Squidshot}
+                                add "{PublicBukkitValues: {""ItemNumID"": %{num::Squidshot}%}}" to nbt of player's held item
+                        set {_value} to tag "PublicBukkitValues;ItemNumID" of nbt of player's held item
+                        if gui with id "Squidshot.%{_value}%" is not set:
+                                create a gui with id "Squidshot.%{_value}%" with virtual dropper inventory named "&9Squidshot":      
+                                        make gui slot 0 with black stained glass pane named "&0 "      
+                                        make gui slot 1 with black stained glass pane named "&0 "      
+                                        make gui slot 2 with black stained glass pane named "&0 " 
+                                        make gui slot 3 with moveable air
+                                        make gui slot 4 with {saveditems::InfoSquidshot}
+                                        make gui slot 5 with moveable air    
+                                        make gui slot 6 with black stained glass pane named "&0 "      
+                                        make gui slot 7 with black stained glass pane named "&0 "      
+                                        make gui slot 8 with black stained glass pane named "&0 "
+                                        run on gui close:
+                                                clear {ammo1::%{_value}%::1}
+                                                clear {ammo2::%{_value}%::2}
+                                                set {ammo1::%{_value}%::1} to slot 3 of player's current inventory
+                                                set {ammo2::%{_value}%::2} to slot 5 of player's current inventory
+                        open gui "Squidshot.%{_value}%" to player
+                        edit gui with id "Squidshot.%{_value}%":
+                                make gui slot 3 with moveable {ammo1::%{_value}%::1}
+                                make gui slot 5 with moveable {ammo2::%{_value}%::2}
+
+on inventory click:
+        if nbt of clicked slot contains "CheesyCraft:""Squidshot""":
+                if name of player's current inventory is "&9Squidshot":
+                        cancel event

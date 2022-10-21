@@ -1,0 +1,20 @@
+on inventory click:
+    if event-item is any sword:
+        if nbt of cursor slot of player contains "CheesyCraft:""MirrorBlade""":  
+            if cursor slot of player is not shulker box:
+                if nbt of event-item contains "CheesyCraft:""MirrorBlade""":
+                    send "&cMirroring a Mirrored Blade could potentially create a rip in the fabric of reality, best not to continue..."
+                    stop
+                if nbt of event-item contains "CheesyCraft:""MirrorClone""":
+                    send "&cMirroring a Mirrored Blade could potentially create a rip in the fabric of reality, best not to continue..."
+                    stop
+                cancel event
+                set {_i} to event-item
+                remove 1 of player's cursor slot from player's cursor slot
+                if display name of {_i} is set:
+                    set display name of {_i} to "&bMirrored %event-item's display name%"
+                else:
+                    set {_t::*} to "%event-item's type%" in strict proper case
+                    set display name of {_i} to "&bMirrored %{_t::*}%"
+                add {_i} to player's cursor slot
+                add "{CheesyCraft:""MirrorClone""}" to nbt of player's cursor slot

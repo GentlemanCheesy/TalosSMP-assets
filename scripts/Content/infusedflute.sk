@@ -1,0 +1,153 @@
+options:
+    avoid: air or water or lava
+
+on death:
+    if victim is a wandering trader:
+        set {_chance} to 10
+        if level of looting of the attacker's tool >= 1:
+            if level of looting of the attacker's tool <= 3:
+                add (level of looting of the attacker's tool * 5) to {_chance}
+            else:
+                add 15 to {_chance}
+        chance of {_chance}%:
+            add 1 to {num::InfusedFlute}
+            set {_i} to {saveditems::InfusedFlute}
+            add "{PublicBukkitValues: {""ItemNumID"": %{num::InfusedFlute}%}}" to nbt of {_i}
+            drop {_i} at location of victim
+
+on place:
+    if player's held item is bamboo:
+        if nbt of player's held item contains "CheesyCraft:""InfusedFlute""":
+            cancel event
+
+on join:
+    wait 3 ticks
+    while player is online:
+        wait 1 second
+        loop all items in player's inventory:
+            if nbt of loop-item contains "CheesyCraft:""InfusedFlute""":
+                if item amount of loop-item = 1:
+                    if nbt of loop-item does not contain "ItemNumID" and "PublicBukkitValues":
+                        add 1 to {num::InfusedFlute}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::InfusedFlute}%}}" to nbt of loop-item
+                    if nbt of loop-item contains "{PublicBukkitValues: {""ItemNumID"": 0}}":
+                        add 1 to {num::InfusedFlute}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::InfusedFlute}%}}" to nbt of loop-item
+
+on right click:
+    if player's held item is bamboo:
+        if nbt of player's held item contains "CheesyCraft:""InfusedFlute""":
+            set {_value} to tag "PublicBukkitValues;ItemNumID" of nbt of player's held item
+            set {slots.%{_value}%::*} to 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, and 35
+            if gui with id "InfusedFlute.%{_value}%" is not set:
+                create a gui with id "InfusedFlute.%{_value}%" with virtual chest inventory with 4 rows named "&9Click the notes!":
+                    run on gui close:
+                        set {_slotsclose::*} to 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, and 35
+                        make gui slots {_slotsclose::*} with gray stained glass pane named " "
+                        clear {clickednotes::%{_value}%}
+            if difference between {cooldown::%{_value}%} and now < 1 hours:
+                set {_difference} to difference between now and {cooldown::%{_value}%}
+                send "&f[&c!&f] &cThis item's ability is still on cooldown!"
+                send "&f[&c!&f] &7(&cTime left: &4% difference between {_difference} and 1 hour%&7)"
+            else:
+                open gui with id "InfusedFlute.%{_value}%" to player
+                edit gui with id "InfusedFlute.%{_value}%":
+                    make gui slots {slots.%{_value}%::*} with gray stained glass pane named " "
+                    loop 5 times:
+                        set {_chance.%{_value}%} to random element of {slots.%{_value}%::*}
+                        remove {_chance.%{_value}%} from {slots.%{_value}%::*}
+                        make gui slot "%{_chance.%{_value}%}%" parsed as a integer with lime concrete named "&aClick here!":
+                            make gui slot {_chance.%{_value}%} with red concrete named " "
+                            add 1 to {clickednotes::%{_value}%}
+                            if {clickednotes::%{_value}%} is 1:
+                                play sound "block.note_block.flute" with volume 1 and pitch 1.19 at gui player's location
+                            if {clickednotes::%{_value}%} is 2:
+                                play sound "block.note_block.flute" with volume 1 and pitch 1.33 at gui player's location
+                            if {clickednotes::%{_value}%} is 3:
+                                play sound "block.note_block.flute" with volume 1 and pitch 1.06 at gui player's location
+                            if {clickednotes::%{_value}%} is 4:
+                                play sound "block.note_block.flute" with volume 1 and pitch 0.59 at gui player's location
+                            if {clickednotes::%{_value}%} is equal to 5:
+                                play sound "block.note_block.flute" with volume 1 and pitch 0.79 at gui player's location
+                                clear {clickednotes::%{_value}%}
+                                set {_loc::old} to gui player's location
+                                while gui player's location is {_loc::old}:
+                                    wait 2 ticks
+                                    set {_loc::new} to location at random number between (gui player's x location - 50) and (gui player's x location + 50), 0, random number between (gui player's z location - 50) and (gui player's z location + 50)
+                                    loop blocks above {_loc::new}:
+                                        if loop-block and block above loop-block are air:
+                                            if block under loop-block is not {@avoid}:
+                                                set {_loc::new} to location of loop-block
+                                                teleport gui player to {_loc::new}
+                                                set {cooldown::%{_value}%} to now
+                                close gui player's inventory
+                            
+on place:
+    if player's held item is bamboo:
+        if nbt of player's held item contains "CheesyCraft:""WarpingFlute""":
+            cancel event
+
+on right click:
+    if player's held item is bamboo:
+        if nbt of player's held item contains "CheesyCraft:""WarpingFlute""":
+            if item amount of player's held item = 1:
+                if nbt of player's held item does not contain "ItemNumID" and "PublicBukkitValues":
+                    add 1 to {num::WarpingFlute}
+                    add "{PublicBukkitValues: {""ItemNumID"": %{num::WarpingFlute}%}}" to nbt of player's held item
+                set {_value} to tag "PublicBukkitValues;ItemNumID" of nbt of player's held item
+                set {slots.%{_value}%::*} to 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, and 35
+                if gui with id "WarpingFlute.%{_value}%" is not set:
+                    create a gui with id "WarpingFlute.%{_value}%" with virtual chest inventory with 4 rows named "&9Click the notes!":
+                        run on gui close:
+                            set {_slotsclose::*} to 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, and 35
+                            make gui slots {_slotsclose::*} with gray stained glass pane named " "
+                            clear {clickednotes::%{_value}%}
+                if difference between {cooldown.warp::%{_value}%} and now < 10 minutes:
+                    set {_difference} to difference between now and {cooldown.warp::%{_value}%}
+                    send "&f[&c!&f] &cThis item's ability is still on cooldown!"
+                    send "&f[&c!&f] &7(&cTime left: &4% difference between {_difference} and 10 minutes%&7)"
+                else:
+                    open gui with id "WarpingFlute.%{_value}%" to player
+                    edit gui with id "WarpingFlute.%{_value}%":
+                        make gui slots {slots.%{_value}%::*} with gray stained glass pane named " "
+                        loop 6 times:
+                            set {_chance.%{_value}%} to random element of {slots.%{_value}%::*}
+                            remove {_chance.%{_value}%} from {slots.%{_value}%::*}
+                            make gui slot "%{_chance.%{_value}%}%" parsed as a integer with lime concrete named "&aClick here!":
+                                make gui slot {_chance.%{_value}%} with red concrete named " "
+                                add 1 to {clickednotes::%{_value}%}
+                                if {clickednotes::%{_value}%} is 1:
+                                    play sound "block.note_block.flute" with volume 1 and pitch 1 at gui player's location
+                                if {clickednotes::%{_value}%} is 2:
+                                    play sound "block.note_block.flute" with volume 1 and pitch 1 at gui player's location
+                                if {clickednotes::%{_value}%} is 3:
+                                    play sound "block.note_block.flute" with volume 1 and pitch 1 at gui player's location
+                                if {clickednotes::%{_value}%} is 4:
+                                    play sound "block.note_block.flute" with volume 1 and pitch 0.79 at gui player's location
+                                if {clickednotes::%{_value}%} is 5:
+                                    play sound "block.note_block.flute" with volume 1 and pitch 1 at gui player's location
+                                if {clickednotes::%{_value}%} is 6:
+                                    play sound "block.note_block.flute" with volume 1 and pitch 1.19 at gui player's location
+                                    clear {clickednotes::%{_value}%}
+                                    loop {PipesBlue.%player's uuid%.%world%::*}:
+                                        if {PipesIDsBlue.%player's uuid%.%world%::*} contains {WarpPipeIDBlue::%loop-value%}:
+                                            add loop-value to {_PipesLoc::*}
+                                    loop {PipesWhite.%player's uuid%.%world%::*}:
+                                        if {PipesIDsWhite.%player's uuid%.%world%::*} contains {WarpPipeIDWhite::%loop-value%}:
+                                            add loop-value to {_PipesLoc::*}
+                                    loop {Pipesred.%player's uuid%.%world%::*}:
+                                        if {PipesIDsred.%player's uuid%.%world%::*} contains {WarpPipeIDred::%loop-value%}:
+                                            add loop-value to {_PipesLoc::*}
+                                    loop {Pipes.%player's uuid%.%world%::*}:
+                                        if {PipesIDs.%player's uuid%.%world%::*} contains {WarpPipeID::%loop-value%}:
+                                            add loop-value to {_PipesLoc::*}
+                                    set {_randomwarppipe} to random element out of {_PipesLoc::*}
+                                    set {_yaw} to gui player's yaw
+                                    set {_pitch} to gui player's pitch
+                                    set yaw of {_randomwarppipe} to {_yaw}
+                                    set pitch of {_randomwarppipe} to {_pitch}
+                                    teleport gui player to {_randomwarppipe}
+                                    set {cooldown.warp::%{_value}%} to now
+                                    close gui player's inventory
+            else:
+                send "&cThis item can't be activated as a stack of items."

@@ -1,0 +1,275 @@
+on command "/cmi vanish":
+    if player has permission "%permission of command "/cmi vanish"%":
+        if {v::%player%} is not set:
+            set {v::%player%} to true
+            stop
+        if {v::%player%} is false:
+            set {v::%player%} to true
+            stop
+        if {v::%player%} is true:
+            set {v::%player%} to false
+            stop
+        
+on command "/cmi vanish":
+    if player has permission "%permission of command "/cmi vanish"%":
+        if {v::%player%} is true:
+            play sound "BLOCK_NOTE_BLOCK_PLING" with volume 1 and pitch 0.8 to all players
+            set {_num} to random integer between 1 and 13
+            if {_num} is 1:
+                broadcast "&8[&c-&8] &f%player% &fclipped into the Backrooms."
+            if {_num} is 2:
+                broadcast "&8[&c-&8] &f%player% &fpeaced out!"
+            if {_num} is 3:
+                broadcast "&8[&c-&8] &f%player%&f's pet rock needs to go on a walk."
+            if {_num} is 4:
+                broadcast "&8[&c-&8] &f%player% &fwent on a ""Top Secret Spy Mission""."
+            if {_num} is 5:
+                broadcast "&8[&c-&8] &f%player% &fjinxed his internet connection..."
+            if {_num} is 6:
+                broadcast "&8[&c-&8] &f%player% &fneeded a break, see you soon!"
+            if {_num} is 7:
+                broadcast "&8[&c-&8] &f%player% &fwent to a friend's house, have fun!"
+            if {_num} is 8:
+                broadcast "&8[&c-&8] &f%player% &fworks for NASA and went to space!"
+            if {_num} is 9:
+                broadcast "&8[&c-&8] &f%player% &ffell asleep at the keyboard again."
+            if {_num} is 10:
+                broadcast "&8[&c-&8] &f%player% &fmisclicked the quit button!"
+            if {_num} is 11:
+                broadcast "&8[&c-&8] &f%player% &fgoes on vacation tommorow!"
+            if {_num} is 12:
+                broadcast "&8[&c-&8] &f%player% &fbeat Sword Art Online!"
+            if {_num} is 13:
+                broadcast "&8[&c-&8] &f%player% &fgets a healthy amount of exercise daily! Way to go champ!"
+        else:
+            play sound "BLOCK_NOTE_BLOCK_PLING" with volume 1 and pitch 1 to all players
+            set {_num} to random integer between 1 and 13
+            if {_num} is 1:
+                broadcast "&7[&a+&7] &f%player% &fhas ascended."
+            if {_num} is 2:
+                broadcast "&7[&a+&7] &f%player% &fpeaced in!"
+            if {_num} is 3:
+                broadcast "&7[&a+&7] &f%player% &farmed the Talos 1 self destruct sequence!"
+            if {_num} is 4:
+                broadcast "&7[&a+&7] &fWelcome back %player%&f!"
+            if {_num} is 5:
+                broadcast "&7[&a+&7] &f%player% &ffixed their internet connection! For now..."
+            if {_num} is 6:
+                broadcast "&7[&a+&7] &f%player% &fhas Hot Chocolate, awesome!"
+            if {_num} is 7:
+                broadcast "&7[&a+&7] &f%player% &fwon the lottery! Just kidding, but welcome anyways!"
+            if {_num} is 8:
+                broadcast "&7[&a+&7] &f%player% IS ALIVE, ALIVVVVVEEEEEEE!?!!?"
+            if {_num} is 9:
+                broadcast "&7[&a+&7] &f%player% &fsnapped back into reality."
+            if {_num} is 10:
+                broadcast "&7[&a+&7] &f%player% &fpicked up the phone, but all that could be heard was garbage noise..."
+            if {_num} is 11:
+                broadcast "&7[&a+&7] &f%player% &fis back from vacation today!"
+            if {_num} is 12:
+                broadcast "&7[&a+&7] &f%player% &flogged onto Sword Art Online!"
+            if {_num} is 13:
+                broadcast "&7[&a+&7] &f%player% &fis locked and loaded."
+
+on first join:
+    set join message to "&f[&a+&f] Praise %player%! Welcome to the &eTalos SMP &ffriend!"
+    set {_m} to join message
+    play sound "ENTITY_PLAYER_LEVELUP" with volume 1 and pitch 1 to all players
+    wait 1 tick
+    make console execute command "cmi spawn %player%"
+    give player 16 apple
+    give player 1 golden hoe named "&eClaim Tool"
+    make embed:
+        set author of the embed to "%uncolored {_m}%"
+        set author icon of embed to "https://crafatar.com/renders/head/%player's uuid%?overlay"
+        set description of embed to "%player% joined the Talos SMP for the first time!"
+    post last made embed to channel with id "893940003565076480"
+	
+on join:
+    if player has played before:
+        play sound "BLOCK_NOTE_BLOCK_PLING" with volume 1 and pitch 1 to all players
+        set {_num} to random integer between 1 and 13
+        if {_num} is 1:
+            set the join message to "&7[&a+&7] &f%player% &fhas ascended."
+        if {_num} is 2:
+            set the join message to "&7[&a+&7] &f%player% &fpeaced in!"
+        if {_num} is 3:
+            set the join message to "&7[&a+&7] &f%player% &farmed the Talos 1 self destruct sequence!"
+        if {_num} is 4:
+            set the join message to "&7[&a+&7] &fWelcome back %player%&f!"
+        if {_num} is 5:
+            set the join message to "&7[&a+&7] &f%player% &ffixed their internet connection! For now..."
+        if {_num} is 6:
+            set the join message to "&7[&a+&7] &f%player% &fhas Hot Chocolate, awesome!"
+        if {_num} is 7:
+            set the join message to "&7[&a+&7] &f%player% &fwon the lottery! Just kidding, but welcome anyways!"
+        if {_num} is 8:
+            set the join message to "&7[&a+&7] &f%player% IS ALIVE, ALIVVVVVEEEEEEE!?!!?"
+        if {_num} is 9:
+            set the join message to "&7[&a+&7] &f%player% &fsnapped back into reality."
+        if {_num} is 10:
+            set the join message to "&7[&a+&7] &f%player% &fpicked up the phone, but all that could be heard was garbage noise..."
+        if {_num} is 11:
+            set the join message to "&7[&a+&7] &f%player% &fis back from vacation today!"
+        if {_num} is 12:
+            set the join message to "&7[&a+&7] &f%player% &flogged onto Sword Art Online!"
+        if {_num} is 13:
+            set the join message to "&7[&a+&7] &f%player% &fis locked and loaded."
+        set {_m} to join message
+        make embed:
+            set author of the embed to "%uncolored {_m}%"
+            set author icon of embed to "https://crafatar.com/renders/head/%player's uuid%?overlay"
+            set description of embed to "%player% joined the Talos SMP!"
+        post last made embed to channel with id "893940003565076480"
+
+on quit:
+    play sound "BLOCK_NOTE_BLOCK_PLING" with volume 1 and pitch 0.8 to all players
+    set {_num} to random integer between 1 and 13
+    if {_num} is 1:
+        set the quit message to "&8[&c-&8] &f%player% &fclipped into the Backrooms."
+    if {_num} is 2:
+        set the quit message to "&8[&c-&8] &f%player% &fpeaced out!"
+    if {_num} is 3:
+        set the quit message to "&8[&c-&8] &f%player%&f's pet rock needs to go on a walk."
+    if {_num} is 4:
+        set the quit message to "&8[&c-&8] &f%player% &fwent on a ""Top Secret Spy Mission""."
+    if {_num} is 5:
+        set the quit message to "&8[&c-&8] &f%player% &fjinxed his internet connection..."
+    if {_num} is 6:
+        set the quit message to "&8[&c-&8] &f%player% &fneeded a break, see you soon!"
+    if {_num} is 7:
+        set the quit message to "&8[&c-&8] &f%player% &fwent to a friend's house, have fun!"
+    if {_num} is 8:
+        set the quit message to "&8[&c-&8] &f%player% &fworks for NASA and went to space!"
+    if {_num} is 9:
+        set the quit message to "&8[&c-&8] &f%player% &ffell asleep at the keyboard again."
+    if {_num} is 10:
+        set the quit message to "&8[&c-&8] &f%player% &fmisclicked the quit button!"
+    if {_num} is 11:
+        set the quit message to "&8[&c-&8] &f%player% &fgoes on vacation tommorow!"
+    if {_num} is 12:
+        set the quit message to "&8[&c-&8] &f%player% &fbeat Sword Art Online!"
+    if {_num} is 13:
+        set the quit message to "&8[&c-&8] &f%player% &fgets a healthy amount of exercise daily! Way to go champ!"
+    set {_m} to quit message
+    make embed:
+        set author of the embed to "%uncolored {_m}%"
+        set author icon of embed to "https://crafatar.com/renders/head/%player's uuid%?overlay"
+        set description of embed to "%player% disconnected from the Talos SMP!"
+    post last made embed to channel with id "893940003565076480"
+
+
+define new bot named "TalosSMP Bot":
+    token: ODg3Nzk4NzcyMzc2MTQ1OTYx.YUJZCQ.YoEF5QtejBloUO8d380XUHA8XZE
+    intents: default intents
+    policy: all
+    auto reconnect: true
+    compression: none
+        
+on death of a player:
+    play sound "ENTITY_RABBIT_DEATH" with volume 1 and pitch 1 to all players
+    set {_num} to random integer between 1 and 22
+    set {_d} to "%death message%"
+    set the death message to ""
+    if nbt of helmet of victim contains "Skill:""Impasta""":
+        set {_pastadeath} to true
+    if nbt of chestplate of victim contains "Skill:""Impasta""":
+        set {_pastadeath} to true
+    if nbt of leggings of victim contains "Skill:""Impasta""":
+        set {_pastadeath} to true
+    if nbt of boots of victim contains "Skill:""Impasta""":
+        set {_pastadeath} to true
+    if {numbness.death::%victim%} is true:
+        set {_num} to random integer between 1 and 3
+        if {_num} is 1:
+            set {_m} to "&8[&4☠&8] &c%victim%&c's body came to its senses!." 
+        if {_num} is 2:
+            set {_m} to "&8[&4☠&8] &c%victim%&c suffered from blowback." 
+        if {_num} is 3:
+            set {_m} to "&8[&4☠&8] &c%victim%&c wasn't long for this world..." 
+        send formatted {_m} to all players
+        make embed:
+            set author of the embed to "%uncolored {_m}%"
+            set author icon of embed to "https://crafatar.com/renders/head/%victim's uuid%?overlay"
+            set description of embed to "%uncolored {_d}%"
+        post last embed to channel with id "893940003565076480"
+        stop
+    if {_pastadeath} is true:
+        set {_num} to random integer between 1 and 10
+        if {_num} is 1:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cate too much pasta.<reset>" 
+        if {_num} is 2:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cfell into a lava lake.<reset>" 
+        if {_num} is 3:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cdied at the ""hands"" of our Spagetti Overlords.<reset>" 
+        if {_num} is 4:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cfell and cannot get up!<reset>" 
+        if {_num} is 5:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &cToday will be cloudy with a chance of meatballs &c%victim%&c!<reset>" 
+        if {_num} is 6:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cgot kicked out of the Buffet...<reset>" 
+        if {_num} is 7:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cslipped on wet noodles!<reset>" 
+        if {_num} is 8:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &ctried ordering Mexican food in a Italian restruant.<reset>" 
+        if {_num} is 9:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &ctried ordering Italian food in a Mexican restruant.<reset>" 
+        if {_num} is 10:
+            set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cwas crushed by a Lasagnaught.<reset>" 
+        send formatted {_m} to all players
+        make embed:
+            set author of the embed to "%uncolored {_m}%"
+            set author icon of embed to "https://crafatar.com/renders/head/%victim's uuid%?overlay"
+            set description of embed to "%uncolored {_d}%"
+        post last embed to channel with id "893940003565076480"
+        stop
+    if {_num} is 1:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &ccannot move it move it anymore.<reset>" 
+    if {_num} is 2:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cdied a dramatic death, oh woe is me!<reset>" 
+    if {_num} is 3:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim%&c's death will not be in vain.<reset>" 
+    if {_num} is 4:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &ctook an arrow to the knee.<reset>" 
+    if {_num} is 5:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &ctripped on a rock...<reset>" 
+    if {_num} is 6:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cspontanously combusted!<reset>" 
+    if {_num} is 7:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cdrank one too many potions...<reset>" 
+    if {_num} is 8:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cwas turned into a zombie!<reset>" 
+    if {_num} is 9:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cflew too close to the sun!<reset>" 
+    if {_num} is 10:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cwas banned from Twitch again!<reset>" 
+    if {_num} is 11:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cwas grounded for playing past their bedtime.<reset>" 
+    if {_num} is 12:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cblacked out and ran to the nearest Pokemon Center!<reset>" 
+    if {_num} is 13:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &clost a sparring match with a Drowned.<reset>" 
+    if {_num} is 14:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &chugged a Creeper.<reset>" 
+    if {_num} is 15:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &clost connection to the WiFi!<reset>" 
+    if {_num} is 16:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cknows the sweet release of death.<reset>" 
+    if {_num} is 17:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cmet Death in the alley way.<reset>" 
+    if {_num} is 18:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &ctried to fly without an elytra!<reset>" 
+    if {_num} is 19:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cangered the wrath of Notch himself!<reset>" 
+    if {_num} is 20:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cposted on Twitter a bit too much.<reset>" 
+    if {_num} is 21:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &ccould not outrun the Snail of immortality...<reset>" 
+    if {_num} is 22:
+        set {_m} to "<ttp:%{_d}%>&8[&4☠&8] &c%victim% &cwas rushed to the hospital.<reset>" 
+    make embed:
+        set author of the embed to "%uncolored {_m}%"
+        set author icon of embed to "https://crafatar.com/renders/head/%victim's uuid%?overlay"
+        set description of embed to "%uncolored {_d}%"
+    post last made embed to channel with id "893940003565076480"
+    send formatted {_m} to all players

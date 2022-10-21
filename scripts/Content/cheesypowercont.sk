@@ -1,0 +1,30 @@
+every 1 second:
+    loop {drinkblender.location::*}:
+        if chunk at loop-value is loaded:
+            loop 45 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0, 9, 27, 18, 36, or 45:
+                    if nbt of slot {_n} of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""FunnelMod""":
+                        if block above loop-value-1 is hopper:
+                            if block data tag "facing" of block above loop-value-1 is "down":
+                                loop all items in inventory of block above loop-value-1:
+                                    if item amount of loop-value-3 = max stack size of 1 of loop-value-3:
+                                        if 1 of loop-value-3 is potion or golden apple or firework rocket or golden carrot or {saveditems::LepusBrew}:
+                                            if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                set {_i} to item amount of loop-value-3 of loop-value-3
+                                                remove {_i} from loop-value-3
+                                                add {_i} to slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                exit loop
+                                        if 1 of loop-value-3 is milk or honey bottle or carved pumpkin or powder snow bucket:
+                                            if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                set {_i} to item amount of loop-value-3 of loop-value-3
+                                                remove {_i} from loop-value-3
+                                                add {_i} to slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                exit loop
+                        if block below loop-value-1 is hopper:
+                            if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is not air:
+                                if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" = max stack size of 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%":
+                                    if block below loop-value-1 can hold 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%":
+                                        set {_i} to item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" of slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                        remove {_i} from slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                        add {_i} to inventory of block below loop-value-1

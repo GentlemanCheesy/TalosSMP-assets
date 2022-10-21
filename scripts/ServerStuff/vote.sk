@@ -1,0 +1,117 @@
+command /vote:
+    usage: /vote
+    executable by: players
+    trigger:
+        send "&6Vote Link:"
+        send "&ehttps://www.planetminecraft.com/server/talos-smp/vote/"
+        
+on votifier vote:
+    set {_p} to "%username of event-vote%" parsed as player
+    add 1 to {votes::%{_p}'s uuid%}
+    loop all players:
+        if loop-player is not {_p}:
+            send "&f[&6!&f] &e%username of event-vote% &7voted for the &eTalos SMP&7!" to loop-player
+        else:
+            send "&f[&6!&f] &7Thanks for voting &e%username of event-vote%&7, you have &e%{votes::%loop-player's uuid%}% &7vote(s) saved and earned 1 Player Head, 300 Claim Blocks, and a &eYellow Username &7for 24 hours." to loop-player
+            if {votes::%loop-player%} = 10:
+                send "&f[&6!&f] &7You have enough votes saved up for at least 1 reward from &fTime Gus &7at Spawn!" to loop-player
+    if "%group of {_p}%" is not "Owner" or "Moderator" or "Srmod":
+        execute console command "/lp user %username of event-vote% meta settempprefix 1 &e 24h"
+    execute console command "/acb %username of event-vote% 300"
+    execute console command "/heads random %username of event-vote%"
+    
+command /worldmap:
+    usage: /worldmap
+    executable by: players
+    trigger:
+        send "&6Map Link:"
+        send "&ehttp://mc.talosmp.net:8080"
+
+on citizen right click:
+    if citizen is named "Time Gus":
+        loop all items in player's inventory:
+            if nbt of loop-item contains "CheesyCraft:""RewindTime""":
+                set {_n} to 1.2
+                exit loop
+        create a gui with virtual chest inventory with 3 rows named "&8Gus' Contraband" and shape "xxxxyxxxx", "xa-b-c-dx", and "xxxxxxxxx":
+            make gui slot "x" with gray stained glass pane named " "
+            set {_lore::*} to lore of {saveditems::Gus}
+            make gui slot "y" with {saveditems::Gus} with lore {_lore::*} and " " and "&7You currently have &e%{votes::%player's uuid%}% &7vote(s)!"
+            make gui slot "-" with air
+            make gui slot "a" with {saveditems::MonthlyDeal4}:
+                if {votes::%player's uuid%} >= rounded 8 / {_n}:
+                    give player 1 of {saveditems::vexalveil+}
+                    add rounded -8 / {_n} to {votes::%player's uuid%}
+                    close player's inventory
+            make gui slot "b" with {saveditems::MonthlyDeal5}:
+                if {votes::%player's uuid%} >= rounded 8 / {_n}:
+                    give player 1 of {saveditems::Summervineseeds}
+                    add rounded -8 / {_n} to {votes::%player's uuid%}
+                    close player's inventory
+            make gui slot "c" with {saveditems::MonthlyDeal6}:
+                if {votes::%player's uuid%} >= rounded 10 / {_n}:
+                    give player 1 of {saveditems::SpringShoes}
+                    add rounded -10 / {_n} to {votes::%player's uuid%}
+                    close player's inventory
+            make gui slot "d" with {saveditems::MonthlyDeal7}:
+                if {votes::%player's uuid%} >= rounded 10 / {_n}:
+                    give player 1 of {saveditems::Slimeshot}
+                    add rounded -10 / {_n} to {votes::%player's uuid%}
+                    close player's inventory
+        open the last gui for the player
+        
+on place of player head or player wall head:
+    if nbt of player's held item does not contain "slimefun_item" or "CheesyCraft":
+        if {headtoggle::%player%} is true:
+            set {head.place::%event-block's location%} to true
+            set {_i} to player's held item
+            wait 5 ticks
+            set player's held item to {_i}
+        else if {headtoggle::%player%} is not set:
+            set {head.place::%event-block's location%} to true
+            set {_i} to player's held item
+            wait 5 ticks
+            set player's held item to {_i}
+        
+command /headtoggle:
+    usage: /headtoggle
+    executable by: players
+    trigger:
+        if {headtoggle::%player%} is not set:
+            set {headtoggle::%player%} to false
+            send "&fHead placement mode toggled off."
+            stop
+        if {headtoggle::%player%} is false:
+            set {headtoggle::%player%} to true
+            send "&fHead placement mode toggled on."
+            stop
+        if {headtoggle::%player%} is true:
+            set {headtoggle::%player%} to false
+            send "&fHead placement mode toggled off."
+            stop
+
+on break of player head or player wall head:
+    if {head.place::%event-block's location%} is true:
+        cancel the drops
+        
+on flow:
+    if block below event-block is player head or player wall head:
+        cancel event
+    if block south event-block is player head or player wall head:
+        cancel event
+    if block east event-block is player head or player wall head:
+        cancel event
+    if block west event-block is player head or player wall head:
+        cancel event
+    if block north event-block is player head or player wall head:
+        cancel event
+        
+on explode:
+    loop exploded blocks:
+        if loop-block is player head or player wall head:
+            cancel event
+            
+on piston extend:
+    loop moved blocks:
+        if loop-block is player head or player wall head:
+            cancel event

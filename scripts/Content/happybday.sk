@@ -1,0 +1,11 @@
+#happy 19th birthday me ;)
+
+on right click:
+    if event-item is any sword:
+        if nbt of event-item contains "CheesyCraft:""CheesyKatana""":
+            set {_loc} to location of block above exact target block of player
+            set {_yaw} to player's yaw
+            set {_pitch} to player's pitch
+            set yaw of {_loc} to {_yaw}
+            set pitch of {_loc} to {_pitch}
+            teleport player to {_loc}

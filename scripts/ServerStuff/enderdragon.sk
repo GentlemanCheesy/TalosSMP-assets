@@ -1,0 +1,15 @@
+every 5 seconds:
+    loop all ender dragons:
+        if {dragon::*} does not contain loop-entity:
+            set name of loop-entity to "&cEnraged Ender Dragon"
+            set loop-entity's max health to loop-entity's max health * 5
+            heal loop-entity
+            add loop-entity to {dragon::*}
+            
+on damage:
+    if victim is ender dragon:
+        set {_w} to world of victim
+        loop all players in {_w}:
+            add 2 to {_n}
+        set damage to damage / {_n}
+        

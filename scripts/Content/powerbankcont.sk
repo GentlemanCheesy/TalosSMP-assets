@@ -1,0 +1,42 @@
+on place of gilded blackstone:
+    if nbt of player's held item contain "CheesyCraft:""PowerBankII""":
+        set {powerbankii.place::%event-block's location%} to true
+        set {powerbank.power::%event-block's location%} to 0
+        set {powerbank.powertotal::%event-block's location%} to 2000
+        set {powerbank.location::%event-block's location%} to event-block's location
+        set {powerbank.range::%event-block's location%} to 16
+        if tag "Power" of nbt of player's held item is set:
+            set {powerbank.power::%event-block's location%} to tag "Power" of nbt of player's held item
+
+on break of gilded blackstone:
+    if {powerbankii.place::%event-block's location%} is true:
+        cancel the drops
+        clear {powerbankii.place::%event-block's location%}
+        set {_i} to {saveditems::powerbankii}
+        if {powerbank.power::%event-block's location%} > 0:
+            set line 6 of lore of {_i} to "%line 6 of lore of {_i}% &8Holding %{powerbank.power::%event-block's location%}% &8CP"
+            add "{Power:%{powerbank.power::%event-block's location%}%}" to nbt of {_i}
+        clear {powerbank.power::%event-block's location%}
+        clear {powerbank.location::%event-block's location%}
+        clear {powerbank.powertotal::%event-block's location%}
+        clear {powerbank.range::%event-block's location%}
+        drop {_i}
+        loop all items in gui with id "powerbank.%event-block's location%":
+            if index of loop-item is 3 or 4 or 5:
+                drop loop-item
+        delete gui with id "powerbank.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {powerbankii.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "powerbank.%event-block's location%" is not set:
+                    create a gui with id "powerbank.%event-block's location%" with virtual dropper named "Power Bank" with shape "w_w" and "xxx" and "www":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                open gui with id "powerbank.%event-block's location%" to player
+                while name of player's current inventory contains "Power Bank":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick

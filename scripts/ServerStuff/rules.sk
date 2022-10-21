@@ -1,0 +1,13 @@
+command /rules:
+    usage: /rules
+    executable by: players
+    trigger:
+        send "&6Rules:"
+        send "&e1. No Griefing, Stealing, Browsing, ""Borrowing"", etc. Even unclaimed bases."
+        send "&e2. Swearing is allowed but only within moderation, do not swear at other players please!"
+        send "&e3. No derogatory language please!"
+        send "&e4. No Spamming in-game."
+        send "&e5. Modifications to your game that give an advantage over others are bannable!"
+        send "&e6. Please do not build too close to another player's base unless you already have permission!"
+        send "&e7. Both parties must agree before pvp combat. Even when pvp is enabled."
+        send "&e8. Rules are subject to change"

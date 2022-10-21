@@ -1,0 +1,7 @@
+on damage:
+    if {dmg::%event-projectile%} is set:
+        set damage to ({dmg::%event-projectile%} / 2)
+        clear {dmg::%event-projectile%}
+    if {poisonshot::%event-projectile%} is true:
+        clear {poisonshot::%event-projectile%}
+        set damage to (damage * 1.5)

@@ -1,0 +1,1391 @@
+on unload:
+    loop {refurbisher.location::*}:
+        set {_n1} to 0
+        loop 28 times:
+            set {_n} to loop-number - 1
+            if {_n} is 0 or 9 or 27 or 18 or 12 or 16:
+                add 1 to {_n1}
+                set {refurbisher.save::%loop-value-1%::%{_n1}%} to slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%"
+
+on load:
+    loop {refurbisher.location::*}:
+        if gui with id "ElectricRefurbisher.%loop-value%" is not set:
+            create a gui with id "ElectricRefurbisher.%loop-value%" with virtual chest inventory with 4 rows named "Electric Refurbisher" with shape "1wyyybooo" and "2wy3ybo4o" and "5wyyybooo" and "6wbbbbbbb":
+                set {_n1} to 0
+                loop 6 times:
+                    add 1 to {_n1}
+                    set {_n4::*} to 0 and 9 and 18 and 27 and 12 and 16
+                    if {refurbisher.save::%loop-value-1%::%{_n1}%} is not set:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    if {refurbisher.save::%loop-value-1%::%{_n1}%} is air:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    else:
+                        make gui slot {_n4::%{_n1}%} with moveable {refurbisher.save::%loop-value-1%::%{_n1}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                make gui slot "y" with blue stained glass pane named "&9Input"
+                make gui slot "o" with lime stained glass pane named "&aOutput"
+                make gui slot "b" with gray stained glass pane named " "
+
+on place of iron block:
+    if nbt of player's held item contain "CheesyCraft:""ElectricRefurbisher""":
+        set {refurbisher.place::%event-block's location%} to true
+        set {refurbisher.location::%event-block's location%} to event-block's location
+
+on break of iron block:
+    if {refurbisher.place::%event-block's location%} is true:
+        cancel the drops
+        clear {refurbisher.place::%event-block's location%}
+        clear {refurbisher.location::%event-block's location%}
+        drop {saveditems::ElectricRefurbisher}
+        loop all items in gui with id "ElectricRefurbisher.%event-block's location%":
+            if index of loop-item is 0 or 9 or 27 or 18 or 12 or 16:
+                drop loop-item
+        delete gui with id "ElectricRefurbisher.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {refurbisher.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "ElectricRefurbisher.%event-block's location%" is not set:
+                    create a gui with id "ElectricRefurbisher.%event-block's location%" with virtual chest inventory with 4 rows named "Electric Refurbisher" with shape "xwyyybooo" and "xwyxyboxo" and "xwyyybooo" and "xwbbbbbbb":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                        make gui slot "y" with blue stained glass pane named "&9Input"
+                        make gui slot "o" with lime stained glass pane named "&aOutput"
+                        make gui slot "b" with gray stained glass pane named " "
+                open gui with id "ElectricRefurbisher.%event-block's location%" to player
+                while name of player's current inventory contains "Electric refurbisher":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+            
+
+every 1 second:
+    loop {refurbisher.location::*}:
+        if chunk at loop-value is loaded:
+            if {refurbisher.maxed::%loop-value%} is true:
+                continue loop
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 27 or 18:
+                    if nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%" contains "RedstoneSwitchMod":
+                        if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped birch log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped spruce log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped jungle log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped acacia log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped dark oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson stem:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson stem:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped crimson stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped stem:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped stem:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped warped stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped birch wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped spruce wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped jungle wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped acacia wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped dark oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson hyphae:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson hyphae:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped crimson hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped hyphae:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped hyphae:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped warped hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper or unmodified weathered copper or unmodified exposed copper:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized cut copper or unmodified weathered cut copper or unmodified exposed cut copper:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper slab or unmodified weathered copper slab or unmodified exposed copper slab:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper slab to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper stairs or unmodified weathered copper stairs or unmodified exposed copper stairs:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper stairs to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                    else if nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%" contains "RedstoneActivationMod":
+                        if block at loop-value-1 is redstone powered:
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped birch log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped spruce log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped jungle log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped acacia log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped dark oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson stem:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson stem:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped crimson stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped stem:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped stem:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped warped stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped birch wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped spruce wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped jungle wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped acacia wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped dark oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson hyphae:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson hyphae:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped crimson hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped hyphae:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped hyphae:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped warped hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper or unmodified weathered copper or unmodified exposed copper:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized cut copper or unmodified weathered cut copper or unmodified exposed cut copper:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper slab or unmodified weathered copper slab or unmodified exposed copper slab:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper slab to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper stairs or unmodified weathered copper stairs or unmodified exposed copper stairs:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper stairs to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                        if block at loop-value-1 is indirectly redstone powered:
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped birch log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped spruce log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped jungle log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped acacia log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak log:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak log:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped dark oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson stem:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson stem:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped crimson stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped stem:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped stem:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped warped stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped birch wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped spruce wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped jungle wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped acacia wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak wood:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak wood:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped dark oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson hyphae:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson hyphae:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped crimson hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped hyphae:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped hyphae:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 stripped warped hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper or unmodified weathered copper or unmodified exposed copper:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized cut copper or unmodified weathered cut copper or unmodified exposed cut copper:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper slab or unmodified weathered copper slab or unmodified exposed copper slab:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper slab to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper stairs or unmodified weathered copper stairs or unmodified exposed copper stairs:
+                                if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                    if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                        loop {powerbank.location::*}:
+                                            set {_c1::*} to region at loop-value-1
+                                            set {_c2::*} to region at loop-value-3
+                                            if {_c1::*} is not {_c2::*}:
+                                                continue
+                                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                                if {powerbank.power::%loop-value-3%} >= 2:
+                                                    add 1 cut copper stairs to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                                                    set {refurbisher.activated::%loop-value-1%} to true
+                                                    exit 2 loops
+                        exit loop
+                    else:
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak log:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak log:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch log:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch log:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped birch log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce log:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce log:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped spruce log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle log:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle log:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped jungle log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia log:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia log:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped acacia log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak log:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak log:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped dark oak log to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson stem:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson stem:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped crimson stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped stem:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped stem:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped warped stem to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is oak wood:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped oak wood:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is birch wood:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped birch wood:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped birch wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is spruce wood:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped spruce wood:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped spruce wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is jungle wood:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped jungle wood:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped jungle wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is acacia wood:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped acacia wood:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped acacia wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is dark oak wood:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped dark oak wood:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped dark oak wood to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is crimson hyphae:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped crimson hyphae:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped crimson hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is warped hyphae:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or stripped warped hyphae:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 stripped warped hyphae to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper or unmodified weathered copper or unmodified exposed copper:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized cut copper or unmodified weathered cut copper or unmodified exposed cut copper:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 cut copper block to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper slab or unmodified weathered copper slab or unmodified exposed copper slab:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 cut copper slab to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is unmodified oxidized copper stairs or unmodified weathered copper stairs or unmodified exposed copper stairs:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is air or copper block:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" < 64:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 2:
+                                                add 1 cut copper stairs to slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" from slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                set {refurbisher.activated::%loop-value-1%} to true
+                                                exit 2 loops
+                
+every 2 ticks:
+    loop {refurbisher.location::*}:
+        if {refurbisher.activated::%loop-value%} is true:
+            if chunk at loop-value is loaded:
+                loop 28 times:
+                    set {_n} to loop-number - 1
+                    if {_n} is 0 or 9 or 18 or 27:
+                        if nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%" contains "CheesyCraft:""EcholomaticMod""":
+                            loop all blocks in radius 9 of loop-value-1:
+                                if loop-value-3 is sculk sensor:
+                                    spawn snowball at location of loop-value-3
+                            delete {refurbisher.activated::%loop-value-1%}
+                            exit loop
+                                              
+every 2 ticks:
+    loop {refurbisher.location::*}:
+        if chunk at loop-value is loaded:
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 18 or 27:
+                    if nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%" contains "CheesyCraft:""WardstaticMod""":
+                        set {_total} to tag "Total" of nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%"
+                        set {_max} to tag "Max" of nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%"
+                        if {_total} = {_max}:
+                            set {refurbisher.maxed::%loop-value-1%} to true
+                        if {_total} < {_max}:
+                            if {refurbisher.activated2::%loop-value-1%} is true:
+                                add "{Total:%{_total} + 1%}" to nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%"
+                        loop all blocks in radius 1 of loop-value-1:
+                            if loop-value-3 is sculk:
+                                delete {refurbisher.maxed::%loop-value-1%}
+                                add "{Total:0}" to nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%"
+                        delete {refurbisher.activated2::%loop-value-1%}
+                
+every 2 ticks:
+    loop {refurbisher.location::*}:
+        if nbt of slot 0 of gui with id "ElectricRefurbisher.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 0 of gui with id "ElectricRefurbisher.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 0 of gui with id "ElectricRefurbisher.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 9 of gui with id "ElectricRefurbisher.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 9 of gui with id "ElectricRefurbisher.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 9 of gui with id "ElectricRefurbisher.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 18 of gui with id "ElectricRefurbisher.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 18 of gui with id "ElectricRefurbisher.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 18 of gui with id "ElectricRefurbisher.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 27 of gui with id "ElectricRefurbisher.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 27 of gui with id "ElectricRefurbisher.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 27 of gui with id "ElectricRefurbisher.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        delete {refurbisher.maxed::%loop-value%}
+            
+every 1 second:
+    loop {refurbisher.location::*}:
+        if chunk at loop-value is loaded:
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 27 or 18:
+                    if nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%" contains "CheesyCraft:""FunnelMod""":
+                        if block above loop-value-1 is hopper:
+                            if block data tag "facing" of block above loop-value-1 is "down":
+                                loop all items in inventory of block above loop-value-1:
+                                    if item amount of loop-value-3 = max stack size of 1 of loop-value-3:
+                                        if 1 of loop-value-3 is any log or any wood or warped stem or warped hyphae or crimson stem or crimson hyphae or oxidized copper block or exposed copper or weathered copper or oxidized cut copper block or exposed cut copper block or weathered cut copper block or exposed copper stairs or weathered copper stairs or oxidized copper stairs or oxidized copper slab or exposed copper slab or weathered copper slab:
+                                            if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is air:
+                                                set {_i} to item amount of loop-value-3 of loop-value-3
+                                                remove {_i} from loop-value-3
+                                                add {_i} to slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                exit loop
+                        if block below loop-value-1 is hopper:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is not air:
+                                if item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" = max stack size of 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%":
+                                    if block below loop-value-1 can hold 1 of slot 41 of gui with id "ElectricRefurbisher.%loop-value-1%":
+                                        set {_i} to item amount of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                        remove {_i} from slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                        add {_i} to inventory of block below loop-value-1
+                                        
+
+every 1 second:
+    loop {refurbisher.location::*}:
+        if chunk at loop-value is loaded:
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 27 or 18:
+                    if nbt of slot {_n} of gui with id "ElectricRefurbisher.%loop-value-1%" contains "CheesyCraft:""HopperMod""":
+                        if block above loop-value-1 is hopper:
+                            if block data tag "facing" of block above loop-value-1 is "down":
+                                loop all items in inventory of block above loop-value-1:
+                                    if 1 of loop-value-3 is any log or any wood or warped stem or warped hyphae or crimson stem or crimson hyphae or oxidized copper block or exposed copper or weathered copper or oxidized cut copper block or exposed cut copper block or weathered cut copper block or exposed copper stairs or weathered copper stairs or oxidized copper stairs or oxidized copper slab or exposed copper slab or weathered copper slab:
+                                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is air:
+                                            set {_i} to 1 of loop-value-3
+                                            remove 1 of loop-value-3 from loop-value-3
+                                            add {_i} to slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                            exit loop
+                                        if 1 of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" is 1 of loop-value-3:
+                                            if item amount of slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%" < max stack size of 1 of loop-value-3:
+                                                set {_i} to 1 of loop-value-3
+                                                remove 1 of loop-value-3 from loop-value-3
+                                                add {_i} to slot 12 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                                exit loop
+                        if block below loop-value-1 is hopper:
+                            if 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%" is not air:
+                                if block below loop-value-1 can hold 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%":
+                                    set {_i} to 1 of slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                    remove {_i} from slot 16 of gui with id "ElectricRefurbisher.%loop-value-1%"
+                                    add {_i} to inventory of block below loop-value-1

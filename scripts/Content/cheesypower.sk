@@ -1,0 +1,1109 @@
+on unload:
+    loop {powerbank.location::*}:
+        set {_n1} to 0
+        loop (3, 4, and 5):
+            add 1 to {_n1}
+            set {powerbank.save::%loop-value-1%::%{_n1}%} to slot loop-value-2 of gui with id "powerbank.%loop-value-1%"
+    loop {tidegen.location::*}:
+        set {_n2} to 0
+        loop (3, 4, and 5):
+            add 1 to {_n2}
+            set {tidegen.save::%loop-value-1%::%{_n2}%} to slot loop-value-2 of gui with id "TideGen.%loop-value-1%"
+    loop {drinkblender.location::*}:
+        set {_n3} to 0
+        loop (0, 9, 18, 27, 36, 45, 12, 16, and 41):
+            add 1 to {_n3}
+            set {drinkblender.save::%loop-value-1%::%{_n3}%} to slot loop-value-2 of gui with id "DrinkBlender.%loop-value-1%"
+    loop {magnet.location::*}:
+        set {_n4} to 0
+        loop (3, 4, and 5):
+            add 1 to {_n4}
+            set {magnet.save::%loop-value-1%::%{_n4}%} to slot loop-value-2 of gui with id "Magnet.%loop-value-1%"
+    loop {engine.location::*}:
+        set {_n5} to 0
+        loop (0, 9, 18, and 13):
+            add 1 to {_n5}
+            set {engine.save::%loop-value-1%::%{_n5}%} to slot loop-value-2 of gui with id "SearingEngine.%loop-value-1%"
+        
+on load:
+    loop {powerbank.location::*}:
+        if gui with id "powerbank.%loop-value%" is not set:
+            create a gui with id "powerbank.%loop-value%" with virtual dropper named "Power Bank" with shape "w_w" and "123" and "www":
+                set {_n1} to 0
+                loop 3 times:
+                    add 1 to {_n1}
+                    set {_n4::*} to 3, 4, and 5
+                    if {powerbank.save::%loop-value-1%::%{_n1}%} is not set:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    if {powerbank.save::%loop-value-1%::%{_n1}%} is air:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    else:
+                        make gui slot {_n4::%{_n1}%} with moveable {powerbank.save::%loop-value-1%::%{_n1}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+    loop {tidegen.location::*}:
+        if gui with id "TideGen.%loop-value%" is not set:
+            create a gui with id "TideGen.%loop-value%" with virtual dropper named "Tide Pool Generator" with shape "w_w" and "123" and "www":
+                set {_n2} to 0
+                loop 3 times:
+                    add 1 to {_n2}
+                    set {_n5::*} to 3, 4, and 5
+                    if {tidegen.save::%loop-value-1%::%{_n2}%} is not set:
+                        make gui slot {_n5::%{_n2}%} with moveable air
+                    if {tidegen.save::%loop-value-1%::%{_n2}%} is air:
+                        make gui slot {_n5::%{_n2}%} with moveable air
+                    else:
+                        make gui slot {_n5::%{_n2}%} with moveable {tidegen.save::%loop-value-1%::%{_n2}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+    loop {drinkblender.location::*}:
+        if gui with id "DrinkBlender.%loop-value%" is not set:
+            create a gui with id "DrinkBlender.%loop-value%" with virtual chest inventory with 6 rows named "Drink Blender" with shape "1wyyybooo" and "2wy3ybo4o" and  "5wyyybooo" and "6wbbgggbb" and "7wbbg8gbb" and "9wbbgggbb":
+                set {_n3} to 0
+                loop 9 times:
+                    add 1 to {_n3}
+                    set {_n6::*} to 0, 9, 18, 27, 36, 45, 12, 16, and 41
+                    if {drinkblender.save::%loop-value-1%::%{_n3}%} is not set:
+                        make gui slot {_n6::%{_n3}%} with moveable air
+                    if {drinkblender.save::%loop-value-1%::%{_n3}%} is air:
+                        make gui slot {_n6::%{_n3}%} with moveable air
+                    else:
+                        make gui slot {_n6::%{_n3}%} with moveable {drinkblender.save::%loop-value-1%::%{_n3}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                make gui slot "y" with yellow stained glass pane named "&eDrink Input"
+                make gui slot "o" with orange stained glass pane named "&6Ingredient Input"
+                make gui slot "b" with gray stained glass pane named " "
+                make gui slot "g" with lime stained glass pane named "&aOutput Slot"
+    loop {magnet.location::*}:
+        if gui with id "Magnet.%loop-value%" is not set:
+            create a gui with id "Magnet.%loop-value%" with virtual dropper named "Super Magnet" with shape "w_w" and "123" and "www":
+                set {_n7} to 0
+                loop 3 times:
+                    add 1 to {_n7}
+                    set {_n8::*} to 3, 4, and 5
+                    if {magnet.save::%loop-value-1%::%{_n7}%} is not set:
+                        make gui slot {_n8::%{_n7}%} with moveable air
+                    if {magnet.save::%loop-value-1%::%{_n7}%} is air:
+                        make gui slot {_n8::%{_n7}%} with moveable air
+                    else:
+                        make gui slot {_n8::%{_n7}%} with moveable {magnet.save::%loop-value-1%::%{_n7}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+    loop {engine.location::*}:
+        if gui with id "SearingEngine.%loop-value%" is not set:
+            create a gui with id "SearingEngine.%loop-value%" with virtual chest inventory with 3 rows named "Searing Engine" with shape "1wbooobbb" and "2wbo3obxb" and "4wbooobbb":
+                set {_n10} to 0
+                loop 4 times:
+                    add 1 to {_n10}
+                    set {_n9::*} to 0, 9, 18, and 13
+                    if {engine.save::%loop-value-1%::%{_n10}%} is not set:
+                        make gui slot {_n9::%{_n10}%} with moveable air
+                    if {engine.save::%loop-value-1%::%{_n10}%} is air:
+                        make gui slot {_n9::%{_n10}%} with moveable air
+                    else:
+                        make gui slot {_n9::%{_n10}%} with moveable {engine.save::%loop-value-1%::%{_n10}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                make gui slot "o" with orange stained glass pane named "&6Fuel Input"
+                make gui slot "b" with gray stained glass pane named " "
+                        
+on place of prismarine bricks:
+    if nbt of player's held item contain "CheesyCraft:""DrinkBlender""":
+        set {drinkblender.place::%event-block's location%} to true
+        set {drinkblender.location::%event-block's location%} to event-block's location
+
+on break of prismarine bricks:
+    if {drinkblender.place::%event-block's location%} is true:
+        cancel the drops
+        clear {drinkblender.place::%event-block's location%}
+        clear {drinkblender.location::%event-block's location%}
+        clear {drinkblender.save::%event-block's location%::*}
+        drop {saveditems::DrinkBlender}
+        loop all items in gui with id "DrinkBlender.%event-block's location%":
+            if index of loop-item is 0 or 9 or 18 or 27 or 36 or 45 or 12 or 16 or 41:
+                drop loop-item
+        delete gui with id "DrinkBlender.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {drinkblender.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "DrinkBlender.%event-block's location%" is not set:
+                    create a gui with id "DrinkBlender.%event-block's location%" with virtual chest inventory with 6 rows named "Drink Blender" with shape "xwyyybooo" and "xwyxyboxo" and  "xwyyybooo" and "xwbbgggbb" and "xwbbgxgbb" and "xwbbgggbb":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                        make gui slot "y" with yellow stained glass pane named "&eDrink Input"
+                        make gui slot "o" with orange stained glass pane named "&6Ingredient Input"
+                        make gui slot "b" with gray stained glass pane named " "
+                        make gui slot "g" with lime stained glass pane named "&aOutput Slot"
+                open gui with id "DrinkBlender.%event-block's location%" to player
+                while name of player's current inventory contains "Drink Blender":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+                                        
+on place of gilded blackstone:
+    if nbt of player's held item contain "CheesyCraft:""PowerBankI""":
+        set {powerbanki.place::%event-block's location%} to true
+        set {powerbank.power::%event-block's location%} to 0
+        set {powerbank.powertotal::%event-block's location%} to 800
+        set {powerbank.location::%event-block's location%} to event-block's location
+        set {powerbank.range::%event-block's location%} to 8
+        if tag "Power" of nbt of player's held item is set:
+            set {powerbank.power::%event-block's location%} to tag "Power" of nbt of player's held item
+
+on break of gilded blackstone:
+    if {powerbanki.place::%event-block's location%} is true:
+        cancel the drops
+        clear {powerbanki.place::%event-block's location%}
+        set {_i} to {saveditems::powerbanki}
+        if {powerbank.power::%event-block's location%} > 0:
+            set line 6 of lore of {_i} to "%line 6 of lore of {_i}% &8Holding %{powerbank.power::%event-block's location%}% &8CP"
+            add "{Power:%{powerbank.power::%event-block's location%}%}" to nbt of {_i}
+        clear {powerbank.power::%event-block's location%}
+        clear {powerbank.location::%event-block's location%}
+        clear {powerbank.powertotal::%event-block's location%}
+        clear {powerbank.range::%event-block's location%}
+        drop {_i}
+        loop all items in gui with id "powerbank.%event-block's location%":
+            if index of loop-item is 3 or 4 or 5:
+                drop loop-item
+        delete gui with id "powerbank.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {powerbanki.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "powerbank.%event-block's location%" is not set:
+                    create a gui with id "powerbank.%event-block's location%" with virtual dropper named "Power Bank" with shape "w_w" and "xxx" and "www":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                open gui with id "powerbank.%event-block's location%" to player
+                while name of player's current inventory contains "Power Bank":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+
+on place of dark prismarine:
+    if nbt of player's held item contain "CheesyCraft:""TidePoolGenerator""":
+        set {tidegen.place::%event-block's location%} to true
+        set {tidegen.location::%event-block's location%} to event-block's location
+
+on break of dark prismarine:
+    if {tidegen.place::%event-block's location%} is true:
+        cancel the drops
+        clear {tidegen.place::%event-block's location%}
+        clear {tidegen.location::%event-block's location%}
+        drop {saveditems::TidePoolGenerator}
+        loop all items in gui with id "TideGen.%event-block's location%":
+            if index of loop-item is 3 or 4 or 5:
+                drop loop-item
+        delete gui with id "TideGen.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {tidegen.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "TideGen.%event-block's location%" is not set:
+                    create a gui with id "TideGen.%event-block's location%" with virtual dropper named "Tide Pool Generator" with shape "w_w" and "xxx" and "www":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                open gui with id "TideGen.%event-block's location%" to player
+                while name of player's current inventory contains "Tide Pool Generator":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+
+every 1 second:
+    loop {drinkblender.location::*}:
+        if chunk at loop-value is loaded:
+            if {drinkblender.maxed::%loop-value%} is true:
+                continue loop
+            loop (0, 9, 18, 27, 36, and 45):
+                if nbt of slot loop-value-2 of gui with id "DrinkBlender.%loop-value-1%" contains "RedstoneSwitchMod":
+                    if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= 10:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpookyCider""" or "CheesyCraft:""SpikedSpookyCider""":
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    replace "minecraft:" with "" in {_effects}
+                                                    replace "_" with " " in {_effects}
+                                                    set {_effects} to {_effects} in strict proper case
+                                                    set {_i} to {saveditems::SpikedSpookyCider}
+                                                    add 1 to {num::SpookyCider}
+                                                    add "{PublicBukkitValues: {""ItemNumID"": %{num::SpookyCider}%}}" to nbt of {_i}
+                                                    set line 18 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                    if tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is set:
+                                                        set {_value} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set line 2 of lore of {_i} to line 2 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add "{UsesLeft:%{_value}%}" to nbt of {_i}
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    remove 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpikedSpookyCider}
+                                                    add 1 to {num::SpookyCider}
+                                                    add "{PublicBukkitValues: {""ItemNumID"": %{num::SpookyCider}%}}" to nbt of {_i}
+                                                    set line 18 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                    if tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is set:
+                                                        set {_value} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set line 2 of lore of {_i} to line 2 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add "{UsesLeft:%{_value}%}" to nbt of {_i}
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SummervineSoda""" or "CheesyCraft:""SpikedSummervineSoda""":
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    replace "minecraft:" with "" in {_effects}
+                                                    replace "_" with " " in {_effects}
+                                                    set {_effects} to {_effects} in strict proper case
+                                                    set {_i} to {saveditems::SpikedSummervineSoda}
+                                                    set line 9 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    remove 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpikedSummervineSoda}
+                                                    set line 9 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is powder snow bucket:
+                                            if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden carrot:
+                                                if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air or {saveditems::LepusBrew}:
+                                                    if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 64:
+                                                        set {_i} to {saveditems::LepusBrew}
+                                                        add 1 of {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 golden carrot from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 12 of gui with id "DrinkBlender.%loop-value-1%" to empty bucket  
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is carved pumpkin:
+                                            if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden apple:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpookyCider}
+                                                    add 1 to {num::SpookyCider}
+                                                    add "{ItemNumID:%{num::SpookyCider}%}" to nbt of {_i}
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 golden apple from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 carved pumpkin from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                        if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        replace "minecraft:" with "" in {_effects}
+                                                        replace "_" with " " in {_effects}
+                                                        set {_effects} to {_effects} in strict proper case
+                                                        set {_i} to {saveditems::SpikedAmericanDream}
+                                                        set line 17 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                                set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                                set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add 1 to {num::SpikedAmericanDream}
+                                                            add "{ItemNumID:%{num::SpikedAmericanDream}%}" to nbt of {_i}
+                                                            set {_value} to tag "ItemNumID" of {_i}
+                                                            set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_i} to {saveditems::SpikedAmericanDream}
+                                                        set line 17 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                                set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                                set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%}
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop   
+                                        if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" does not contain "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is firework rocket:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 firework rocket from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {saveditems::AmericanDream}
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        exit loop
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        replace "minecraft:" with "" in {_effects}
+                                                        replace "_" with " " in {_effects}
+                                                        set {_effects} to {_effects} in strict proper case
+                                                        set {_i} to {saveditems::SpikedMilk}
+                                                        set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_i} to {saveditems::SpikedMilk}
+                                                        set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop   
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is honey bottle:
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                replace "minecraft:" with "" in {_effects}
+                                                replace "_" with " " in {_effects}
+                                                set {_effects} to {_effects} in strict proper case
+                                                set {_i} to {saveditems::SpikedHoney}
+                                                set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is {_i}:
+                                                    if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 16:
+                                                        add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%}
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpikedHoney}
+                                                    set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop   
+                        exit loop                                
+                else if nbt of slot loop-value-2 of gui with id "DrinkBlender.%loop-value-1%" contains "RedstoneActivationMod":
+                    if block at loop-value-1 is redstone powered:
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= 10:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is powder snow bucket:
+                                            if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden carrot:
+                                                if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air or {saveditems::LepusBrew}:
+                                                    if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 64:
+                                                        set {_i} to {saveditems::LepusBrew}
+                                                        add 1 of {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 golden carrot from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 12 of gui with id "DrinkBlender.%loop-value-1%" to empty bucket     
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is carved pumpkin:
+                                            if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden apple:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpookyCider}
+                                                    add 1 to {num::SpookyCider}
+                                                    add "{ItemNumID:%{num::SpookyCider}%}" to nbt of {_i}
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 golden apple from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 carved pumpkin from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                        if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        replace "minecraft:" with "" in {_effects}
+                                                        replace "_" with " " in {_effects}
+                                                        set {_effects} to {_effects} in strict proper case
+                                                        set {_i} to {saveditems::SpikedAmericanDream}
+                                                        set line 17 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                                set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                                set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add 1 to {num::SpikedAmericanDream}
+                                                            add "{ItemNumID:%{num::SpikedAmericanDream}%}" to nbt of {_i}
+                                                            set {_value} to tag "ItemNumID" of {_i}
+                                                            set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_i} to {saveditems::SpikedAmericanDream}
+                                                        set line 17 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                                set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                                set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop   
+                                        if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" does not contain "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is firework rocket:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 firework rocket from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {saveditems::AmericanDream}
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        exit loop
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        replace "minecraft:" with "" in {_effects}
+                                                        replace "_" with " " in {_effects}
+                                                        set {_effects} to {_effects} in strict proper case
+                                                        set {_i} to {saveditems::SpikedMilk}
+                                                        set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_i} to {saveditems::SpikedMilk}
+                                                        set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop   
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is honey bottle:
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                replace "minecraft:" with "" in {_effects}
+                                                replace "_" with " " in {_effects}
+                                                set {_effects} to {_effects} in strict proper case
+                                                set {_i} to {saveditems::SpikedHoney}
+                                                set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is {_i}:
+                                                    if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 16:
+                                                        add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%}
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpikedHoney}
+                                                    set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop 
+                    else if block at loop-value-1 is indirectly redstone powered:
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= 10:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is powder snow bucket:
+                                            if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden carrot:
+                                                if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air or {saveditems::LepusBrew}:
+                                                    if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 64:
+                                                        set {_i} to {saveditems::LepusBrew}
+                                                        add 1 of {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 golden carrot from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 12 of gui with id "DrinkBlender.%loop-value-1%" to empty bucket     
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is carved pumpkin:
+                                            if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden apple:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpookyCider}
+                                                    add 1 to {num::SpookyCider}
+                                                    add "{ItemNumID:%{num::SpookyCider}%}" to nbt of {_i}
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 golden apple from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 carved pumpkin from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                        if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        replace "minecraft:" with "" in {_effects}
+                                                        replace "_" with " " in {_effects}
+                                                        set {_effects} to {_effects} in strict proper case
+                                                        set {_i} to {saveditems::SpikedAmericanDream}
+                                                        set line 17 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                                set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                                set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add 1 to {num::SpikedAmericanDream}
+                                                            add "{ItemNumID:%{num::SpikedAmericanDream}%}" to nbt of {_i}
+                                                            set {_value} to tag "ItemNumID" of {_i}
+                                                            set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_i} to {saveditems::SpikedAmericanDream}
+                                                        set line 17 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                                set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                                set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                            add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop   
+                                        if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                            if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" does not contain "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is firework rocket:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 firework rocket from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {saveditems::AmericanDream}
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        replace "minecraft:" with "" in {_effects}
+                                                        replace "_" with " " in {_effects}
+                                                        set {_effects} to {_effects} in strict proper case
+                                                        set {_i} to {saveditems::SpikedMilk}
+                                                        set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                    if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                        set {_i} to {saveditems::SpikedMilk}
+                                                        set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                        set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                        remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%}
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop   
+                                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is honey bottle:
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                replace "minecraft:" with "" in {_effects}
+                                                replace "_" with " " in {_effects}
+                                                set {_effects} to {_effects} in strict proper case
+                                                set {_i} to {saveditems::SpikedHoney}
+                                                set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is {_i}:
+                                                    if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 16:
+                                                        add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                        remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add -10 to {powerbank.power::%loop-value-3%} 
+                                                        set {drinkblender.activated::%loop-value-1%} to true
+                                                        set {drinkblender.activated2::%loop-value-1%} to true
+                                                        exit loop
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpikedHoney}
+                                                    set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop 
+                        exit loop
+                else:
+                    loop {powerbank.location::*}:
+                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                            if {powerbank.power::%loop-value-3%} >= 10:
+                                set {_c1::*} to region at loop-value-1
+                                set {_c2::*} to region at loop-value-3
+                                if {_c1::*} = {_c2::*}:
+                                    if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is powder snow bucket:
+                                        if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden carrot:
+                                            if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air or {saveditems::LepusBrew}:
+                                                if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 64:
+                                                    set {_i} to {saveditems::LepusBrew}
+                                                    add 1 of {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 golden carrot from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    set slot 12 of gui with id "DrinkBlender.%loop-value-1%" to empty bucket     
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                    if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is carved pumpkin:
+                                        if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is golden apple:
+                                            if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                set {_i} to {saveditems::SpookyCider}
+                                                add 1 to {num::SpookyCider}
+                                                add "{ItemNumID:%{num::SpookyCider}%}" to nbt of {_i}
+                                                set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                remove 1 golden apple from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                remove 1 carved pumpkin from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                add -10 to {powerbank.power::%loop-value-3%} 
+                                                set {drinkblender.activated::%loop-value-1%} to true
+                                                set {drinkblender.activated2::%loop-value-1%} to true
+                                                exit loop
+                                    if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    replace "minecraft:" with "" in {_effects}
+                                                    replace "_" with " " in {_effects}
+                                                    set {_effects} to {_effects} in strict proper case
+                                                    set {_i} to {saveditems::SpikedAmericanDream}
+                                                    set line 17 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                    if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                            set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                            set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add 1 to {num::SpikedAmericanDream}
+                                                        add "{ItemNumID:%{num::SpikedAmericanDream}%}" to nbt of {_i}
+                                                        set {_value} to tag "ItemNumID" of {_i}
+                                                        set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpikedAmericanDream}
+                                                    set line 17 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                    if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "UsesLeft:":
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""SpikedAmericanDream""":
+                                                            set line 16 of lore of {_i} to line 16 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""AmericanDream""":
+                                                            set line 16 of lore of {_i} to line 11 of lore of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        set {_value2} to tag "UsesLeft" of nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                        add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop   
+                                    if slot 12 of gui with id "DrinkBlender.%loop-value-1%" is milk bucket:
+                                        if nbt of slot 12 of gui with id "DrinkBlender.%loop-value-1%" does not contain "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is firework rocket:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 firework rocket from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {saveditems::AmericanDream}
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    exit loop
+                                            if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    replace "minecraft:" with "" in {_effects}
+                                                    replace "_" with " " in {_effects}
+                                                    set {_effects} to {_effects} in strict proper case
+                                                    set {_i} to {saveditems::SpikedMilk}
+                                                    set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                                if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                    set {_i} to {saveditems::SpikedMilk}
+                                                    set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                    set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                    remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    remove 1 milk bucket from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop   
+                                    if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is honey bottle:
+                                        if slot 16 of gui with id "DrinkBlender.%loop-value-1%"'s type is potion:
+                                            set {_effects} to tag "Potion" of nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                            replace "minecraft:" with "" in {_effects}
+                                            replace "_" with " " in {_effects}
+                                            set {_effects} to {_effects} in strict proper case
+                                            set {_i} to {saveditems::SpikedHoney}
+                                            set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                                            if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is {_i}:
+                                                if item amount of slot 41 of gui with id "DrinkBlender.%loop-value-1%" < 16:
+                                                    add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                    remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                    add -10 to {powerbank.power::%loop-value-3%} 
+                                                    set {drinkblender.activated::%loop-value-1%} to true
+                                                    set {drinkblender.activated2::%loop-value-1%} to true
+                                                    exit loop
+                                            if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                add {_i} to slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                                set slot 16 of gui with id "DrinkBlender.%loop-value-1%" to glass bottle
+                                                remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                add -10 to {powerbank.power::%loop-value-3%} 
+                                                set {drinkblender.activated::%loop-value-1%} to true
+                                                set {drinkblender.activated2::%loop-value-1%} to true
+                                                exit loop
+                                        else if nbt of slot 16 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""LepusBrew""":
+                                            if slot 41 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                                set {_i} to {saveditems::SpikedHoney}
+                                                set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                                                set slot 41 of gui with id "DrinkBlender.%loop-value-1%" to {_i}
+                                                remove 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                                remove 1 honey bottle from slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                                add -10 to {powerbank.power::%loop-value-3%} 
+                                                set {drinkblender.activated::%loop-value-1%} to true
+                                                set {drinkblender.activated2::%loop-value-1%} to true
+                                                exit loop 
+
+every 2 ticks:
+    loop {drinkblender.location::*}:
+        if {drinkblender.activated::%loop-value%} is true:
+            if chunk at loop-value is loaded:
+                loop 46 times:
+                    set {_n} to loop-number - 1
+                    if {_n} is 0 or 9 or 18 or 27 or 36 or 45:
+                        if nbt of slot {_n} of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""EcholomaticMod""":
+                            loop all blocks in radius 9 of loop-value-1:
+                                if loop-value-3 is sculk sensor:
+                                    spawn snowball at location of loop-value-3
+                            delete {drinkblender.activated::%loop-value-1%}
+                            exit loop
+                                            
+every 2 ticks:
+    loop {drinkblender.location::*}:
+        if chunk at loop-value is loaded:
+            loop 46 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 18 or 27 or 36 or 45:
+                    if nbt of slot {_n} of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""WardstaticMod""":
+                        set {_total} to tag "Total" of nbt of slot {_n} of gui with id "DrinkBlender.%loop-value-1%"
+                        set {_max} to tag "Max" of nbt of slot {_n} of gui with id "DrinkBlender.%loop-value-1%"
+                        if {_total} = {_max}:
+                            set {drinkblender.maxed::%loop-value-1%} to true
+                        if {_total} < {_max}:
+                            if {drinkblender.activated2::%loop-value-1%} is true:
+                                add "{Total:%{_total} + 1%}" to nbt of slot {_n} of gui with id "DrinkBlender.%loop-value-1%"
+                        loop all blocks in radius 1 of loop-value-1:
+                            if loop-value-3 is sculk:
+                                delete {drinkblender.maxed::%loop-value-1%}
+                                add "{Total:0}" to nbt of slot {_n} of gui with id "DrinkBlender.%loop-value-1%"
+                        delete {drinkblender.activated2::%loop-value-1%}
+                
+every 2 ticks:
+    loop {drinkblender.location::*}:
+        if nbt of slot 0 of gui with id "DrinkBlender.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 0 of gui with id "DrinkBlender.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 0 of gui with id "DrinkBlender.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 9 of gui with id "DrinkBlender.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 9 of gui with id "DrinkBlender.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 9 of gui with id "DrinkBlender.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 18 of gui with id "DrinkBlender.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 18 of gui with id "DrinkBlender.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 18 of gui with id "DrinkBlender.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 27 of gui with id "DrinkBlender.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 27 of gui with id "DrinkBlender.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 27 of gui with id "DrinkBlender.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 36 of gui with id "DrinkBlender.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 36 of gui with id "DrinkBlender.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 36 of gui with id "DrinkBlender.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 45 of gui with id "DrinkBlender.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 45 of gui with id "DrinkBlender.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 45 of gui with id "DrinkBlender.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        delete {drinkblender.maxed::%loop-value%}
+                                            
+every 1 second:
+    loop {tidegen.location::*}:
+        if chunk at loop-value is loaded:
+            if nbt of slot 3 of gui with id "TideGen.%loop-value%" contains "CheesyCraft:""MagmaticMod""":
+                if "%block above loop-value%" contains "water" or "lava": 
+                    if "%block above loop-value%" contains "flowing" or "falling":
+                        loop {powerbank.location::*}:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-2
+                            if {_c1::*} = {_c2::*}:
+                                if distance between loop-value-1 and loop-value-2 <= {powerbank.range::%loop-value-2%}:
+                                    if {powerbank.power::%loop-value-2%} <= {powerbank.powertotal::%loop-value-2%} - 2:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with lime stained glass pane named "&aCurrent Setup" with lore "" and "&7This Generator is creating CP."
+                                        add 2 to {powerbank.power::%loop-value-2%} 
+                                        exit loop
+                                    else:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank with more room."
+                                else:
+                                    edit gui with id "TideGen.%loop-value-1%":
+                                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank nearby first."
+                else:
+                    edit gui with id "TideGen.%loop-value%":
+                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs flowing water/lava above it first."
+                continue loop
+            if nbt of slot 4 of gui with id "TideGen.%loop-value%" contains "CheesyCraft:""MagmaticMod""":
+                if "%block above loop-value%" contains "water" or "lava": 
+                    if "%block above loop-value%" contains "flowing" or "falling":
+                        loop {powerbank.location::*}:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-2
+                            if {_c1::*} = {_c2::*}:
+                                if distance between loop-value-1 and loop-value-2 <= {powerbank.range::%loop-value-2%}:
+                                    if {powerbank.power::%loop-value-2%} <= {powerbank.powertotal::%loop-value-2%} - 2:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with lime stained glass pane named "&aCurrent Setup" with lore "" and "&7This Generator is creating CP."
+                                        add 2 to {powerbank.power::%loop-value-2%} 
+                                        exit loop
+                                    else:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank with more room."
+                                else:
+                                    edit gui with id "TideGen.%loop-value-1%":
+                                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank nearby first."
+                else:
+                    edit gui with id "TideGen.%loop-value%":
+                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs flowing water/lava above it first."
+                continue loop
+            if nbt of slot 5 of gui with id "TideGen.%loop-value%" contains "CheesyCraft:""MagmaticMod""":
+                if "%block above loop-value%" contains "water" or "lava": 
+                    if "%block above loop-value%" contains "flowing" or "falling":
+                        loop {powerbank.location::*}:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-2
+                            if {_c1::*} = {_c2::*}:
+                                if distance between loop-value-1 and loop-value-2 <= {powerbank.range::%loop-value-2%}:
+                                    if {powerbank.power::%loop-value-2%} <= {powerbank.powertotal::%loop-value-2%} - 2:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with lime stained glass pane named "&aCurrent Setup" with lore "" and "&7This Generator is creating CP."
+                                        add 2 to {powerbank.power::%loop-value-2%} 
+                                        exit loop
+                                    else:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank with more room."
+                                else:
+                                    edit gui with id "TideGen.%loop-value-1%":
+                                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank nearby first."
+                    else:
+                        edit gui with id "TideGen.%loop-value%":
+                            make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs flowing water/lava above it first."
+                    continue loop
+            else:
+                if "%block above loop-value%" contains "water": 
+                    if "%block above loop-value%" contains "flowing" or "falling":
+                        loop {powerbank.location::*}:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-2
+                            if {_c1::*} = {_c2::*}:
+                                if distance between loop-value-1 and loop-value-2 <= {powerbank.range::%loop-value-2%}:
+                                    if {powerbank.power::%loop-value-2%} <= {powerbank.powertotal::%loop-value-2%} - 2:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with lime stained glass pane named "&aCurrent Setup" with lore "" and "&7This Generator is creating CP."
+                                        add 2 to {powerbank.power::%loop-value-2%} 
+                                        exit loop
+                                    else:
+                                        edit gui with id "TideGen.%loop-value-1%":
+                                            make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank with more room."
+                                else:
+                                    edit gui with id "TideGen.%loop-value-1%":
+                                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs a Power Bank nearby first."
+                else:
+                    edit gui with id "TideGen.%loop-value%":
+                        make gui slot 1 with red stained glass pane named "&cCurrent Setup" with lore "" and "&7This Generator needs flowing water above it first."
+                        
+every 1 second:
+    loop {powerbank.location::*}:
+        edit gui with id "powerbank.%loop-value%":
+            make gui slot 1 with lime stained glass pane named "&aCurrent Power" with lore "" and "&7This Power Bank has %{powerbank.power::%loop-value%}% &7/ %{powerbank.powertotal::%loop-value%}% &7CP."
+            
+every 1 second:
+    loop {drinkblender.location::*}:
+        if chunk at loop-value is loaded:
+            loop (0, 9, 18, 27, 36, and 45):
+                if nbt of slot loop-value-2 of gui with id "DrinkBlender.%loop-value-1%" contains "CheesyCraft:""HopperMod""":
+                    if block above loop-value-1 is hopper:
+                        if block data tag "facing" of block above loop-value-1 is "down":
+                            loop all items in inventory of block above loop-value-1:
+                                if 1 of loop-value-3 is potion or golden apple or firework rocket or golden carrot or {saveditems::LepusBrew}:
+                                    if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                        set {_i} to 1 of loop-value-3
+                                        remove 1 of loop-value-3 from loop-value-3
+                                        add {_i} to slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                        exit loop
+                                    if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is 1 of loop-value-3:
+                                        if item amount of slot 16 of gui with id "DrinkBlender.%loop-value-1%" < max stack size of 1 of loop-value-3:
+                                            set {_i} to 1 of loop-value-3
+                                            remove 1 of loop-value-3 from loop-value-3
+                                            add {_i} to slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                            exit loop
+                                if 1 of loop-value-3 is milk or honey bottle or carved pumpkin or powder snow bucket:
+                                    if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is air:
+                                        set {_i} to 1 of loop-value-3
+                                        remove 1 of loop-value-3 from loop-value-3
+                                        add {_i} to slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                        exit loop
+                                    if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is 1 of loop-value-3:
+                                        if item amount of slot 12 of gui with id "DrinkBlender.%loop-value-1%" < max stack size of 1 of loop-value-3:
+                                            set {_i} to 1 of loop-value-3
+                                            remove 1 of loop-value-3 from loop-value-3
+                                            add {_i} to slot 12 of gui with id "DrinkBlender.%loop-value-1%"
+                                            exit loop
+                    if block below loop-value-1 is hopper:
+                        if 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%" is not air:
+                            if block below loop-value-1 can hold 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%":
+                                set {_i} to 1 of slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                remove {_i} from slot 41 of gui with id "DrinkBlender.%loop-value-1%"
+                                add {_i} to inventory of block below loop-value-1
+                        if 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%" is glass bottle:
+                            if block below loop-value-1 can hold 1 glass bottle:
+                                set {_i} to 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                remove {_i} from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                add {_i} to inventory of block below loop-value-1
+                        if 1 of slot 12 of gui with id "DrinkBlender.%loop-value-1%" is empty bucket:
+                            if block below loop-value-1 can hold 1 empty bucket:
+                                set {_i} to 1 of slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                remove {_i} from slot 16 of gui with id "DrinkBlender.%loop-value-1%"
+                                add {_i} to inventory of block below loop-value-1
+                        

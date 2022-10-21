@@ -1,0 +1,122 @@
+# # # # # # # # # # # # # # # # #
+#                               #
+# TAG GAME SCRIPT FOR SKRIPT    #
+# VERSION: 1.2                  #
+# DEVELOPER: GentlemanCheesy    #
+# DISCORD: GentlemanCheesy#2225 #
+#                               #
+# # # # # # # # # # # # # # # # #
+
+# If you want, you can edit the text within the code to display it differently. 
+# Make sure you know what you are doing first!
+
+on join:
+    wait 1 second
+    if {tagcount::%player's uuid%} is not set:
+        set {tagcount::%player's uuid%} to 0
+    clear scoreboard of player
+    set line 8 of scoreboard of player to " &6CheesyTag Info Board"
+    set line 7 of scoreboard of player to " &eToggle with ""/tagboard"""
+    set line 6 of scoreboard of player to " "
+    set line 3 of scoreboard of player to " "
+    set line 2 of scoreboard of player to " &6CheesyTag Stats:"
+    while player is online:
+        set line 1 of scoreboard of player to " &eTagged %{tagcount::%player's uuid%}%&e times!"
+        wait 1 second
+
+on join:
+    wait 1 second
+    while player is online:
+        if {tagplayer} parsed as player is online:
+            set line 4 of scoreboard of player to " &6X: &e%rounded x-location of {tagplayer} parsed as player% &6Y: &e%rounded y-location of {tagplayer} parsed as player% &6Z: &e%rounded z-location of {tagplayer} parsed as player%"
+        else:
+            set line 4 of scoreboard of player to " &eThey are offline..."
+        wait 10 seconds
+
+
+on join:
+    wait 1 second
+    while player is online:
+        set line 5 of scoreboard of player to " &e%{tagplayer} parsed as offline player% is it!"
+        wait 1.5 seconds
+        
+on join:
+    if {toggle::%player%} is false:
+        toggle scoreboard of player off
+        
+on right click on player:
+    if clicked player is online:
+        if player's uuid is {tagplayer}:
+            loop all items in inventory of player:
+                if nbt of loop-item contains "CheesyCraft:""CrimsonTalisman""":
+                    if difference between {tagback.cooldown::%player%} and now > 1 minute:
+                        exit loop
+                    if {tagback::%clicked player%} is set:
+                        exit loop
+                    set {tagback::%player%} to now
+                    set {tagback.cooldown::%player%} to now
+                    send "&7%player% &7activated &4No Tag-Backs!" to clicked player
+                    send "&7You activated &4No Tag-Backs!" to player
+            loop all items in inventory of clicked player:
+                if nbt of loop-item contains "CheesyCraft:""WarpedTalisman""":
+                    if difference between {warpdrive.cooldown::%clicked player%} and now > 1 minute:
+                        exit loop
+                    if {tagback::%clicked player%} is set:
+                        exit loop
+                    if {warpdrive.cooldown::%clicked player%} is not set:
+                        apply speed 2 to clicked player for 10 seconds
+                        send "&7You &7activated &3Warpdrive&7!" to clicked player
+                        send "&7%clicked player% activated &3Warpdrive&7!" to player
+                    set {warpdrive.cooldown::%clicked player%} to now
+            if {tagback::%clicked player%} is set:
+                if difference between {tagback::%clicked player%} and now < 30 seconds:
+                    set {_difference} to difference between now and {tagback::%clicked player%}
+                    send "&7%clicked player% &7has &c%(difference between {_difference} and 30 seconds)% &7of &4No Tag-Backs! &7left!" to player
+                    stop
+            set {tagplayer} to clicked player's uuid
+            play sound "entity.item.pickup" with volume 1 and pitch 1 to player
+            play sound "entity.item.pickup" with volume 1 and pitch 1 to clicked player
+            if {tagcount::%clicked player's uuid%} is not set:
+                set {tagcount::%clicked player's uuid%} to 0
+            add 1 to {tagcount::%clicked player's uuid%}
+
+every 1 second:
+    loop all players:
+        loop all items in inventory of loop-player:
+            if nbt of loop-item contains "CheesyCraft:""CrimsonTalisman""":
+                if {tagback::%loop-player%} is set:
+                    if difference between {tagback::%loop-player%} and now > 30 seconds:
+                        clear {tagback::%loop-player%}
+                if {tagback.cooldown::%loop-player%} is set:
+                    if difference between {tagback.cooldown::%loop-player%} and now > 1 minute:
+                        clear {tagback.cooldown::%loop-player%}
+                        send "&7You can use &4No Tag-Backs! &7again!" to loop-player
+            if nbt of loop-item contains "CheesyCraft:""WarpedTalisman""":
+                if {warpdrive.cooldown::%loop-player%} is set:
+                    if difference between {warpdrive.cooldown::%loop-player%} and now > 1 minute:
+                        clear {warpdrive.cooldown::%loop-player%}
+                        send "&7You can use &3Warpdrive &7again!" to loop-player
+
+# sets the current player who is it
+command /tagset <player>:
+	description: Set who is currently it.
+	usage: /tagset <player>
+	permission: admin.tagset
+	executable by: players
+	trigger:
+		set {tagplayer} to uuid of arg-1
+
+# simple scoreboard disabling command
+command /tagboard:
+    description: Toggles the Scoreboard.
+    usage: /tagboard
+    executable by: players
+    trigger:
+        if scoreboard of player is on:
+            set {toggle::%player%} to false
+            toggle scoreboard of player off
+            stop
+        if scoreboard of player is off:
+            set {toggle::%player%} to true
+            toggle scoreboard of player on
+            stop

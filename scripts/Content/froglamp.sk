@@ -1,0 +1,36 @@
+every 5 seconds:
+    loop all players:
+        clear {_p}
+        loop all items in inventory of loop-player:
+            if nbt of loop-item contains "CheesyCraft:""OchreFroglamp""":
+                loop all items in inventory of loop-player:
+                    if nbt of loop-item-2 contains "CheesyCraft:""PearlescentFroglamp""":
+                        loop all items in inventory of loop-player:
+                            if nbt of loop-item-3 contains "CheesyCraft:""VerdantFroglamp""":
+                                if biome at loop-player is Meadow or Bamboo Jungle or Sparse Jungle or Swamp or dark forest or Old Growth Birch Forest or birch forest or Flower Forest or forest or Sunflower Plains or Plains or Old Growth Spruce Taiga or Old Growth Pine Taiga or Taiga or Windswept Forest or desert or savanna or windswept savanna or savanna plateau or badlands or wooded badlands or eroded badlands or beach or Snowy Plains or Ice Spikes or Snowy Taiga or Snowy Beach or Grove or Snowy Slopes or Jagged Peaks or Frozen Peaks or Frozen River or Frozen Ocean or Deep Frozen Ocean:
+                                    apply speed 2 to loop-player for 5 seconds
+                                    apply strength to loop-player for 5 seconds     
+                                    apply jump boost 2 to loop-player for 5 seconds 
+                                    set {_p} to true
+                                    exit 3 loops
+        if {_p} is true:
+            continue loop
+        loop all items in inventory of loop-player:
+            if nbt of loop-item contains "CheesyCraft:""OchreFroglamp""":
+                if biome at loop-player is desert or savanna or windswept savanna or savanna plateau or badlands or wooded badlands or eroded badlands or beach:
+                    apply speed 2 to loop-player for 5 seconds
+                    exit loop
+        loop all items in inventory of loop-player:
+            if nbt of loop-item contains "CheesyCraft:""PearlescentFroglamp""":
+                if biome at loop-player is Snowy Plains or Ice Spikes or Snowy Taiga or Snowy Beach or Grove or Snowy Slopes or Jagged Peaks or Frozen Peaks or Frozen River or Frozen Ocean or Deep Frozen Ocean:
+                    apply strength to loop-player for 5 seconds
+                    exit loop
+        loop all items in inventory of loop-player:
+            if nbt of loop-item contains "CheesyCraft:""VerdantFroglamp""":
+                if biome at loop-player is Meadow or Bamboo Jungle or Sparse Jungle or Swamp or dark forest or Old Growth Birch Forest or birch forest or Flower Forest or forest or Sunflower Plains or Plains or Old Growth Spruce Taiga or Old Growth Pine Taiga or Taiga or Windswept Forest:
+                    apply jump boost 2 to loop-player for 5 seconds
+                    exit loop
+                    
+on right click with player head:
+    if nbt of player's held item contains "Froglamp":
+        cancel event

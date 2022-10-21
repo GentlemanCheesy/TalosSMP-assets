@@ -1,0 +1,208 @@
+options:
+    NoSlaughter: player or villager or wolf or cat or fox or parrot
+
+on unload:
+    loop {SlaughterBox.location::*}:
+        set {_n1} to 0
+        loop 6 times:
+            set {_n} to loop-number - 1
+            if {_n} is 3 or 4 or 5:
+                add 1 to {_n1}
+                set {SlaughterBox.save::%loop-value-1%::%{_n1}%} to slot {_n} of gui with id "SlaughterBox.%loop-value-1%"
+
+on load:
+    loop {SlaughterBox.location::*}:
+        if gui with id "SlaughterBox.%loop-value%" is not set:
+            create a gui with id "SlaughterBox.%loop-value%" with virtual dropper named "SlaughterBox" with shape "www" and "123" and "www":
+                set {_n1} to 0
+                loop 3 times:
+                    add 1 to {_n1}
+                    set {_n4::*} to 3, 4, and 5
+                    if {SlaughterBox.save::%loop-value-1%::%{_n1}%} is not set:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    if {SlaughterBox.save::%loop-value-1%::%{_n1}%} is air:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    else:
+                        make gui slot {_n4::%{_n1}%} with moveable {SlaughterBox.save::%loop-value-1%::%{_n1}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+
+on place of player head or player wall head:
+    if nbt of player's held item contain "CheesyCraft:""SlaughterBox""":
+        set {SlaughterBox.place::%event-block's location%} to true
+        set {SlaughterBox.location::%event-block's location%} to event-block's location
+
+on break of player head or player wall head:
+    if {SlaughterBox.place::%event-block's location%} is true:
+        cancel the drops
+        clear {SlaughterBox.place::%event-block's location%}
+        clear {SlaughterBox.location::%event-block's location%}
+        drop {saveditems::SlaughterBox}
+        loop all items in gui with id "SlaughterBox.%event-block's location%":
+            if index of loop-item is 3 or 4 or 5:
+                drop loop-item
+        delete gui with id "SlaughterBox.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {SlaughterBox.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "SlaughterBox.%event-block's location%" is not set:
+                    create a gui with id "SlaughterBox.%event-block's location%" with virtual dropper named "SlaughterBox" with shape "www" and "xxx" and "www":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                open gui with id "SlaughterBox.%event-block's location%" to player
+                while name of player's current inventory contains "SlaughterBox":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+                    
+every 1 second:
+    loop {SlaughterBox.location::*}:
+        if chunk at loop-value is loaded:
+            loop 6 times:
+                set {_n} to loop-number - 1
+                if {_n} is 3 or 4 or 5:
+                    if nbt of slot {_n} of gui with id "SlaughterBox.%loop-value-1%" contains "RedstoneSwitchMod":
+                        if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                            loop {powerbank.location::*}:
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    if {powerbank.power::%loop-value-3%} >= 2:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} = {_c2::*}:
+                                            loop all creatures in radius 11 around loop-value-1:
+                                                if loop-value-4 is not {@NoSlaughter}:
+                                                    damage loop-value-4 by 2
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                    else if nbt of slot {_n} of gui with id "SlaughterBox.%loop-value-1%" contains "RedstoneActivationMod":
+                        if block at loop-value-1 is redstone powered:
+                            loop {powerbank.location::*}:
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    if {powerbank.power::%loop-value-3%} >= 2:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} = {_c2::*}:
+                                            loop all creatures in radius 11 around loop-value-1:
+                                                if loop-value-4 is not {@NoSlaughter}:
+                                                    damage loop-value-4 by 2
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                        if block at loop-value-1 is indirectly redstone powered:
+                            loop {powerbank.location::*}:
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    if {powerbank.power::%loop-value-3%} >= 2:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} = {_c2::*}:
+                                            loop all creatures in radius 11 around loop-value-1:
+                                                if loop-value-4 is not {@NoSlaughter}:
+                                                    damage loop-value-4 by 2
+                                                    add -2 to {powerbank.power::%loop-value-3%}
+                    else:
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= 2:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        loop all creatures in radius 11 around loop-value-1:
+                                            if loop-value-4 is not {@NoSlaughter}:
+                                                damage loop-value-4 by 2
+                                                add -2 to {powerbank.power::%loop-value-3%}
+                                                
+every 6 ticks:
+    loop {SlaughterBox.location::*}:
+        if chunk at loop-value is loaded:
+            loop 6 times:
+                set {_n} to loop-number - 1
+                if {_n} is 3 or 4 or 5:
+                    if nbt of slot {_n} of gui with id "SlaughterBox.%loop-value-1%" contains "RedstoneSwitchMod":
+                        if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                            loop {powerbank.location::*}:
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    if {powerbank.power::%loop-value-3%} >= 2:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} = {_c2::*}:
+                                            loop (3 and 4 and 5):
+                                                if nbt of slot loop-value-4 of gui with id "SlaughterBox.%loop-value-1%" contains "DisruptionMod":
+                                                    loop all projectiles in radius 11 around loop-value-1:
+                                                        if {powerbank.power::%loop-value-3%} >= 2:
+                                                            if loop-value-5 is on the ground:
+                                                                continue
+                                                            if loop-value-5 is shulker bullet:
+                                                                if {s::%loop-value-5%::*} is not true:
+                                                                    summon shulker bullet at loop-value-5's location
+                                                                    set {s::%last spawned shulker bullet%::*} to true
+                                                                    kill loop-value-5
+                                                            else:
+                                                                set loop-value-5's velocity to vector(0, 0, 0)
+                                                            add -2 to {powerbank.power::%loop-value-3%}
+                                                        exit 3 loops
+                    else if nbt of slot {_n} of gui with id "SlaughterBox.%loop-value-1%" contains "RedstoneActivationMod":
+                        if block at loop-value-1 is redstone powered:
+                            loop {powerbank.location::*}:
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    if {powerbank.power::%loop-value-3%} >= 2:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} = {_c2::*}:
+                                            loop (3 and 4 and 5):
+                                                if nbt of slot loop-value-4 of gui with id "SlaughterBox.%loop-value-1%" contains "DisruptionMod":
+                                                    loop all projectiles in radius 11 around loop-value-1:
+                                                        if {powerbank.power::%loop-value-3%} >= 2:
+                                                            if loop-value-5 is on the ground:
+                                                                continue
+                                                            if loop-value-5 is shulker bullet:
+                                                                if {s::%loop-value-5%::*} is not true:
+                                                                    summon shulker bullet at loop-value-5's location
+                                                                    set {s::%last spawned shulker bullet%::*} to true
+                                                                    kill loop-value-5
+                                                            else:
+                                                                set loop-value-5's velocity to vector(0, 0, 0)
+                                                            add -2 to {powerbank.power::%loop-value-3%}
+                                                        exit 3 loops
+                        if block at loop-value-1 is indirectly redstone powered:
+                            loop {powerbank.location::*}:
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    if {powerbank.power::%loop-value-3%} >= 2:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} = {_c2::*}:
+                                            loop (3 and 4 and 5):
+                                                if nbt of slot loop-value-4 of gui with id "SlaughterBox.%loop-value-1%" contains "DisruptionMod":
+                                                    loop all projectiles in radius 11 around loop-value-1:
+                                                        if {powerbank.power::%loop-value-3%} >= 2:
+                                                            if loop-value-5 is on the ground:
+                                                                continue
+                                                            if loop-value-5 is shulker bullet:
+                                                                if {s::%loop-value-5%::*} is not true:
+                                                                    summon shulker bullet at loop-value-5's location
+                                                                    set {s::%last spawned shulker bullet%::*} to true
+                                                                    kill loop-value-5
+                                                            else:
+                                                                set loop-value-5's velocity to vector(0, 0, 0)
+                                                            add -2 to {powerbank.power::%loop-value-3%}
+                                                        exit 3 loops
+                    else:
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= 2:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        loop (3 and 4 and 5):
+                                            if nbt of slot loop-value-4 of gui with id "SlaughterBox.%loop-value-1%" contains "DisruptionMod":
+                                                loop all projectiles in radius 11 around loop-value-1:
+                                                    if {powerbank.power::%loop-value-3%} >= 2:
+                                                        if loop-value-5 is on the ground:
+                                                            continue
+                                                        if loop-value-5 is shulker bullet:
+                                                            if {s::%loop-value-5%::*} is not true:
+                                                                summon shulker bullet at loop-value-5's location
+                                                                set {s::%last spawned shulker bullet%::*} to true
+                                                                kill loop-value-5
+                                                        else:
+                                                            set loop-value-5's velocity to vector(0, 0, 0)
+                                                        add -2 to {powerbank.power::%loop-value-3%}
+                                                    exit 3 loops

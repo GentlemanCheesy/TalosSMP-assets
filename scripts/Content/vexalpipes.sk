@@ -1,0 +1,423 @@
+on place of lime stained glass:
+    if nbt of player's held item contain "CheesyCraft:""GreenVexalPipe""":
+        set {GreenVexalPipe.place::%event-block's location%} to true
+        set {GreenVexalPipe.loc::%event-block's location%} to event-block's location
+        add 1 to {GreenVexalPipeNum}
+        set {GreenVexalPipe.num::%event-block's location%} to {GreenVexalPipeNum}
+        set {GreenVexalPipe.pos::%event-block's location%} to player's location
+        set {_n} to 0
+        loop all blocks in radius 1 of event-block's location:
+            if {GreenVexalPipe.loc::%event-block's location%} is not loop-value's location:
+                add {GreenVexalPipe.num::%loop-value's location%} to {_n::*}
+        loop {_n::*}:
+            loop {GreenVexalPipe.loc::*}:
+                if {GreenVexalPipe.num::%loop-value-2%} = loop-value-1:
+                    set {GreenVexalPipe.num::%loop-value-2%} to {GreenVexalPipe.num::%event-block's location%}
+        loop {GreenVexalPipe.loc::*}:
+            if {GreenVexalPipe.num::%event-block's location%} = {GreenVexalPipe.num::%loop-value%}:
+                loop all blocks in radius 1 of loop-value:
+                    if {GreenVexalPipe.place::%loop-value-2's location%} is set:
+                        add 1 to {_n2}
+            if {_n2} >= 3:
+                set {GreenVexalPipe.endpoint::%loop-value%} to false
+            if {_n2} < 3:
+                set {GreenVexalPipe.endpoint::%loop-value%} to true
+            clear {_n2}
+        
+on break:
+    if {GreenVexalPipe.place::%event-block's location%} is true:
+        loop all blocks in radius 1 of event-block's location:
+            if {GreenVexalPipe.place::%loop-value's location%} is set:
+                add 1 to {_n2}
+        if {_n2} >= 3:
+            cancel event
+            send "&cVexal Pipes must be broken from an endpoint only!"
+            stop
+        if {_n2} < 3:
+            loop all blocks in radius 1 of event-block's location:
+                if {GreenVexalPipe.place::%loop-value's location%} is set:
+                    if loop-value's location is not event-block's location:
+                        loop all blocks in radius 1 of loop-value's location:
+                            if {GreenVexalPipe.place::%loop-value-2's location%} is set:
+                                if loop-value-2's location is not event-block's location:
+                                    if loop-value-2's location is not loop-value-1's location:
+                                        add 1 to {_n}
+                if {_n} < 2:
+                    set {GreenVexalPipe.endpoint::%loop-value's location%} to true
+        cancel the drops
+        clear {GreenVexalPipe.place::%event-block's location%}
+        clear {GreenVexalPipe.loc::%event-block's location%}
+        clear {GreenVexalPipe.num::%event-block's location%}
+        clear {GreenVexalPipe.pos::%event-block's location%}
+        clear {GreenVexalPipe.endpoint::%event-block's location%}
+        drop {saveditems::GreenVexalPipe}
+        
+on right click:
+    if nbt of player's held item contains "CheesyCraft:""VexalVeilPlus""" or "CheesyCraft:""VexalVeil""":
+        stop
+    if player is not sneaking:
+        if {GreenVexalPipe.place::%event-block's location%} is true:
+            if {GreenVexalPipe.endpoint::%event-block's location%} is true:
+                loop all blocks in radius 1 of event-block's location:
+                    if {VexalCork.place::%loop-value's location%} is true:
+                        if loop-value is redstone powered:
+                            set {_t} to true
+                        else if loop-value is indirectly redstone powered:
+                            set {_t} to true
+                if {_t} is not set:
+                    loop {GreenVexalPipe.loc::*}:
+                        if {GreenVexalPipe.num::%event-block's location%} = {GreenVexalPipe.num::%loop-value%}:
+                            if {GreenVexalPipe.loc::%event-block's location%} is not loop-value:
+                                if {GreenVexalPipe.endpoint::%loop-value%} is true:
+                                    loop all blocks in radius 1 of loop-value:
+                                        if {VexalCork.place::%loop-value-2's location%} is true:
+                                            if block at loop-value-2 is redstone powered:
+                                                set {_t2} to true
+                                            else if block at loop-value-2 is indirectly redstone powered:
+                                                set {_t2} to true
+                                    if {_t2} is true:
+                                        clear {_t2}
+                                        continue loop
+                                    add {GreenVexalPipe.pos::%loop-value%} to {_PipesLoc::*}
+                    if {_PipesLoc::*} is not set:
+                        send "&fThere is no open Vexal Pipe to travel to!"
+                    set {_randomwarppipe} to random element out of {_PipesLoc::*}
+                    set {_yaw} to player's yaw
+                    set {_pitch} to player's pitch
+                    set yaw of {_randomwarppipe} to {_yaw}
+                    set pitch of {_randomwarppipe} to {_pitch}
+                    teleport player to {_randomwarppipe}
+                else:
+                    send "&fThis Vexal Pipe is blocked by a Vexal Cork!"
+                
+on place of red stained glass:
+    if nbt of player's held item contain "CheesyCraft:""RedVexalPipe""":
+        set {RedVexalPipe.place::%event-block's location%} to true
+        set {RedVexalPipe.loc::%event-block's location%} to event-block's location
+        add 1 to {RedVexalPipeNum}
+        set {RedVexalPipe.num::%event-block's location%} to {RedVexalPipeNum}
+        set {RedVexalPipe.pos::%event-block's location%} to player's location
+        set {_n} to 0
+        loop all blocks in radius 1 of event-block's location:
+            if {RedVexalPipe.loc::%event-block's location%} is not loop-value's location:
+                add {RedVexalPipe.num::%loop-value's location%} to {_n::*}
+        loop {_n::*}:
+            loop {RedVexalPipe.loc::*}:
+                if {RedVexalPipe.num::%loop-value-2%} = loop-value-1:
+                    set {RedVexalPipe.num::%loop-value-2%} to {RedVexalPipe.num::%event-block's location%}
+        loop {RedVexalPipe.loc::*}:
+            if {RedVexalPipe.num::%event-block's location%} = {RedVexalPipe.num::%loop-value%}:
+                loop all blocks in radius 1 of loop-value:
+                    if {RedVexalPipe.place::%loop-value-2's location%} is set:
+                        add 1 to {_n2}
+            if {_n2} >= 3:
+                set {RedVexalPipe.endpoint::%loop-value%} to false
+            if {_n2} < 3:
+                set {RedVexalPipe.endpoint::%loop-value%} to true
+            clear {_n2}
+        
+on break:
+    if {RedVexalPipe.place::%event-block's location%} is true:
+        loop all blocks in radius 1 of event-block's location:
+            if {RedVexalPipe.place::%loop-value's location%} is set:
+                add 1 to {_n2}
+        if {_n2} >= 3:
+            cancel event
+            send "&cVexal Pipes must be broken from an endpoint only!"
+            stop
+        if {_n2} < 3:
+            loop all blocks in radius 1 of event-block's location:
+                if {RedVexalPipe.place::%loop-value's location%} is set:
+                    if loop-value's location is not event-block's location:
+                        loop all blocks in radius 1 of loop-value's location:
+                            if {RedVexalPipe.place::%loop-value-2's location%} is set:
+                                if loop-value-2's location is not event-block's location:
+                                    if loop-value-2's location is not loop-value-1's location:
+                                        add 1 to {_n}
+                if {_n} < 2:
+                    set {RedVexalPipe.endpoint::%loop-value's location%} to true
+        cancel the drops
+        clear {RedVexalPipe.place::%event-block's location%}
+        clear {RedVexalPipe.loc::%event-block's location%}
+        clear {RedVexalPipe.num::%event-block's location%}
+        clear {RedVexalPipe.pos::%event-block's location%}
+        clear {RedVexalPipe.endpoint::%event-block's location%}
+        drop {saveditems::RedVexalPipe}
+        
+on right click:
+    if nbt of player's held item contains "CheesyCraft:""VexalVeilPlus""" or "CheesyCraft:""VexalVeil""":
+        stop
+    if player is not sneaking:
+        if {RedVexalPipe.place::%event-block's location%} is true:
+            if {RedVexalPipe.endpoint::%event-block's location%} is true:
+                loop all blocks in radius 1 of event-block's location:
+                    if {VexalCork.place::%loop-value's location%} is true:
+                        if loop-value is redstone powered:
+                            set {_t} to true
+                        else if loop-value is indirectly redstone powered:
+                            set {_t} to true
+                if {_t} is not set:
+                    loop {RedVexalPipe.loc::*}:
+                        if {RedVexalPipe.num::%event-block's location%} = {RedVexalPipe.num::%loop-value%}:
+                            if {RedVexalPipe.loc::%event-block's location%} is not loop-value:
+                                if {RedVexalPipe.endpoint::%loop-value%} is true:
+                                    loop all blocks in radius 1 of loop-value:
+                                        if {VexalCork.place::%loop-value-2's location%} is true:
+                                            if block at loop-value-2 is redstone powered:
+                                                set {_t2} to true
+                                            else if block at loop-value-2 is indirectly redstone powered:
+                                                set {_t2} to true
+                                    if {_t2} is true:
+                                        clear {_t2}
+                                        continue loop
+                                    add {RedVexalPipe.pos::%loop-value%} to {_PipesLoc::*}
+                    if {_PipesLoc::*} is not set:
+                        send "&fThere is no open Vexal Pipe to travel to!"
+                    set {_randomwarppipe} to random element out of {_PipesLoc::*}
+                    set {_yaw} to player's yaw
+                    set {_pitch} to player's pitch
+                    set yaw of {_randomwarppipe} to {_yaw}
+                    set pitch of {_randomwarppipe} to {_pitch}
+                    teleport player to {_randomwarppipe}
+                else:
+                    send "&fThis Vexal Pipe is blocked by a Vexal Cork!"
+                
+on place of cyan stained glass:
+    if nbt of player's held item contain "CheesyCraft:""BlueVexalPipe""":
+        set {BlueVexalPipe.place::%event-block's location%} to true
+        set {BlueVexalPipe.loc::%event-block's location%} to event-block's location
+        add 1 to {BlueVexalPipeNum}
+        set {BlueVexalPipe.num::%event-block's location%} to {BlueVexalPipeNum}
+        set {BlueVexalPipe.pos::%event-block's location%} to player's location
+        set {_n} to 0
+        loop all blocks in radius 1 of event-block's location:
+            if {BlueVexalPipe.loc::%event-block's location%} is not loop-value's location:
+                add {BlueVexalPipe.num::%loop-value's location%} to {_n::*}
+        loop {_n::*}:
+            loop {BlueVexalPipe.loc::*}:
+                if {BlueVexalPipe.num::%loop-value-2%} = loop-value-1:
+                    set {BlueVexalPipe.num::%loop-value-2%} to {BlueVexalPipe.num::%event-block's location%}
+        loop {BlueVexalPipe.loc::*}:
+            if {BlueVexalPipe.num::%event-block's location%} = {BlueVexalPipe.num::%loop-value%}:
+                loop all blocks in radius 1 of loop-value:
+                    if {BlueVexalPipe.place::%loop-value-2's location%} is set:
+                        add 1 to {_n2}
+            if {_n2} >= 3:
+                set {BlueVexalPipe.endpoint::%loop-value%} to false
+            if {_n2} < 3:
+                set {BlueVexalPipe.endpoint::%loop-value%} to true
+            clear {_n2}
+        
+on break:
+    if {BlueVexalPipe.place::%event-block's location%} is true:
+        loop all blocks in radius 1 of event-block's location:
+            if {BlueVexalPipe.place::%loop-value's location%} is set:
+                add 1 to {_n2}
+        if {_n2} >= 3:
+            cancel event
+            send "&cVexal Pipes must be broken from an endpoint only!"
+            stop
+        if {_n2} < 3:
+            loop all blocks in radius 1 of event-block's location:
+                if {BlueVexalPipe.place::%loop-value's location%} is set:
+                    if loop-value's location is not event-block's location:
+                        loop all blocks in radius 1 of loop-value's location:
+                            if {BlueVexalPipe.place::%loop-value-2's location%} is set:
+                                if loop-value-2's location is not event-block's location:
+                                    if loop-value-2's location is not loop-value-1's location:
+                                        add 1 to {_n}
+                if {_n} < 2:
+                    set {BlueVexalPipe.endpoint::%loop-value's location%} to true
+        cancel the drops
+        clear {BlueVexalPipe.place::%event-block's location%}
+        clear {BlueVexalPipe.loc::%event-block's location%}
+        clear {BlueVexalPipe.num::%event-block's location%}
+        clear {BlueVexalPipe.pos::%event-block's location%}
+        clear {BlueVexalPipe.endpoint::%event-block's location%}
+        drop {saveditems::BlueVexalPipe}
+        
+on right click:
+    if nbt of player's held item contains "CheesyCraft:""VexalVeilPlus""" or "CheesyCraft:""VexalVeil""":
+        stop
+    if player is not sneaking:
+        if {BlueVexalPipe.place::%event-block's location%} is true:
+            if {BlueVexalPipe.endpoint::%event-block's location%} is true:
+                loop all blocks in radius 1 of event-block's location:
+                    if {VexalCork.place::%loop-value's location%} is true:
+                        if loop-value is redstone powered:
+                            set {_t} to true
+                        else if loop-value is indirectly redstone powered:
+                            set {_t} to true
+                if {_t} is not set:
+                    loop {BlueVexalPipe.loc::*}:
+                        if {BlueVexalPipe.num::%event-block's location%} = {BlueVexalPipe.num::%loop-value%}:
+                            if {BlueVexalPipe.loc::%event-block's location%} is not loop-value:
+                                if {BlueVexalPipe.endpoint::%loop-value%} is true:
+                                    loop all blocks in radius 1 of loop-value:
+                                        if {VexalCork.place::%loop-value-2's location%} is true:
+                                            if block at loop-value-2 is redstone powered:
+                                                set {_t2} to true
+                                            else if block at loop-value-2 is indirectly redstone powered:
+                                                set {_t2} to true
+                                    if {_t2} is true:
+                                        clear {_t2}
+                                        continue loop
+                                    add {BlueVexalPipe.pos::%loop-value%} to {_PipesLoc::*}
+                    if {_PipesLoc::*} is not set:
+                        send "&fThere is no open Vexal Pipe to travel to!"
+                    set {_randomwarppipe} to random element out of {_PipesLoc::*}
+                    set {_yaw} to player's yaw
+                    set {_pitch} to player's pitch
+                    set yaw of {_randomwarppipe} to {_yaw}
+                    set pitch of {_randomwarppipe} to {_pitch}
+                    teleport player to {_randomwarppipe}
+                else:
+                    send "&fThis Vexal Pipe is blocked by a Vexal Cork!"
+                
+on place of white stained glass:
+    if nbt of player's held item contain "CheesyCraft:""WhiteVexalPipe""":
+        set {WhiteVexalPipe.place::%event-block's location%} to true
+        set {WhiteVexalPipe.loc::%event-block's location%} to event-block's location
+        add 1 to {WhiteVexalPipeNum}
+        set {WhiteVexalPipe.num::%event-block's location%} to {WhiteVexalPipeNum}
+        set {WhiteVexalPipe.pos::%event-block's location%} to player's location
+        set {_n} to 0
+        loop all blocks in radius 1 of event-block's location:
+            if {WhiteVexalPipe.loc::%event-block's location%} is not loop-value's location:
+                add {WhiteVexalPipe.num::%loop-value's location%} to {_n::*}
+        loop {_n::*}:
+            loop {WhiteVexalPipe.loc::*}:
+                if {WhiteVexalPipe.num::%loop-value-2%} = loop-value-1:
+                    set {WhiteVexalPipe.num::%loop-value-2%} to {WhiteVexalPipe.num::%event-block's location%}
+        loop {WhiteVexalPipe.loc::*}:
+            if {WhiteVexalPipe.num::%event-block's location%} = {WhiteVexalPipe.num::%loop-value%}:
+                loop all blocks in radius 1 of loop-value:
+                    if {WhiteVexalPipe.place::%loop-value-2's location%} is set:
+                        add 1 to {_n2}
+            if {_n2} >= 3:
+                set {WhiteVexalPipe.endpoint::%loop-value%} to false
+            if {_n2} < 3:
+                set {WhiteVexalPipe.endpoint::%loop-value%} to true
+            clear {_n2}
+        
+on break:
+    if {WhiteVexalPipe.place::%event-block's location%} is true:
+        loop all blocks in radius 1 of event-block's location:
+            if {WhiteVexalPipe.place::%loop-value's location%} is set:
+                add 1 to {_n2}
+        if {_n2} >= 3:
+            cancel event
+            send "&cVexal Pipes must be broken from an endpoint only!"
+            stop
+        if {_n2} < 3:
+            loop all blocks in radius 1 of event-block's location:
+                if {WhiteVexalPipe.place::%loop-value's location%} is set:
+                    if loop-value's location is not event-block's location:
+                        loop all blocks in radius 1 of loop-value's location:
+                            if {WhiteVexalPipe.place::%loop-value-2's location%} is set:
+                                if loop-value-2's location is not event-block's location:
+                                    if loop-value-2's location is not loop-value-1's location:
+                                        add 1 to {_n}
+                if {_n} < 2:
+                    set {WhiteVexalPipe.endpoint::%loop-value's location%} to true
+        cancel the drops
+        clear {WhiteVexalPipe.place::%event-block's location%}
+        clear {WhiteVexalPipe.loc::%event-block's location%}
+        clear {WhiteVexalPipe.num::%event-block's location%}
+        clear {WhiteVexalPipe.pos::%event-block's location%}
+        clear {WhiteVexalPipe.endpoint::%event-block's location%}
+        drop {saveditems::WhiteVexalPipe}
+        
+on right click:
+    if nbt of player's held item contains "CheesyCraft:""VexalVeilPlus""" or "CheesyCraft:""VexalVeil""":
+        stop
+    if player is not sneaking:
+        if {WhiteVexalPipe.place::%event-block's location%} is true:
+            if {WhiteVexalPipe.endpoint::%event-block's location%} is true:
+                loop all blocks in radius 1 of event-block's location:
+                    if {VexalCork.place::%loop-value's location%} is true:
+                        if loop-value is redstone powered:
+                            set {_t} to true
+                        else if loop-value is indirectly redstone powered:
+                            set {_t} to true
+                if {_t} is not set:
+                    loop {WhiteVexalPipe.loc::*}:
+                        if {WhiteVexalPipe.num::%event-block's location%} = {WhiteVexalPipe.num::%loop-value%}:
+                            if {WhiteVexalPipe.loc::%event-block's location%} is not loop-value:
+                                if {WhiteVexalPipe.endpoint::%loop-value%} is true:
+                                    loop all blocks in radius 1 of loop-value:
+                                        if {VexalCork.place::%loop-value-2's location%} is true:
+                                            if loop-value-2 is redstone powered:
+                                                set {_t2} to true
+                                            else if loop-value-2 is indirectly redstone powered:
+                                                set {_t2} to true
+                                    if {_t2} is true:
+                                        clear {_t2}
+                                        continue loop
+                                    add {WhiteVexalPipe.pos::%loop-value%} to {_PipesLoc::*}
+                    if {_PipesLoc::*} is not set:
+                        send "&fThere is no open Vexal Pipe to travel to!"
+                    set {_randomwarppipe} to random element out of {_PipesLoc::*}
+                    set {_yaw} to player's yaw
+                    set {_pitch} to player's pitch
+                    set yaw of {_randomwarppipe} to {_yaw}
+                    set pitch of {_randomwarppipe} to {_pitch}
+                    teleport player to {_randomwarppipe}
+                else:
+                    send "&fThis Vexal Pipe is blocked by a Vexal Cork!"
+                    
+on place of mangrove planks:
+    if nbt of player's held item contain "CheesyCraft:""VexalCork""":
+        set {VexalCork.place::%event-block's location%} to true
+        set {VexalCork.loc::%event-block's location%} to event-block's location
+        
+on break of mangrove planks:
+    if {VexalCork.place::%event-block's location%} is true:
+        cancel the drops
+        clear {VexalCork.place::%event-block's location%}
+        clear {VexalCork.loc::%event-block's location%}
+        drop {saveditems::VexalCork}
+       
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeil""":
+            if event-player can build at location of event-block:
+                if player's offhand tool is a block:
+                    if player's offhand tool is solid:
+                        if block hardness of player's offhand tool > -1:
+                            if {WhiteVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                remove 1 of player's held item from player's held item
+                                cancel event
+                            if {RedVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                remove 1 of player's held item from player's held item
+                                cancel event
+                            if {BlueVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                remove 1 of player's held item from player's held item
+                                cancel event
+                            if {GreenVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                remove 1 of player's held item from player's held item
+                                cancel event
+                            
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeilPlus""":
+            if event-player can build at location of event-block:
+                if player's offhand tool is a block:
+                    if player's offhand tool is solid:
+                        if block hardness of player's offhand tool > -1:
+                            if {WhiteVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                cancel event
+                            if {RedVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                cancel event
+                            if {BlueVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                cancel event
+                            if {GreenVexalPipe.place::%event-block's location%} is true:
+                                set event-block to player's offhand tool
+                                cancel event

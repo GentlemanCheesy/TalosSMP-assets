@@ -1,0 +1,305 @@
+on death:
+    if victim is a elder guardian:
+        chance of 50%:
+            add 1 to {num::SpongeStaff}
+            set {_i} to {saveditems::SpongeStaff}
+            add "{PublicBukkitValues: {""ItemNumID"": %{num::SpongeStaff}%}}" to nbt of {_i}
+            drop {_i} at location of victim
+
+on join:
+    wait 3 ticks
+    while player is online:
+        wait 1 second
+        loop all items in player's inventory:
+            if nbt of loop-item contains "CheesyCraft:""SpongeStaff""":
+                if item amount of loop-item = 1:
+                    if nbt of loop-item does not contain "ItemNumID" and "PublicBukkitValues":
+                        add 1 to {num::SpongeStaff}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::SpongeStaff}%}}" to nbt of loop-item
+                    if nbt of loop-item contains "{PublicBukkitValues: {""ItemNumID"": 0}}":
+                        add 1 to {num::SpongeStaff}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::SpongeStaff}%}}" to nbt of loop-item
+
+on right click with blaze rod:
+    if nbt of player's held item contains "CheesyCraft:""SpongeStaff""":
+        if event-player can build at location of targeted block:
+            if item amount of event-item = 1:
+                set {_spongestaff::*} to uncoloured line 2 of player's held item's lore
+                loop {_spongestaff::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of Water"
+                    if {_value::1} is less than {_value::2}:
+                        if {place.woodenfluidtank::%targeted block's location%} is true:
+                            if {fluid.woodenfluidtank::%targeted block's location%} is "Water":
+                                if {amount.woodenfluidtank::%targeted block's location%} is more than or equal to 3:
+                                    if {fluid.woodenfluidtank::%targeted block's location%} is "Water":
+                                        add -3 to {amount.woodenfluidtank::%targeted block's location%}
+                                        add 1 to {_value::1}
+                                        set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                                        if {amount.woodenfluidtank::%targeted block's location%} is 0:
+                                            set {fluid.woodenfluidtank::%targeted block's location%} to "Empty"
+                                else:
+                                    if {amount.woodenfluidtank::%targeted block's location%} is 0:
+                                        send "&cThis tank is currently empty!"
+                                    if {amount.woodenfluidtank::%targeted block's location%} is more than 0:
+                                        send "&cThis tank doesn't have enough liquid for a full bucket!"
+                            else:
+                                if {fluid.woodenfluidtank::%targeted block's location%} is "Empty":
+                                    send "&cThis tank is currently empty!"
+                                else:
+                                    send "&cCan not put this into your sponge staff!"
+                        else if {place.stonefluidtank::%targeted block's location%} is true:
+                            if {fluid.stonefluidtank::%targeted block's location%} is "Water":
+                                if {amount.stonefluidtank::%targeted block's location%} is more than or equal to 3:
+                                    if {fluid.stonefluidtank::%targeted block's location%} is "Water":
+                                        add -3 to {amount.stonefluidtank::%targeted block's location%}
+                                        add 1 to {_value::1}
+                                        set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                                        if {amount.stonefluidtank::%targeted block's location%} is 0:
+                                            set {fluid.stonefluidtank::%targeted block's location%} to "Empty"
+                                else:
+                                    if {amount.stonefluidtank::%targeted block's location%} is 0:
+                                        send "&cThis tank is currently empty!"
+                                    if {amount.stonefluidtank::%targeted block's location%} is more than 0:
+                                        send "&cThis tank doesn't have enough liquid for a full bucket!"
+                            else:
+                                if {fluid.stonefluidtank::%targeted block's location%} is "Empty":
+                                    send "&cThis tank is currently empty!"
+                                else:
+                                    send "&cCan not put this into your sponge staff!"
+                        else if {place.blackstonefluidtank::%targeted block's location%} is true:
+                            if {fluid.blackstonefluidtank::%targeted block's location%} is "Water":
+                                if {amount.blackstonefluidtank::%targeted block's location%} is more than or equal to 3:
+                                    if {fluid.blackstonefluidtank::%targeted block's location%} is "Water":
+                                        add -3 to {amount.blackstonefluidtank::%targeted block's location%}
+                                        add 1 to {_value::1}
+                                        set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                                        if {amount.blackstonefluidtank::%targeted block's location%} is 0:
+                                            set {fluid.blackstonefluidtank::%targeted block's location%} to "Empty"
+                                else:
+                                    if {amount.blackstonefluidtank::%targeted block's location%} is 0:
+                                        send "&cThis tank is currently empty!"
+                                    if {amount.blackstonefluidtank::%targeted block's location%} is more than 0:
+                                        send "&cThis tank doesn't have enough liquid for a full bucket!"
+                            else:
+                                if {fluid.blackstonefluidtank::%targeted block's location%} is "Empty":
+                                    send "&cThis tank is currently empty!"
+                                else:
+                                    send "&cCan not put this into your sponge staff!"
+                        else if {place.obsidianfluidtank::%targeted block's location%} is true:
+                            if {fluid.obsidianfluidtank::%targeted block's location%} is "Water":
+                                if {amount.obsidianfluidtank::%targeted block's location%} is more than or equal to 3:
+                                    if {fluid.obsidianfluidtank::%targeted block's location%} is "Water":
+                                        add -3 to {amount.obsidianfluidtank::%targeted block's location%}
+                                        add 1 to {_value::1}
+                                        set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                                        if {amount.obsidianfluidtank::%targeted block's location%} is 0:
+                                            set {fluid.obsidianfluidtank::%targeted block's location%} to "Empty"
+                                else:
+                                    if {amount.obsidianfluidtank::%targeted block's location%} is 0:
+                                        send "&cThis tank is currently empty!"
+                                    if {amount.obsidianfluidtank::%targeted block's location%} is more than 0:
+                                        send "&cThis tank doesn't have enough liquid for a full bucket!"
+                            else:
+                                if {fluid.blackstonefluidtank::%targeted block's location%} is "Empty":
+                                    send "&cThis tank is currently empty!"
+                                else:
+                                    send "&cCan not put this into your sponge staff!"
+                        else if "%targeted block%" contains "water": 
+                            if "%targeted block%" does not contain "flowing" or "falling":
+                                set targeted block to air
+                                add 1 to {_value::1}
+                                set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+
+on left click with blaze rod:
+    if nbt of player's held item contains "CheesyCraft:""SpongeStaff""":
+        if event-player can build at location of targeted block:
+            if item amount of event-item = 1:
+                set {_spongestaff::*} to uncoloured line 2 of player's held item's lore
+                loop {_spongestaff::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of Water"
+                    if {_value::1} is more than 0:
+                        if {place.woodenfluidtank::%targeted block's location%} is true:
+                            if {fluid.woodenfluidtank::%targeted block's location%} is "Empty" or "Water":
+                                if {amount.woodenfluidtank::%targeted block's location%} is 0:
+                                    set {fluid.woodenfluidtank::%targeted block's location%} to "Water"
+                                if {amount.woodenfluidtank::%targeted block's location%} is less than or equal to 69:
+                                    add 3 to {amount.woodenfluidtank::%targeted block's location%}
+                                    add -1 to {_value::1}
+                                    set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                            else:
+                                send "&cThis tank already holds another type of liquid!"
+                            stop
+                        else if {place.stonefluidtank::%targeted block's location%} is true:
+                            if {fluid.stonefluidtank::%targeted block's location%} is "Empty" or "Water":
+                                if {amount.stonefluidtank::%targeted block's location%} is 0:
+                                    set {fluid.stonefluidtank::%targeted block's location%} to "Water"
+                                if {amount.stonefluidtank::%targeted block's location%} is less than or equal to 141:
+                                    add 3 to {amount.stonefluidtank::%targeted block's location%}
+                                    add -1 to {_value::1}
+                                    set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                            else:
+                                send "&cThis tank already holds another type of liquid!"
+                            stop
+                        else if {place.blackstonefluidtank::%targeted block's location%} is true:
+                            if {fluid.blackstonefluidtank::%targeted block's location%} is "Empty" or "Water":
+                                if {amount.blackstonefluidtank::%targeted block's location%} is 0:
+                                    set {fluid.blackstonefluidtank::%targeted block's location%} to "Water"
+                                if {amount.blackstonefluidtank::%targeted block's location%} is less than or equal to 141:
+                                    add 3 to {amount.blackstonefluidtank::%targeted block's location%}
+                                    add -1 to {_value::1}
+                                    set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                            else:
+                                send "&cThis tank already holds another type of liquid!"
+                            stop
+                        else if {place.obsidianfluidtank::%targeted block's location%} is true:
+                            if {fluid.obsidianfluidtank::%targeted block's location%} is "Empty" or "Water":
+                                if {amount.obsidianfluidtank::%targeted block's location%} is 0:
+                                    set {fluid.obsidianfluidtank::%targeted block's location%} to "Water"
+                                if {amount.obsidianfluidtank::%targeted block's location%} is less than or equal to 213:
+                                    add 3 to {amount.obsidianfluidtank::%targeted block's location%}
+                                    add -1 to {_value::1}
+                                    set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                            else:
+                                send "&cThis tank already holds another type of liquid!"
+                            stop
+                        else if targeted block's world is "World2_nether":
+                            add -1 to {_value::1}
+                            set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                            stop
+                        else if "%targeted block%" contains "flowing" and "water":
+                            set target block to water
+                            add -1 to {_value::1}
+                            set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                            stop
+                        else if block above target block is air:
+                            set block above target block to water
+                            add -1 to {_value::1}
+                            set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+        
+on inventory click:
+    if event-item is blaze rod:
+        if nbt of event-item contains "CheesyCraft:""SpongeStaff""":
+            if item amount of event-item = 1:
+                if 1 of cursor slot of player is empty bucket:
+                    remove 1 of cursor slot of player from cursor slot of player
+                    cancel event
+                    set {_spongestaff::*} to uncoloured line 2 of event-item's lore
+                    loop {_spongestaff::*}:
+                        set {_value::*} to loop-value parsed as "%num% / %num% Buckets of Water"
+                        add 1 to {_value::2}
+                        set {_i} to event-item
+                        set line 2 of lore of {_i} to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Water"
+                        remove event-item from event-slot
+                        add {_i} to event-slot
+
+on right click with blaze rod:
+    if nbt of player's held item contains "CheesyCraft:""ScaldingStaff""":
+        if item amount of player's held item = 1:
+            if event-player can build at location of targeted block:
+                set {_spongestaff::*} to uncoloured line 2 of player's held item's lore
+                loop {_spongestaff::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of Lava"
+                    if {_value::1} is less than {_value::2}:
+                        if {place.blackstonefluidtank::%targeted block's location%} is true:
+                            if {fluid.blackstonefluidtank::%targeted block's location%} is "Lava":
+                                if {amount.blackstonefluidtank::%targeted block's location%} is more than or equal to 3:
+                                    if {fluid.blackstonefluidtank::%targeted block's location%} is "Lava":
+                                        add -3 to {amount.blackstonefluidtank::%targeted block's location%}
+                                        add 1 to {_value::1}
+                                        set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+                                        if {amount.blackstonefluidtank::%targeted block's location%} is 0:
+                                            set {fluid.blackstonefluidtank::%targeted block's location%} to "Empty"
+                                else:
+                                    if {amount.blackstonefluidtank::%targeted block's location%} is 0:
+                                        send "&cThis tank is currently empty!"
+                                    if {amount.blackstonefluidtank::%targeted block's location%} is more than 0:
+                                        send "&cThis tank doesn't have enough liquid for a full bucket!"
+                            else:
+                                if {fluid.blackstonefluidtank::%targeted block's location%} is "Empty":
+                                    send "&cThis tank is currently empty!"
+                                else:
+                                    send "&cCan not put this into your sponge staff!"
+                        else if {place.obsidianfluidtank::%targeted block's location%} is true:
+                            if {fluid.obsidianfluidtank::%targeted block's location%} is "Lava":
+                                if {amount.obsidianfluidtank::%targeted block's location%} is more than or equal to 3:
+                                    if {fluid.obsidianfluidtank::%targeted block's location%} is "Lava":
+                                        add -3 to {amount.obsidianfluidtank::%targeted block's location%}
+                                        add 1 to {_value::1}
+                                        set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+                                        if {amount.obsidianfluidtank::%targeted block's location%} is 0:
+                                            set {fluid.obsidianfluidtank::%targeted block's location%} to "Empty"
+                                else:
+                                    if {amount.obsidianfluidtank::%targeted block's location%} is 0:
+                                        send "&cThis tank is currently empty!"
+                                    if {amount.obsidianfluidtank::%targeted block's location%} is more than 0:
+                                        send "&cThis tank doesn't have enough liquid for a full bucket!"
+                            else:
+                                if {fluid.blackstonefluidtank::%targeted block's location%} is "Empty":
+                                    send "&cThis tank is currently empty!"
+                                else:
+                                    send "&cCan not put this into your sponge staff!"
+                        else if "%targeted block%" contains "lava": 
+                            if "%targeted block%" does not contain "flowing" or "falling":
+                                set targeted block to air
+                                add 1 to {_value::1}
+                                set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+        else:
+            send "&cYou can't use this item as a item stack."
+
+on left click with blaze rod:
+    if nbt of player's held item contains "CheesyCraft:""ScaldingStaff""":
+        if item amount of player's held item = 1:
+            if event-player can build at location of targeted block:
+                set {_spongestaff::*} to uncoloured line 2 of player's held item's lore
+                loop {_spongestaff::*}:
+                    set {_value::*} to loop-value parsed as "%num% / %num% Buckets of Lava"
+                    if {_value::1} is more than 0:
+                        if {place.blackstonefluidtank::%targeted block's location%} is true:
+                            if {fluid.blackstonefluidtank::%targeted block's location%} is "Empty" or "Lava":
+                                if {amount.blackstonefluidtank::%targeted block's location%} is 0:
+                                    set {fluid.blackstonefluidtank::%targeted block's location%} to "Lava"
+                                if {amount.blackstonefluidtank::%targeted block's location%} is less than or equal to 141:
+                                    add 3 to {amount.blackstonefluidtank::%targeted block's location%}
+                                    add -1 to {_value::1}
+                                    set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+                            else:
+                                send "&cThis tank already holds another type of liquid!"
+                            stop
+                        else if {place.obsidianfluidtank::%targeted block's location%} is true:
+                            if {fluid.obsidianfluidtank::%targeted block's location%} is "Empty" or "Lava":
+                                if {amount.obsidianfluidtank::%targeted block's location%} is 0:
+                                    set {fluid.obsidianfluidtank::%targeted block's location%} to "Lava"
+                                if {amount.obsidianfluidtank::%targeted block's location%} is less than or equal to 213:
+                                    add 3 to {amount.obsidianfluidtank::%targeted block's location%}
+                                    add -1 to {_value::1}
+                                    set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+                            else:
+                                send "&cThis tank already holds another type of liquid!"
+                            stop
+                        else if "%targeted block%" contains "flowing" and "lava":
+                            set target block to lava
+                            add -1 to {_value::1}
+                            set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+                            stop
+                        else if block above target block is air:
+                            set block above target block to lava
+                            add -1 to {_value::1}
+                            set line 2 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+        else:
+            send "&cYou can't use this item as a item stack."
+        
+on inventory click:
+    if event-item is blaze rod:
+        if nbt of event-item contains "CheesyCraft:""ScaldingStaff""":
+            if item amount of event-item = 1:
+                if 1 of cursor slot of player is empty bucket:
+                    remove 1 of cursor slot of player from cursor slot of player
+                    cancel event
+                    set {_spongestaff::*} to uncoloured line 2 of event-item's lore
+                    loop {_spongestaff::*}:
+                        set {_value::*} to loop-value parsed as "%num% / %num% Buckets of Lava"
+                        add 1 to {_value::2}
+                        set {_i} to event-item
+                        set line 2 of lore of {_i} to "&f%{_value::1}%&f / %{_value::2}%&f Buckets of Lava"
+                        remove event-item from event-slot
+                        add {_i} to event-slot

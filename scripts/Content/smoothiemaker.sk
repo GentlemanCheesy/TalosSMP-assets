@@ -1,0 +1,788 @@
+on unload:
+    loop {SmoothieMaker.location::*}:
+        set {_n1} to 0
+        loop 28 times:
+            set {_n} to loop-number - 1
+            if {_n} is 0 or 9 or 27 or 18 or 12 or 16:
+                add 1 to {_n1}
+                set {SmoothieMaker.save::%loop-value-1%::%{_n1}%} to slot {_n} of gui with id "SmoothieMaker.%loop-value-1%"
+
+on load:
+    loop {SmoothieMaker.location::*}:
+        if gui with id "SmoothieMaker.%loop-value%" is not set:
+            create a gui with id "SmoothieMaker.%loop-value%" with virtual chest inventory with 4 rows named "Smoothie Maker" with shape "1wyyybooo" and "2wy3ybo4o" and "5wyyybooo" and "6wbbbbbbb":
+                set {_n1} to 0
+                loop 6 times:
+                    add 1 to {_n1}
+                    set {_n4::*} to 0, 9, 18, 27, 12, and 16
+                    if {SmoothieMaker.save::%loop-value-1%::%{_n1}%} is not set:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    if {SmoothieMaker.save::%loop-value-1%::%{_n1}%} is air:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    else:
+                        make gui slot {_n4::%{_n1}%} with moveable {SmoothieMaker.save::%loop-value-1%::%{_n1}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                make gui slot "y" with blue stained glass pane named "&9Input"
+                make gui slot "o" with lime stained glass pane named "&aOutput"
+                make gui slot "b" with gray stained glass pane named " "
+
+on place of blue terracotta:
+    if nbt of player's held item contains "CheesyCraft:""SmoothieMaker""":
+        set {SmoothieMaker.place::%event-block's location%} to true
+        set {SmoothieMaker.location::%event-block's location%} to event-block's location
+
+on break of blue terracotta:
+    if {SmoothieMaker.place::%event-block's location%} is true:
+        cancel the drops
+        clear {SmoothieMaker.place::%event-block's location%}
+        clear {SmoothieMaker.location::%event-block's location%}
+        drop {saveditems::SmoothieMaker}
+        loop all items in gui with id "SmoothieMaker.%event-block's location%":
+            if index of loop-item is 0 or 9 or 27 or 18 or 12 or 16:
+                drop loop-item
+        delete gui with id "SmoothieMaker.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {SmoothieMaker.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "SmoothieMaker.%event-block's location%" is not set:
+                    create a gui with id "SmoothieMaker.%event-block's location%" with virtual chest inventory with 4 rows named "Smoothie Maker" with shape "xwyyybooo" and "xwyxyboxo" and "xwyyybooo" and "xwbbbbbbb":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                        make gui slot "y" with blue stained glass pane named "&9Input"
+                        make gui slot "o" with lime stained glass pane named "&aOutput"
+                        make gui slot "b" with gray stained glass pane named " "
+                open gui with id "SmoothieMaker.%event-block's location%" to player
+                while name of player's current inventory contains "Electric SmoothieMaker":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+            
+
+every 1 second:
+    loop {SmoothieMaker.location::*}:
+        if chunk at loop-value is loaded:
+            if {SmoothieMaker.maxed::%loop-value%} is true:
+                continue loop
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 27 or 18:
+                    if nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%" contains "RedstoneSwitchMod":
+                        if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::Pineapple}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::PineappleS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::elderberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::elderberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::grape}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::grapeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::lime}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::limeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blackberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::blackberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cranberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::cranberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::raspberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::raspberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blueberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::blueberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cowberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::cowberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::strawberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::strawberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                    else if nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%" contains "RedstoneActivationMod":
+                        if block at loop-value-1 is redstone powered:
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::Pineapple}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::PineappleS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::elderberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::elderberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::grape}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::grapeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::lime}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::limeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blackberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::blackberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cranberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::cranberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::raspberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::raspberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blueberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::blueberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cowberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::cowberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::strawberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::strawberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                        if block at loop-value-1 is indirectly redstone powered:
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::Pineapple}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::PineappleS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::elderberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::elderberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::grape}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::grapeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::lime}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::limeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blackberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::blackberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cranberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::cranberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::raspberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::raspberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blueberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::blueberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cowberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::cowberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                            if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::strawberry}:
+                                if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                    loop {powerbank.location::*}:
+                                        set {_c1::*} to region at loop-value-1
+                                        set {_c2::*} to region at loop-value-3
+                                        if {_c1::*} is not {_c2::*}:
+                                            continue
+                                        if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                            if {powerbank.power::%loop-value-3%} >= 8:
+                                                add {saveditems::strawberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                                add -8 to {powerbank.power::%loop-value-3%}
+                                                set {smoothiemaker.activated::%loop-value-1%} to true
+                                                set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                                exit 2 loops
+                        exit loop
+                    else:
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::Pineapple}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::PineappleS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::elderberry}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::elderberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::grape}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::grapeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::lime}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::limeS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blackberry}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::blackberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cranberry}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::cranberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::raspberry}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::raspberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::blueberry}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::blueberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::cowberry}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::cowberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is {saveditems::strawberry}:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} >= 8:
+                                            add {saveditems::strawberryS} to slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            remove 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" from slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            add -8 to {powerbank.power::%loop-value-3%}
+                                            set {smoothiemaker.activated::%loop-value-1%} to true
+                                            set {SmoothieMaker.activated2::%loop-value-1%} to true
+                                            exit 2 loops
+            
+every 1 second:
+    loop {SmoothieMaker.location::*}:
+        if chunk at loop-value is loaded:
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 27 or 18:
+                    if nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%" contains "CheesyCraft:""FunnelMod""":
+                        if block above loop-value-1 is hopper:
+                            if block data tag "facing" of block above loop-value-1 is "down":
+                                loop all items in inventory of block above loop-value-1:
+                                    if item amount of loop-value-3 = max stack size of 1 of loop-value-3:
+                                        if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                            set {_i} to item amount of loop-value-3 of loop-value-3
+                                            remove {_i} from loop-value-3
+                                            add {_i} to slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            exit loop
+                        if block below loop-value-1 is hopper:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is not air:
+                                if item amount of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" = max stack size of 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%":
+                                    if block below loop-value-1 can hold 1 of slot 41 of gui with id "SmoothieMaker.%loop-value-1%":
+                                        set {_i} to item amount of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" of slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                        remove {_i} from slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                        add {_i} to inventory of block below loop-value-1
+                              
+every 2 ticks:
+    loop {SmoothieMaker.location::*}:
+        if {smoothiemaker.activated::%loop-value%} is true:
+            if chunk at loop-value is loaded:
+                loop 28 times:
+                    set {_n} to loop-number - 1
+                    if {_n} is 0 or 9 or 18 or 27:
+                        if nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%" contains "CheesyCraft:""EcholomaticMod""":
+                            loop all blocks in radius 9 of loop-value-1:
+                                if loop-value-3 is sculk sensor:
+                                    spawn snowball at location of loop-value-3
+                            delete {smoothiemaker.activated::%loop-value-1%}
+                            exit loop   
+                            
+every 2 ticks:
+    loop {SmoothieMaker.location::*}:
+        if chunk at loop-value is loaded:
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 18 or 27:
+                    if nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%" contains "CheesyCraft:""WardstaticMod""":
+                        set {_total} to tag "Total" of nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%"
+                        set {_max} to tag "Max" of nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%"
+                        if {_total} = {_max}:
+                            set {SmoothieMaker.maxed::%loop-value-1%} to true
+                        if {_total} < {_max}:
+                            if {SmoothieMaker.activated2::%loop-value-1%} is true:
+                                add "{Total:%{_total} + 1%}" to nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%"
+                        loop all blocks in radius 1 of loop-value-1:
+                            if loop-value-3 is sculk:
+                                delete {SmoothieMaker.maxed::%loop-value-1%}
+                                add "{Total:0}" to nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%"
+                        delete {SmoothieMaker.activated2::%loop-value-1%}
+                
+every 2 ticks:
+    loop {SmoothieMaker.location::*}:
+        if nbt of slot 0 of gui with id "SmoothieMaker.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 0 of gui with id "SmoothieMaker.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 0 of gui with id "SmoothieMaker.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 9 of gui with id "SmoothieMaker.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 9 of gui with id "SmoothieMaker.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 9 of gui with id "SmoothieMaker.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 18 of gui with id "SmoothieMaker.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 18 of gui with id "SmoothieMaker.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 18 of gui with id "SmoothieMaker.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 27 of gui with id "SmoothieMaker.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 27 of gui with id "SmoothieMaker.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 27 of gui with id "SmoothieMaker.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        delete {SmoothieMaker.maxed::%loop-value%}
+
+every 1 second:
+    loop {SmoothieMaker.location::*}:
+        if chunk at loop-value is loaded:
+            loop 28 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 27 or 18:
+                    if nbt of slot {_n} of gui with id "SmoothieMaker.%loop-value-1%" contains "CheesyCraft:""HopperMod""":
+                        if block above loop-value-1 is hopper:
+                            if block data tag "facing" of block above loop-value-1 is "down":
+                                loop all items in inventory of block above loop-value-1:
+                                    if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is air:
+                                        set {_i} to 1 of loop-value-3
+                                        remove 1 of loop-value-3 from loop-value-3
+                                        add {_i} to slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                        exit loop
+                                    if 1 of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" is 1 of loop-value-3:
+                                        if item amount of slot 12 of gui with id "SmoothieMaker.%loop-value-1%" < max stack size of 1 of loop-value-3:
+                                            set {_i} to 1 of loop-value-3
+                                            remove 1 of loop-value-3 from loop-value-3
+                                            add {_i} to slot 12 of gui with id "SmoothieMaker.%loop-value-1%"
+                                            exit loop
+                        if block below loop-value-1 is hopper:
+                            if 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%" is not air:
+                                if block below loop-value-1 can hold 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%":
+                                    set {_i} to 1 of slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                    remove {_i} from slot 16 of gui with id "SmoothieMaker.%loop-value-1%"
+                                    add {_i} to inventory of block below loop-value-1

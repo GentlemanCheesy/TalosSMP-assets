@@ -1,0 +1,925 @@
+on place of amethyst block:
+    if nbt of player's held item contain "CheesyCraft:""VexalTrader""":
+        set {vexaltrader.place::%event-block's location%} to true
+        set {vexaltrader.loc::%event-block's location%} to event-block's location
+
+on break of amethyst block:
+    if {vexaltrader.place::%event-block's location%} is true:
+        cancel the drops
+        clear {vexaltrader.place::%event-block's location%}
+        clear {vexaltrader.loc::%event-block's location%}
+        clear {vexaltrader.page::%event-block's location%}
+        clear {vexaltrader.sort::%event-block's location%} 
+        drop {saveditems::VexalTrader}
+        delete gui with id "VexalTrader.%event-block's location%"
+
+on place of magenta glass:
+    if nbt of player's held item contain "CheesyCraft:""VexalTransmitter""":
+        set {vexaltransmitternew.place::%event-block's location%} to true
+        set {vexaltransmitter.loc::%event-block's location%} to event-block's location
+        
+on break:
+    if {vexaltransmitter.place::%event-block's location%} is true:
+        cancel the drops
+        drop {saveditems::VexalTransmitter}
+        drop {vexaltransmitter.stock::%event-block's location%}
+        drop {vexaltransmitter.price::%event-block's location%}
+        delete {vexaltransmitter.stock::%event-block's location%}
+        delete {vexaltransmitter.price::%event-block's location%}
+        delete gui with id "VexalTransmitter.%event-block's location%"
+        set {vexaltrader.refresh::*} to true
+        clear {vexaltransmitter.place::%event-block's location%}
+        clear {vexaltransmitter.loc::%event-block's location%}
+        
+on break:
+    if {vexaltransmitternew.place::%event-block's location%} is true:
+        cancel the drops
+        drop {saveditems::VexalTransmitter}
+        delete {vexaltransmitter.stock::%event-block's location%}
+        delete {vexaltransmitter.price::%event-block's location%}
+        delete gui with id "VexalTransmitter.%event-block's location%"
+        set {vexaltrader.refresh::*} to true
+        clear {vexaltransmitternew.place::%event-block's location%}
+        clear {vexaltransmitter.loc::%event-block's location%}
+        clear {vexaltransmitter.onblock::%event-block's location%}
+        clear {vexaltransmitter.offblock::%event-block's location%}
+        clear {vexaltransmitter.disabledblock::%event-block's location%}
+        clear {vexaltransmitter.disabled::%event-block's location%}
+        clear {vexaltransmitter.local::%event-block's location%}
+        clear {vexaltransmitter.echo::%event-block's location%}
+        clear {vexaltransmitter.ward::%event-block's location%}
+        clear {vexaltransmitter.redstone::%event-block's location%}
+        
+on right click:
+    if player is not sneaking:
+        if {vexaltransmitter.place::%clicked block's location%} is true:
+            if event-player can build at location of event-block:
+                if nbt of player's held item contain "CheesyCraft:""VexalVeil""" or "CheesyCraft:""VexalVeilPlus""":
+                    stop
+                cancel event
+                set {_loc} to event-block's location
+                if gui with id "VexalTransmitter.%event-block's location%" is not set:
+                    create a gui with id "VexalTransmitter.%event-block's location%" with virtual dropper inventory named "&3Vexal Transmitter":
+                        make gui slot 0 with {saveditems::setstock}
+                        make gui slot 1 with black stained glass pane named " "
+                        make gui slot 2 with {saveditems::SetPrice}
+                        make gui slot 3 with stealable air
+                        make gui slot 4 with black stained glass pane named " "
+                        make gui slot 5 with stealable air
+                        make gui slot 6 with black stained glass pane named " "
+                        make gui slot 7 with black stained glass pane named " "
+                        make gui slot 8 with black stained glass pane named " "
+                        run on gui close:
+                            if slot 3 of player's current inventory is air:
+                                clear {vexaltransmitter.stock::%{_loc}%}
+                            if slot 5 of player's current inventory is air:
+                                clear {vexaltransmitter.price::%{_loc}%}
+                            if slot 3 of player's current inventory is not air:
+                                set {vexaltransmitter.stock::%{_loc}%} to slot 3 of player's current inventory
+                            if slot 5 of player's current inventory is not air:
+                                set {vexaltransmitter.price::%{_loc}%} to slot 5 of player's current inventory
+                open gui with id "VexalTransmitter.%event-block's location%" to player
+                edit gui with id "VexalTransmitter.%event-block's location%":
+                    make gui slot 3 with stealable {vexaltransmitter.stock::%{_loc}%}
+                    make gui slot 5 with stealable {vexaltransmitter.price::%{_loc}%}
+                while name of player's current inventory contains "Vexal Transmitter":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+
+on inventory click:
+    if name of player's current inventory is "Vexal Transmitter":
+        if event-slot is 3 or 5:
+            if event-inventory isn't player's inventory:
+                cancel event
+                if player's cursor slot is empty:
+                    set event-slot to air
+                else:
+                    set event-slot to player's cursor slot 
+
+on right click:
+    if player is not sneaking:
+        if {vexaltransmitternew.place::%clicked block's location%} is true:
+            if event-player can build at location of event-block:
+                if nbt of player's held item contain "CheesyCraft:""VexalVeil""" or "CheesyCraft:""VexalVeilPlus""":
+                    stop
+                cancel event
+                set {_loc} to event-block's location
+                if gui with id "VexalTransmitter.%event-block's location%" is not set:
+                    create a gui with id "VexalTransmitter.%event-block's location%" with virtual dropper inventory named "Vexal Transmitter":
+                        make gui slot 0 with {saveditems::setstock}
+                        make gui slot 1 with black stained glass pane named " "
+                        make gui slot 2 with {saveditems::SetPrice}
+                        if {vexaltransmitter.stock::%{_loc}%} is not set:
+                            make gui slot 3 with air
+                        if {vexaltransmitter.stock::%{_loc}%} is set:
+                            make gui slot 3 with {vexaltransmitter.stock::%{_loc}%}
+                        make gui slot 4 with black stained glass pane named " "
+                        if {vexaltransmitter.price::%{_loc}%} is not set:
+                            make gui slot 5 with air
+                        if {vexaltransmitter.price::%{_loc}%} is set:
+                            make gui slot 5 with {vexaltransmitter.price::%{_loc}%}
+                        make gui slot 6 with black stained glass pane named " "
+                        make gui slot 7 with black stained glass pane named " "
+                        make gui slot 8 with black stained glass pane named " "
+                        run on gui close:
+                            if slot 3 of gui is air:
+                                clear {vexaltransmitter.stock::%{_loc}%}
+                            if slot 5 of gui is air:
+                                clear {vexaltransmitter.price::%{_loc}%}
+                            if slot 3 of gui is not air:
+                                set {vexaltransmitter.stock::%{_loc}%} to slot 3 of player's current inventory
+                            if slot 5 of gui is not air:
+                                set {vexaltransmitter.price::%{_loc}%} to slot 5 of player's current inventory
+                open gui with id "VexalTransmitter.%event-block's location%" to player
+                while name of player's current inventory contains "Vexal Transmitter":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+
+on right click:
+    if player is not sneaking:
+        if {vexaltrader.place::%clicked block's location%} is true:
+            if nbt of player's held item contain "CheesyCraft:""VexalVeil""" or "CheesyCraft:""VexalVeilPlus""":
+                stop
+            cancel event
+            set {_loc} to event-block's location
+            set {_p} to event-player
+            set {vexaltrader.refresh::%{_loc}%} to true
+            set {vexaltrader.page::%{_loc}%} to 0
+            set {vexaltrader.player::%{_loc}%} to {_p}
+            if gui with id "VexalTrader.%event-block's location%" is not set:
+                create a gui with id "VexalTrader.%event-block's location%" with virtual chest inventory with 6 rows named "&3Vexal Trader":
+                    make gui slot 0 with black stained glass pane named " "
+                    make gui slot 1 with black stained glass pane named " "
+                    make gui slot 2 with black stained glass pane named " "
+                    make gui slot 3 with black stained glass pane named " "
+                    make gui slot 4 with black stained glass pane named " "
+                    make gui slot 8 with black stained glass pane named " "
+                    make gui slot 10 with black stained glass pane named " "
+                    make gui slot 11 with black stained glass pane named " "
+                    make gui slot 12 with black stained glass pane named " "
+                    make gui slot 13 with black stained glass pane named " "
+                    make gui slot 14 with black stained glass pane named " "
+                    make gui slot 15 with black stained glass pane named " "
+                    make gui slot 16 with black stained glass pane named " "
+                    make gui slot 17 with black stained glass pane named " "
+                    run on gui open:
+                        add "%gui player%" to {traderplayer.%{_loc}%::*}
+                    run on gui close:
+                        remove "%gui player%" from {traderplayer.%{_loc}%::*}
+            open gui with id "VexalTrader.%event-block's location%" to player
+            while name of player's current inventory contains "Vexal Trader":
+                if event-block is air:
+                    close player's inventory
+                edit gui with id "VexalTrader.%event-block's location%":
+                    make gui slot 7 with arrow named "&aNext":
+                        add 1 to {vexaltrader.page::%{_loc}%}
+                        set {vexaltrader.refresh::%{_loc}%} to true
+                        set {vexaltrader.player::%{_loc}%} to {_p}
+                    if {vexaltrader.page::%{_loc}%} > 0:
+                        make gui slot 5 with arrow named "&cBack":
+                            add -1 to {vexaltrader.page::%{_loc}%}
+                            set {vexaltrader.refresh::%{_loc}%} to true
+                            set {vexaltrader.player::%{_loc}%} to {_p}
+                    if {vexaltrader.page::%{_loc}%} = 0:
+                        make gui slot 5 with black stained glass pane named " "
+                    make gui slot 6 with sunflower named "&eRefresh!":
+                        set {vexaltrader.refresh::%{_loc}%} to true
+                        set {vexaltrader.player::%{_loc}%} to {_p}
+                    make gui slot 1 with oak sign named "&fSort by: &cVanilla":
+                        if gui player can build at {_loc}:
+                            set {vexaltrader.sort::%{_loc}%} to "Vanilla"
+                            set {vexaltrader.refresh::%{_loc}%} to true
+                            set {vexaltrader.player::%{_loc}%} to {_p}
+                    make gui slot 2 with birch sign named "&fSort by: &cSlimefun":
+                        if gui player can build at {_loc}:
+                            set {vexaltrader.sort::%{_loc}%} to "Slimefun"
+                            set {vexaltrader.refresh::%{_loc}%} to true
+                            set {vexaltrader.player::%{_loc}%} to {_p}
+                    make gui slot 3 with dark oak sign named "&fSort by: &cTalos Items":
+                        if gui player can build at {_loc}:
+                            set {vexaltrader.sort::%{_loc}%} to "Talos"
+                            set {vexaltrader.refresh::%{_loc}%} to true
+                            set {vexaltrader.player::%{_loc}%} to {_p}
+                    make gui slot 0 with barrier named "&cRemove Sort":
+                        if gui player can build at {_loc}:
+                            clear {vexaltrader.sort::%{_loc}%}
+                            set {vexaltrader.refresh::%{_loc}%} to true
+                            set {vexaltrader.player::%{_loc}%} to {_p}
+                    if {vexaltrader.sort2::%{_loc}%} is not set:
+                        set {vexaltrader.sort2::%{_loc}%} to "Global"
+                    if {vexaltrader.sort2::%{_loc}%} is "Global":
+                        make gui slot 9 with warped sign named "&fSort By: &9Local" with lore " " and "&7The radius of Local is 80 blocks." and " " and "&fCurrently sorting by: &9Global":
+                            if gui player can build at {_loc}:
+                                set {vexaltrader.sort2::%{_loc}%} to "Local"
+                                set {vexaltrader.refresh::%{_loc}%} to true
+                                set {vexaltrader.player::%{_loc}%} to {_p}
+                    if {vexaltrader.sort2::%{_loc}%} is "Local":
+                        make gui slot 9 with crimson sign named "&fSort By: &9Global" with lore " " and "&fCurrently sorting by: &9Local":
+                            if gui player can build at {_loc}:
+                                set {vexaltrader.sort2::%{_loc}%} to "Global"
+                                set {vexaltrader.refresh::%{_loc}%} to true
+                                set {vexaltrader.player::%{_loc}%} to {_p}
+                wait 1 tick
+
+every 1 second:
+    loop {vexaltransmitter.loc::*}:
+        if chunk at loop-value is loaded:
+            set {_loc} to loop-value
+            set {_stock} to {vexaltransmitter.stock::%{_loc}%}
+            set {_price} to {vexaltransmitter.price::%{_loc}%}
+            clear {_s}
+            clear {_n}
+            loop all blocks in radius 1 of loop-value:
+                set {_s} to name of {_stock}
+                if {_s} is set:
+                    if number of {_stock} in inventory of loop-value-2 >= item amount of {_stock}:
+                        set {_n} to name of {_price}
+                        if {_price} is not shulker box:
+                            if {_n} is set:
+                                if loop-value-2 can hold {_price}:
+                                    if {vexaltransmitter.onblock::%{_loc}%} is not set:
+                                        if block at loop-value-1 is not magenta stained glass:
+                                            set block at loop-value-1 to magenta stained glass
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    else:
+                                        if block at loop-value-1 is not {vexaltransmitter.onblock::%{_loc}%}:
+                                            set block at loop-value-1 to {vexaltransmitter.onblock::%{_loc}%}
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    exit loop
+                            else:
+                                if loop-value-2 can hold unmodified {_price}:
+                                    if {vexaltransmitter.onblock::%{_loc}%} is not set:
+                                        if block at loop-value-1 is not magenta stained glass:
+                                            set block at loop-value-1 to magenta stained glass
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    else:
+                                        if block at loop-value-1 is not {vexaltransmitter.onblock::%{_loc}%}:
+                                            set block at loop-value-1 to {vexaltransmitter.onblock::%{_loc}%}
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    exit loop
+                    if {vexaltransmitter.offblock::%{_loc}%} is not set:
+                        if block at loop-value-1 is not light gray stained glass:
+                            set block at loop-value-1 to light gray stained glass
+                    else:
+                        if block at loop-value-1 is not {vexaltransmitter.offblock::%{_loc}%}:
+                            set block at loop-value-1 to {vexaltransmitter.offblock::%{_loc}%}
+                else:
+                    if number of unmodified {_stock} in inventory of loop-value-2 >= item amount of {_stock}:
+                        set {_n} to name of {_price}
+                        if {_price} is not shulker box:
+                            if {_n} is set:
+                                if loop-value-2 can hold {_price}:
+                                    if {vexaltransmitter.onblock::%{_loc}%} is not set:
+                                        if block at loop-value-1 is not magenta stained glass:
+                                            set block at loop-value-1 to magenta stained glass
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    else:
+                                        if block at loop-value-1 is not {vexaltransmitter.onblock::%{_loc}%}:
+                                            set block at loop-value-1 to {vexaltransmitter.onblock::%{_loc}%}
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    exit loop
+                            else:
+                                if loop-value-2 can hold unmodified {_price}:
+                                    if {vexaltransmitter.onblock::%{_loc}%} is not set:
+                                        if block at loop-value-1 is not magenta stained glass:
+                                            set block at loop-value-1 to magenta stained glass
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    else:
+                                        if block at loop-value-1 is not {vexaltransmitter.onblock::%{_loc}%}:
+                                            set block at loop-value-1 to {vexaltransmitter.onblock::%{_loc}%}
+                                            clear {vexaltransmitter.continue::%{_loc}%}
+                                    exit loop
+                    if {vexaltransmitter.offblock::%{_loc}%} is not set:
+                        if block at loop-value-1 is not light gray stained glass:
+                            set block at loop-value-1 to light gray stained glass
+                    else:
+                        if block at loop-value-1 is not {vexaltransmitter.offblock::%{_loc}%}:
+                            set block at loop-value-1 to {vexaltransmitter.offblock::%{_loc}%}
+                if {vexaltransmitter.disabled::%{_loc}%} is true:
+                    if {vexaltransmitter.disabledblock::%{_loc}%} is not set:
+                        if block at loop-value-1 is not red stained glass:
+                            set block at loop-value-1 to red stained glass
+                    else:
+                        if block at loop-value-1 is not {vexaltransmitter.disabledblock::%{_loc}%}:
+                            set block at loop-value-1 to {vexaltransmitter.disabledblock::%{_loc}%}
+                
+every 2 ticks:
+    loop {vexaltrader.loc::*}:
+        set {_loc2} to loop-value
+        set {_p} to {vexaltrader.player::%{_loc2}%}
+        if {vexaltrader.refresh::%loop-value%} is true:
+            edit gui with id "VexalTrader.%loop-value%":
+                set {vexaltrader.refresh::%loop-value%} to false
+                set {_num} to 0
+                set {_num2} to 18
+                loop (integers from 18 to 53):
+                    make gui slot loop-value-2 with air
+                loop {vexaltransmitter.loc::*}:
+                    set {_loc} to loop-value-2
+                    set {_stock} to {vexaltransmitter.stock::%{_loc}%}
+                    set {_price} to {vexaltransmitter.price::%{_loc}%}
+                    if {_num} <= 36:
+                        if {_stock} is set:
+                            if {_price} is set:
+                                loop all blocks in radius 1 of {_loc}:
+                                    if name of {_stock} is set:
+                                        set {_a1} to name of {_stock}
+                                    if {_a1} is set:
+                                        if number of {_stock} in inventory of loop-value-3 >= item amount of {_stock}:
+                                            if name of {_price} is set:
+                                                set {_n1} to name of {_price}
+                                            if {_n1} is set:
+                                                if loop-value-3 can hold {_price}:
+                                                    set {vexaltransmitter.continue::%{_loc}%} to true
+                                                    continue
+                                            else:
+                                                if loop-value-3 can hold unmodified {_price}:
+                                                    set {vexaltransmitter.continue::%{_loc}%} to true
+                                                    continue
+                                    else:
+                                        if number of unmodified {_stock} in inventory of loop-value-3 >= item amount of {_stock}:
+                                            if name of {_price} is set:
+                                                set {_n1} to name of {_price}
+                                            if {_n1} is set:
+                                                if loop-value-3 can hold {_price}:
+                                                    set {vexaltransmitter.continue::%{_loc}%} to true
+                                                    continue
+                                            else:
+                                                if loop-value-3 can hold unmodified {_price}:
+                                                    set {vexaltransmitter.continue::%{_loc}%} to true
+                                                    continue
+                                if {vexaltransmitter.continue::%{_loc}%} is not true:
+                                    continue
+                                clear {vexaltransmitter.continue::%{_loc}%}
+                                if {vexaltransmitter.disabled::%{_loc}%} is true:
+                                    continue
+                                if {vexaltransmitter.local::%{_loc}%} is true:
+                                    if {vexaltrader.sort2::%{_loc2}%} is "Global":
+                                        if distance between {_loc2} and {_loc} > 80: 
+                                            continue
+                                        if world of {_loc2} is not world of {_loc}:
+                                            continue
+                                if {vexaltrader.sort2::%{_loc2}%} is "Local":
+                                    if distance between {_loc2} and {_loc} > 80: 
+                                        continue
+                                    if world of {_loc2} is not world of {_loc}:
+                                        continue
+                                if {vexaltrader.sort::%{_loc2}%} is "Slimefun":
+                                    if nbt of {_stock} does not contain "slimefun_item":
+                                        continue
+                                if {vexaltrader.sort::%{_loc2}%} is "Talos":
+                                    if nbt of {_stock} does not contain "CheesyCraft":
+                                        continue
+                                if {vexaltrader.sort::%{_loc2}%} is "Vanilla":
+                                    if nbt of {_stock} contains "slimefun_item":
+                                        continue
+                                    if nbt of {_stock} contains "CheesyCraft":
+                                        continue
+                                if {_price} is shulker box:
+                                    continue
+                                if {vexaltrader.page::%{_loc2}%} > 0:
+                                    add 1 to {_n}
+                                    if {_n} <= {vexaltrader.page::%{_loc2}%} * 36:
+                                        continue
+                                set {_lore::*} to lore of {_stock}
+                                make gui slot {_num2} with {_stock} with lore " " and "&fLeft click to buy." and "&fRight click to check price." and " " and {_lore::*}:
+                                    set {_p2} to "%gui player%"
+                                    if gui click type is left mouse button:
+                                        if {vexaltransmitter.warder.%{_p2}%::%{_loc}%} is not true:
+                                            if name of {_price} is set:
+                                                set {_n3} to name of {_price}
+                                            if {_n3} is set:
+                                                if number of {_price} in gui player's inventory >= item amount of {_price}:
+                                                    make gui slot {_num2} with lime stained glass pane named "&aClick to confirm purchase!":
+                                                        loop all blocks in radius 1 of {_loc}:
+                                                            set {_e} to name of {_stock}
+                                                            if {_e} is set:
+                                                                if number of {_stock} in inventory of loop-value >= item amount of {_stock}:
+                                                                    if loop-value can hold {_price}:
+                                                                        if gui player's inventory can hold {_stock}:
+                                                                            if {_p2} is "%gui player%":
+                                                                                set {_i} to {_stock}
+                                                                                set {_price2} to {_price}
+                                                                                loop all items in gui player's inventory:
+                                                                                    if loop-item is {_price2}:
+                                                                                        set {_price2} to loop-item
+                                                                                        exit loop
+                                                                                loop all items in loop-value's inventory:
+                                                                                    if loop-item is {_i}:
+                                                                                        set {_i} to loop-item
+                                                                                        exit loop
+                                                                                add {_i} to {_p2} parsed as player's inventory
+                                                                                add {_price2} to loop-value's inventory
+                                                                                remove {_i} from inventory of loop-value
+                                                                                remove {_price2} from gui player's inventory
+                                                                                set {vexaltrader.refresh::%{_loc2}%} to true
+                                                                                loop all blocks in radius 1 of {_loc}:
+                                                                                    if {vexalsensor.place::%loop-value-2's location%} is true:
+                                                                                        set {vexalsensor.active::%loop-value-2's location%} to true
+                                                                                if {vexaltransmitter.echo::%{_loc}%} is true:
+                                                                                    loop all blocks in radius 9 of {_loc}:
+                                                                                        if loop-value-2 is sculk sensor:
+                                                                                            spawn snowball at location of loop-value-2
+                                                                                if {vexaltransmitter.ward::%{_loc}%} is true:
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} is not set:
+                                                                                        set {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} to 0
+                                                                                    add {_p2} to {vexaltransmitter.players.%{_loc}%::*}
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} < {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                        add 1 to {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%}
+                                                                                        if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} = {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                            set {vexaltransmitter.warder.%{_p2}%::%{_loc}%} to true
+                                                            else:
+                                                                if number of unmodified {_stock} in inventory of loop-value >= item amount of {_stock}:
+                                                                    if loop-value can hold {_price}:
+                                                                        if gui player's inventory can hold {_stock}:
+                                                                            if {_p2} is "%gui player%":
+                                                                                remove "%item amount of {_stock}%" parsed as number of unmodified {_stock} from inventory of loop-value
+                                                                                set {_price2} to {_price}
+                                                                                loop all items in gui player's inventory:
+                                                                                    if loop-item is {_price2}:
+                                                                                        set {_price2} to loop-item
+                                                                                        exit loop
+                                                                                set {_i} to {_stock}
+                                                                                add {_i} to {_p2} parsed as player's inventory
+                                                                                remove {_price2} from gui player's inventory
+                                                                                add {_price2} to loop-value's inventory
+                                                                                set {vexaltrader.refresh::%{_loc2}%} to true
+                                                                                loop all blocks in radius 1 of {_loc}:
+                                                                                    if {vexalsensor.place::%loop-value-2's location%} is true:
+                                                                                        set {vexalsensor.active::%loop-value-2's location%} to true
+                                                                                if {vexaltransmitter.echo::%{_loc}%} is true:
+                                                                                    loop all blocks in radius 9 of {_loc}:
+                                                                                        if loop-value-2 is sculk sensor:
+                                                                                            spawn snowball at location of loop-value-2
+                                                                                if {vexaltransmitter.ward::%{_loc}%} is true:
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} is not set:
+                                                                                        set {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} to 0
+                                                                                    add {_p2} to {vexaltransmitter.players.%{_loc}%::*}
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} < {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                        add 1 to {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%}
+                                                                                        if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} = {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                            set {vexaltransmitter.warder.%{_p2}%::%{_loc}%} to true
+                                                else:
+                                                    send "&cNot enough funds!" to gui player
+                                            else if {_price} is not shulker box:
+                                                if number of plain {_price} named "" in gui player's inventory >= item amount of {_price}:
+                                                    make gui slot {_num2} with lime stained glass pane named "&aClick to confirm purchase!":
+                                                        loop all blocks in radius 1 of {_loc}:
+                                                            set {_e} to name of {_stock}
+                                                            if {_e} is set:
+                                                                if number of {_stock} in inventory of loop-value >= item amount of {_stock}:
+                                                                    if loop-value can hold plain {_price}:
+                                                                        if gui player's inventory can hold {_stock}:
+                                                                            if {_p2} is "%gui player%":
+                                                                                remove "%item amount of {_price}%" parsed as number of unmodified {_price} from gui player's inventory
+                                                                                set {_i} to {_stock}
+                                                                                loop all items in loop-value's inventory:
+                                                                                    if loop-item is {_i}:
+                                                                                        set {_i} to loop-item
+                                                                                        exit loop
+                                                                                add {_i} to {_p2} parsed as player's inventory
+                                                                                remove {_i} from inventory of loop-value
+                                                                                add {_price} to loop-value's inventory
+                                                                                set {vexaltrader.refresh::%{_loc2}%} to true
+                                                                                loop all blocks in radius 1 of {_loc}:
+                                                                                    if {vexalsensor.place::%loop-value-2's location%} is true:
+                                                                                        set {vexalsensor.active::%loop-value-2's location%} to true
+                                                                                if {vexaltransmitter.echo::%{_loc}%} is true:
+                                                                                    loop all blocks in radius 9 of {_loc}:
+                                                                                        if loop-value-2 is sculk sensor:
+                                                                                            spawn snowball at location of loop-value-2
+                                                                                if {vexaltransmitter.ward::%{_loc}%} is true:
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} is not set:
+                                                                                        set {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} to 0
+                                                                                    add {_p2} to {vexaltransmitter.players.%{_loc}%::*}
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} < {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                        add 1 to {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%}
+                                                                                        if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} = {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                            set {vexaltransmitter.warder.%{_p2}%::%{_loc}%} to true
+                                                            else:
+                                                                if number of unmodified {_stock} in inventory of loop-value >= item amount of {_stock}:
+                                                                    if loop-value can hold plain {_price}:
+                                                                        if gui player's inventory can hold {_stock}:
+                                                                            if {_p2} is "%gui player%":
+                                                                                remove "%item amount of {_stock}%" parsed as number of unmodified {_stock} from inventory of loop-value
+                                                                                remove "%item amount of {_price}%" parsed as number of unmodified {_price} from gui player's inventory
+                                                                                set {_i} to {_stock}
+                                                                                add {_i} to {_p2} parsed as player's inventory
+                                                                                add {_price} to loop-value's inventory
+                                                                                set {vexaltrader.refresh::%{_loc2}%} to true
+                                                                                loop all blocks in radius 1 of {_loc}:
+                                                                                    if {vexalsensor.place::%loop-value-2's location%} is true:
+                                                                                        set {vexalsensor.active::%loop-value-2's location%} to true
+                                                                                if {vexaltransmitter.echo::%{_loc}%} is true:
+                                                                                    loop all blocks in radius 9 of {_loc}:
+                                                                                        if loop-value-2 is sculk sensor:
+                                                                                            spawn snowball at location of loop-value-2
+                                                                                if {vexaltransmitter.ward::%{_loc}%} is true:
+                                                                                    send "test" to gui player
+                                                                                    delete {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%}
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} is not set:
+                                                                                        set {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} to 0
+                                                                                    add {_p2} to {vexaltransmitter.players.%{_loc}%::*}
+                                                                                    if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} < {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                        add 1 to {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%}
+                                                                                        send "test2" to gui player
+                                                                                        if {vexaltransmitter.wardtotal.%{_p2}%::%{_loc}%} = {vexaltransmitter.wardnum::%{_loc}%}:
+                                                                                            set {vexaltransmitter.warder.%{_p2}%::%{_loc}%} to true
+                                                                                            send "test3" to gui player
+                                                else:
+                                                    send "&cNot enough funds!" to gui player
+                                        else:
+                                            send "&cToo many purchases already made!" to gui player
+                                    if gui click type is right mouse button:
+                                        make gui slot {_num2} with {_price}
+                                        wait 3 seconds
+                                        set {vexaltrader.refresh::%{_loc2}%} to true
+                                    if gui click type is left mouse button with shift:
+                                        if gui player is op:
+                                            close gui player's inventory
+                                            teleport gui player to {_loc}
+                                add 1 to {_num}
+                                add 1 to {_num2}
+            set {vexaltrader.refresh::%{_loc2}%} to false
+
+on place of purple wool:
+    if nbt of player's held item contain "CheesyCraft:""VexalSensor""":
+        set {vexalsensor.place::%event-block's location%} to true
+        set {vexalsensor.location::%event-block's location%} to location of event-block
+            
+on break:
+    if {vexalsensor.place::%event-block's location%} is true:
+        clear {vexalsensor.place::%event-block's location%}
+        clear {vexalsensor.location::%event-block's location%}
+        clear {vexalsensor.block::%event-block's location%}
+        cancel the drops
+        drop {saveditems::VexalSensor}
+
+every 1 second:
+    loop {vexalsensor.location::*}:
+        if {vexalsensor.active::%loop-value%} is true:
+            if {vexalsensor.place::%loop-value%} is not set:
+                continue
+            if block at loop-value is not redstone block:
+                set block at location at loop-value to redstone block
+            set {vexalsensor.active::%loop-value%} to false
+            continue
+        else if {vexalsensor.active::%loop-value%} is false:
+            if {vexalsensor.place::%loop-value%} is not set:
+                continue
+            if {vexalsensor.block::%loop-value%} is not set:
+                if block at loop-value is not purple wool:
+                    set block at location at loop-value to purple wool
+            else:
+                if block at loop-value is not {vexalsensor.block::%loop-value%}:
+                    set block at location at loop-value to {vexalsensor.block::%loop-value%}
+            clear {vexalsensor.active::%loop-value%}
+
+on place of purple stained glass:
+    if nbt of player's held item contain "CheesyCraft:""VexalConduit""":
+        set {vexalconduit.place::%event-block's location%} to true
+        set {vexalconduit.location::%event-block's location%} to event-block's location
+            
+on break:
+    if {vexalconduit.place::%event-block's location%} is true:
+        clear {vexalconduit.place::%event-block's location%}
+        clear {vexalconduit.location::%event-block's location%}
+        cancel the drops
+        drop {saveditems::VexalConduit}
+        loop all items in gui with id "vexalconduit.%event-block's location%":
+            if index of loop-item is 3 or 4 or 5:
+                drop loop-item
+        delete gui with id "vexalconduit.%event-block's location%"
+        
+on unload:
+    loop {vexalconduit.location::*}:
+        set {_n1} to 0
+        loop 6 times:
+            set {_n} to loop-number - 1
+            if {_n} is 3 or 4 or 5:
+                add 1 to {_n1}
+                set {vexalconduit.save::%loop-value-1%::%{_n1}%} to slot {_n} of gui with id "vexalconduit.%loop-value-1%"
+
+on load:
+    loop {vexalconduit.location::*}:
+        if gui with id "vexalconduit.%loop-value%" is not set:
+            create a gui with id "vexalconduit.%loop-value%" with virtual dropper named "Vexal Conduit" with shape "www" and "123" and "www":
+                set {_n1} to 0
+                loop 3 times:
+                    add 1 to {_n1}
+                    set {_n4::*} to 3, 4, and 5
+                    if {vexalconduit.save::%loop-value-1%::%{_n1}%} is not set:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    if {vexalconduit.save::%loop-value-1%::%{_n1}%} is air:
+                        make gui slot {_n4::%{_n1}%} with moveable air
+                    else:
+                        make gui slot {_n4::%{_n1}%} with moveable {vexalconduit.save::%loop-value-1%::%{_n1}%}
+                make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+     
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {vexalconduit.place::%event-block's location%} is true:
+                if nbt of player's held item contain "CheesyCraft:""VexalVeil""" or "CheesyCraft:""VexalVeilPlus""":
+                    stop
+                cancel event
+                if gui with id "vexalconduit.%event-block's location%" is not set:
+                    create a gui with id "vexalconduit.%event-block's location%" with virtual dropper named "Vexal Conduit" with shape "www" and "xxx" and "www":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                open gui with id "vexalconduit.%event-block's location%" to player
+                while name of player's current inventory contains "Vexal Conduit":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+                    
+every 1 second:
+    loop {vexalconduit.location::*}:
+        if chunk at loop-value is loaded:
+            if {vexalconduit.cooldown::%loop-value%} is set:
+                if difference between {vexalconduit.cooldown::%loop-value%} and now < 1 minute:
+                    loop {vexaltransmitter.loc::*}:
+                        if distance between loop-value-1 and loop-value-2 <= 10:
+                            set {_c1::*} to region at loop-value-1
+                            set {_c2::*} to region at loop-value-2
+                            if {_c1::*} = {_c2::*}:
+                                clear {vexaltransmitter.disabled::%loop-value-2%}
+                                if {vexaltransmitter.redstone::%loop-value-2%} is "activation":
+                                    if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                                        set {vexaltransmitter.disabled::%loop-value-2%} to true
+                                if {vexaltransmitter.redstone::%loop-value-2%} is "switch":
+                                    if block at loop-value-1 is redstone powered:
+                                        set {vexaltransmitter.disabled::%loop-value-2%} to true
+                                    if block at loop-value-1 is indirectly redstone powered:
+                                        set {vexaltransmitter.disabled::%loop-value-2%} to true
+                                if {vexaltransmitter.ward::%loop-value-2%} is true:
+                                    loop all blocks in radius 1 of loop-value-1:
+                                        if loop-value-3 is sculk:
+                                            loop {vexaltransmitter.players.%loop-value-2%::*}:
+                                                set {vexaltransmitter.wardtotal.%loop-value-4%::%loop-value-2%} to 0
+                                                clear {vexaltransmitter.warder.%loop-value-4%::%loop-value-2%}
+                                            clear {vexaltransmitter.players.%loop-value-2%::*}
+                                set {vexaltrader.refresh::*} to true
+                    continue
+            loop {vexaltransmitter.loc::*}:
+                if distance between loop-value-1 and loop-value-2 <= 10:
+                    set {_c1::*} to region at loop-value-1
+                    set {_c2::*} to region at loop-value-2
+                    if {_c1::*} = {_c2::*}:
+                        clear {vexaltransmitter.disabled::%loop-value-2%}
+                        clear {vexaltransmitter.local::%loop-value-2%}
+                        clear {vexaltransmitter.echo::%loop-value-2%}
+                        clear {vexaltransmitter.ward::%loop-value-2%}
+                        clear {vexaltransmitter.redstone::%loop-value-2%}
+                        loop {vexaltransmitter.players.%loop-value-2%::*}:
+                            clear {vexaltransmitter.warder.%loop-value-3%::%loop-value-2%}
+                        add 1 to {_n}
+                        add loop-value-2 to {_range::*}
+            set {_n2} to (2 * {_n})
+            loop 6 times:
+                set {_n} to loop-number - 1
+                if {_n} is 3 or 4 or 5:
+                    if nbt of slot {_n} of gui with id "vexalconduit.%loop-value-1%" contains "RedstoneActivationMod":
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= {_n2}:
+                                    set {_c1::*} to regions at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        loop {_range::*}:
+                                            set {vexaltrader.refresh::*} to true
+                                            set {vexaltransmitter.redstone::%loop-value-4%} to "activation"
+                                        set {vexalconduit.cooldown::%loop-value-1%} to now
+                                        add -1 * {_n2} to {powerbank.power::%loop-value-3%}
+                    else if nbt of slot {_n} of gui with id "vexalconduit.%loop-value-1%" contains "RedstoneSwitchMod":
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= {_n2}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        loop {_range::*}:
+                                            set {vexaltrader.refresh::*} to true
+                                            set {vexaltransmitter.redstone::%loop-value-4%} to "switch"
+                                        set {vexalconduit.cooldown::%loop-value-1%} to now
+                                        add -1 * {_n2} to {powerbank.power::%loop-value-3%}
+                    else if nbt of slot {_n} of gui with id "vexalconduit.%loop-value-1%" contains "DisruptionMod":
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= {_n2}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        loop {_range::*}:
+                                            set {vexaltrader.refresh::*} to true
+                                            set {vexaltransmitter.local::%loop-value-4%} to true
+                                        set {vexalconduit.cooldown::%loop-value-1%} to now
+                                        add -1 * {_n2} to {powerbank.power::%loop-value-3%}
+                    else if nbt of slot {_n} of gui with id "vexalconduit.%loop-value-1%" contains "EcholomaticMod":
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= {_n2}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        loop {_range::*}:
+                                            set {vexaltrader.refresh::*} to true
+                                            set {vexaltransmitter.echo::%loop-value-4%} to true
+                                        set {vexalconduit.cooldown::%loop-value-1%} to now
+                                        add -1 * {_n2} to {powerbank.power::%loop-value-3%}
+                    else if nbt of slot {_n} of gui with id "vexalconduit.%loop-value-1%" contains "WardstaticMod":
+                        loop {powerbank.location::*}:
+                            if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                if {powerbank.power::%loop-value-3%} >= {_n2}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} = {_c2::*}:
+                                        loop {_range::*}:
+                                            set {vexaltrader.refresh::*} to true
+                                            set {_max} to tag "Max" of nbt of slot {_n} of gui with id "vexalconduit.%loop-value-1%"
+                                            set {vexaltransmitter.ward::%loop-value-4%} to true
+                                            set {vexaltransmitter.wardnum::%loop-value-4%} to {_max}
+                                            loop {vexaltransmitter.players.%loop-value-4%::*}:
+                                                set {vexaltransmitter.warder.%loop-value-5%::%loop-value-4%} to true
+                                        set {vexalconduit.cooldown::%loop-value-1%} to now
+                                        add -1 * {_n2} to {powerbank.power::%loop-value-3%}
+        
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeil""":
+            if event-player can build at location of event-block:
+                if {vexalconduit.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                set event-block to player's offhand tool
+                                remove 1 of player's held item from player's held item
+                                cancel event
+                            
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeilPlus""":
+            if event-player can build at location of event-block:
+                if {vexalconduit.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                set event-block to player's offhand tool
+                                cancel event
+                            
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeil""":
+            if event-player can build at location of event-block:
+                if {vexaltrader.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                set event-block to player's offhand tool
+                                remove 1 of player's held item from player's held item
+                                cancel event
+                            
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeilPlus""":
+            if event-player can build at location of event-block:
+                if {vexaltrader.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                set event-block to player's offhand tool
+                                cancel event
+                                
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeil""":
+            if event-player can build at location of event-block:
+                if {vexalsensor.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                set event-block to player's offhand tool
+                                set {vexalsensor.block::%event-block's location%} to player's offhand tool
+                                remove 1 of player's held item from player's held item
+                                cancel event
+                            
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeilPlus""":
+            if event-player can build at location of event-block:
+                if {vexalsensor.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                set event-block to player's offhand tool
+                                set {vexalsensor.block::%event-block's location%} to player's offhand tool
+                                cancel event
+                            
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeil""":
+            if event-player can build at location of event-block:
+                if {vexaltransmitternew.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                if {vexaltransmitter.onblock::%event-block's location%} is not set:
+                                    if event-block is magenta stained glass:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.onblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                else:
+                                    if event-block is {vexaltransmitter.onblock::%event-block's location%}:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.onblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                if {vexaltransmitter.offblock::%event-block's location%} is not set:
+                                    if event-block is light gray stained glass:
+                                        if player's offhand tool is not {vexaltransmitter.onwblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.offblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                else:
+                                    if event-block is {vexaltransmitter.offblock::%event-block's location%}:
+                                        if player's offhand tool is not {vexaltransmitter.onwblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.offblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                if {vexaltransmitter.disabledblock::%event-block's location%} is not set:
+                                    if event-block is red stained glass:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.onblock::%event-block's location%}:
+                                            set {vexaltransmitter.disabledblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                else:
+                                    if event-block is {vexaltransmitter.disabledblock::%event-block's location%}:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.onblock::%event-block's location%}:
+                                            set {vexaltransmitter.disabledblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                set event-block to player's offhand tool
+                                cancel event
+                                remove 1 of player's held item from player's held item
+                            
+on right click:
+    if player's held item is not shulker box:
+        if nbt of player's held item contain "CheesyCraft:""VexalVeilPlus""":
+            if event-player can build at location of event-block:
+                if {vexaltransmitternew.place::%event-block's location%} is true:
+                    if player's offhand tool is a block:
+                        if player's offhand tool is solid:
+                            if block hardness of player's offhand tool > -1:
+                                if {vexaltransmitter.onblock::%event-block's location%} is not set:
+                                    if event-block is magenta stained glass:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.onblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                else:
+                                    if event-block is {vexaltransmitter.onblock::%event-block's location%}:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.onblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                if {vexaltransmitter.offblock::%event-block's location%} is not set:
+                                    if event-block is light gray stained glass:
+                                        if player's offhand tool is not {vexaltransmitter.onblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.offblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                else:
+                                    if event-block is {vexaltransmitter.offblock::%event-block's location%}:
+                                        if player's offhand tool is not {vexaltransmitter.onblock::%event-block's location%} or {vexaltransmitter.disabledblock::%event-block's location%}:
+                                            set {vexaltransmitter.offblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                if {vexaltransmitter.disabledblock::%event-block's location%} is not set:
+                                    if event-block is red stained glass:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.onblock::%event-block's location%}:
+                                            set {vexaltransmitter.disabledblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                else:
+                                    if event-block is {vexaltransmitter.disabledblock::%event-block's location%}:
+                                        if player's offhand tool is not {vexaltransmitter.offblock::%event-block's location%} or {vexaltransmitter.onblock::%event-block's location%}:
+                                            set {vexaltransmitter.disabledblock::%event-block's location%} to player's offhand tool
+                                        else:
+                                            send "&cCant set multiple of the same block!"
+                                            stop
+                                set event-block to player's offhand tool
+                                cancel event

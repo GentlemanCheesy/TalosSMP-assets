@@ -1,0 +1,4 @@
+on explode:
+    if event-entity is creeper:
+        cancel event
+        create a fake explosion at event-location

@@ -1,0 +1,22 @@
+command /flingtoggle:
+    description: Toggles flinging.
+    usage: /flingtoggle
+    executable by: players
+    trigger:
+        if player is op:
+            if {fling} is not set:
+                set {fling} to true
+                stop
+            if {fling} is false:
+                set {fling} to true
+                stop
+            if {fling} is true:
+                set {fling} to false
+                stop
+                
+every 10 ticks:
+    if {fling} is true:
+        loop all players in radius 10 of location of "GentlemanCheesy" parsed as player:
+            set {_1} to location of "GentlemanCheesy" parsed as player
+            set {_2} to location of loop-entity
+            push loop-entity (direction from {_1} to {_2}) at speed 4

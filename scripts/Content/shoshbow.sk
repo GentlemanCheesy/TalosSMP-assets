@@ -1,0 +1,289 @@
+on shoot:
+        if nbt of shooter's offhand item contains "CheesyCraft:""ShoshBow""":
+                if shooter's offhand item is bow:
+                        set {_value} to tag "ItemNumID" of nbt of shooter's offhand item
+                        set {_skill} to a random element out of {invbow::%{_value}%::*}
+                        if nbt of {_skill} contains "CheesyCraft:""PoisonShot""":
+                                if nbt of projectile contains "poison":
+                                        set {poisonshot::%event-projectile%} to true
+                        if nbt of {_skill} contains "CheesyCraft:""Squidshot""":
+                                set {_value2} to tag "PublicBukkitValues;ItemNumID" of {_skill}
+                                set {t::%event-projectile%} to 0
+                                if {ammo1::%{_value2}%::1}'s type is ink sac:
+                                        set {squidshotblind::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo1::%{_value2}%::1}'s type is glow ink sac:
+                                        set {squidshotglow::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo1::%{_value2}%::1}'s type is phantom membrane:
+                                        set {squidshotslow::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo1::%{_value2}%::1}'s type is pufferfish:
+                                        set {squidshotpoison::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is ink sac:
+                                        set {squidshotblind::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is glow ink sac:
+                                        set {squidshotglow::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is phantom membrane:
+                                        set {squidshotslow::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is pufferfish:
+                                        set {squidshotpoison::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if nbt of {ammo1::%{_value2}%::1} contains "CheesyCraft:""InkPhial""":
+                                        set {ammo1::%{_value2}%::1} to (item amount of {ammo1::%{_value2}%::1} - 1) of {ammo1::%{_value2}%::1}
+                                        set {t::%event-projectile%} to (3 * {t::%event-projectile%})
+                                if nbt of {ammo2::%{_value2}%::2} contains "CheesyCraft:""InkPhial""":
+                                        set {ammo2::%{_value2}%::2} to (item amount of {ammo2::%{_value2}%::2} - 1) of {ammo2::%{_value2}%::2}
+                                        set {t::%event-projectile%} to (3 * {t::%event-projectile%})
+                        if {invbow::%{_value}%::*} is set:
+                                set {_lvl} to level of power of shooter's offhand item
+                                if difference between {bowdraw::%shooter%} and now >= 1 second: 
+                                        set {dmg::%event-projectile%} to tag "BaseDamage" of nbt of shooter's offhand item
+                                        set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+                                else:
+                                        set {dmg::%event-projectile%} to 7.5
+                                        set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+                                stop
+                        if shooter's inventory contains arrow or tipped arrow or spectral arrow:
+                                cancel event
+                                if shooter's offhand item is not enchanted with infinity:
+                                        if tag "Potion" of nbt of projectile is set:
+                                                set {_potion} to tag "Potion" of nbt of projectile
+                                                loop all items in inventory of shooter:
+                                                        if tag "Potion" of nbt of loop-item is {_potion}:
+                                                                remove 1 of loop-item from shooter
+                                                                exit loop
+                                        else:
+                                                loop all items in inventory of shooter:
+                                                        if 1 of loop-item is projectile:
+                                                                remove 1 of loop-item from shooter
+                                                                exit loop
+                                if nbt of shooter's offhand item does not contain "ItemNumID:":
+                                        add 1 to {num::ShoshBow}
+                                        add "{ItemNumID:%{num::ShoshBow}%}" to nbt of shooter's offhand item
+                                set {_value} to tag "ItemNumID" of nbt of shooter's offhand item
+                                set {shoshbow::%{_value}%} to shooter's offhand item
+                                if {shoshcrossbow::%{_value}%} is not set:
+                                        set shooter's offhand item to {saveditems::ShoshCrossbow}
+                                        add "{ItemNumID:%{_value}%}" to nbt of shooter's offhand item
+                                else:
+                                        set shooter's offhand item to {shoshcrossbow::%{_value}%}
+                        else if shooter's gamemode is creative:
+                                cancel event
+                                if nbt of shooter's offhand item does not contain "ItemNumID:":
+                                        add 1 to {num::ShoshBow}
+                                        add "{ItemNumID:%{num::ShoshBow}%}" to nbt of shooter's offhand item
+                                set {_value} to tag "ItemNumID" of nbt of shooter's offhand item
+                                set {shoshbow::%{_value}%} to shooter's offhand item
+                                if {shoshcrossbow::%{_value}%} is not set:
+                                        set shooter's offhand item to {saveditems::ShoshCrossbow}
+                                        add "{ItemNumID:%{_value}%}" to nbt of shooter's offhand item
+                                else:
+                                        set shooter's offhand item to {shoshcrossbow::%{_value}%}
+                else:
+                        set {dmg::%event-projectile%} to tag "BaseDamage" of nbt of shooter's offhand item
+                        set {_value} to tag "ItemNumID" of nbt of shooter's offhand item
+                        set {shoshcrossbow::%{_value}%} to shooter's offhand item
+                        wait 1 tick
+                        set shooter's offhand item to {shoshbow::%{_value}%}
+                stop
+        if nbt of shooter's held item contains "CheesyCraft:""ShoshBow""":
+                if shooter's held item is bow:
+                        set {_value} to tag "ItemNumID" of nbt of shooter's held item
+                        set {_skill} to a random element out of {invbow::%{_value}%::*}
+                        if nbt of {_skill} contains "CheesyCraft:""PoisonShot""":
+                                if nbt of projectile contains "poison":
+                                        set {poisonshot::%event-projectile%} to true
+                        if nbt of {_skill} contains "CheesyCraft:""Squidshot""":
+                                set {_value2} to tag "PublicBukkitValues;ItemNumID" of {_skill}
+                                set {t::%event-projectile%} to 0
+                                if {ammo1::%{_value2}%::1}'s type is ink sac:
+                                        set {squidshotblind::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo1::%{_value2}%::1}'s type is glow ink sac:
+                                        set {squidshotglow::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo1::%{_value2}%::1}'s type is phantom membrane:
+                                        set {squidshotslow::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo1::%{_value2}%::1}'s type is pufferfish:
+                                        set {squidshotpoison::%event-projectile%} to true
+                                        set {ammo1::%{_value2}%::1} to "%(item amount of {ammo1::%{_value2}%::1} - 1)% %1 of {ammo1::%{_value2}%::1}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is ink sac:
+                                        set {squidshotblind::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is glow ink sac:
+                                        set {squidshotglow::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is phantom membrane:
+                                        set {squidshotslow::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if {ammo2::%{_value2}%::2}'s type is pufferfish:
+                                        set {squidshotpoison::%event-projectile%} to true
+                                        set {ammo2::%{_value2}%::2} to "%(item amount of {ammo2::%{_value2}%::2} - 1)% %1 of {ammo2::%{_value2}%::2}%" parsed as item
+                                        add 5 to {t::%event-projectile%}
+                                if nbt of {ammo1::%{_value2}%::1} contains "CheesyCraft:""InkPhial""":
+                                        set {ammo1::%{_value2}%::1} to (item amount of {ammo1::%{_value2}%::1} - 1) of {ammo1::%{_value2}%::1}
+                                        set {t::%event-projectile%} to (3 * {t::%event-projectile%})
+                                if nbt of {ammo2::%{_value2}%::2} contains "CheesyCraft:""InkPhial""":
+                                        set {ammo2::%{_value2}%::2} to (item amount of {ammo2::%{_value2}%::2} - 1) of {ammo2::%{_value2}%::2}
+                                        set {t::%event-projectile%} to (3 * {t::%event-projectile%})
+                        if {invbow::%{_value}%::*} is set:
+                                set {_lvl} to level of power of shooter's held item
+                                if difference between {bowdraw::%shooter%} and now >= 1 second: 
+                                        set {dmg::%event-projectile%} to tag "BaseDamage" of nbt of shooter's held item
+                                        set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+                                else:
+                                        set {dmg::%event-projectile%} to 7.5
+                                        set {dmg::%event-projectile%} to ({dmg::%event-projectile%} * (0.25 * {_lvl} + 1))
+                                stop
+                        if shooter's inventory contains arrow or tipped arrow or spectral arrow:
+                                cancel event
+                                if shooter's held item is not enchanted with infinity:
+                                        if tag "Potion" of nbt of projectile is set:
+                                                set {_potion} to tag "Potion" of nbt of projectile
+                                                loop all items in inventory of shooter:
+                                                        if tag "Potion" of nbt of loop-item is {_potion}:
+                                                                remove 1 of loop-item from shooter
+                                                                exit loop
+                                        else:
+                                                loop all items in inventory of shooter:
+                                                        if 1 of loop-item is projectile:
+                                                                remove 1 of loop-item from shooter
+                                                                exit loop
+                                if nbt of shooter's held item does not contain "ItemNumID:":
+                                        add 1 to {num::ShoshBow}
+                                        add "{ItemNumID:%{num::ShoshBow}%}" to nbt of shooter's held item
+                                set {_value} to tag "ItemNumID" of nbt of shooter's held item
+                                set {shoshbow::%{_value}%} to shooter's held item
+                                wait 1 tick
+                                if {shoshcrossbow::%{_value}%} is not set:
+                                        set shooter's held item to {saveditems::ShoshCrossbow}
+                                        add "{ItemNumID:%{_value}%}" to nbt of shooter's held item
+                                else:
+                                        set shooter's held item to {shoshcrossbow::%{_value}%}
+                        else if shooter's gamemode is creative:
+                                cancel event
+                                if nbt of shooter's held item does not contain "ItemNumID:":
+                                        add 1 to {num::ShoshBow}
+                                        add "{ItemNumID:%{num::ShoshBow}%}" to nbt of shooter's held item
+                                set {_value} to tag "ItemNumID" of nbt of shooter's held item
+                                set {shoshbow::%{_value}%} to shooter's held item
+                                wait 1 tick
+                                if {shoshcrossbow::%{_value}%} is not set:
+                                        set shooter's held item to {saveditems::ShoshCrossbow}
+                                        add "{ItemNumID:%{_value}%}" to nbt of shooter's held item
+                                else:
+                                        set shooter's held item to {shoshcrossbow::%{_value}%}
+                else:
+                        set {dmg::%event-projectile%} to tag "BaseDamage" of nbt of shooter's held item
+                        set {_value} to tag "ItemNumID" of nbt of shooter's held item
+                        set {shoshcrossbow::%{_value}%} to shooter's held item
+                        wait 1 tick
+                        set shooter's held item to {shoshbow::%{_value}%}
+
+on left click:
+        if player's held item is bow or crossbow:
+                if nbt of player's held item contains "CheesyCraft:""ShoshBow""":
+                        if nbt of player's held item does not contain "ItemNumID:":
+                                add 1 to {num::ShoshBow}
+                                add "{ItemNumID:%{num::ShoshBow}%}" to nbt of player's held item
+                        if nbt of player's held item contains "ItemNumID:0":
+                                add 1 to {num::ShoshBow}
+                                add "{ItemNumID:%{num::ShoshBow}%}" to nbt of player's held item
+                        set {_value} to tag "ItemNumID" of nbt of player's held item
+                        if gui with id "ShoshBow.%{_value}%" is not set:
+                                create a gui with id "ShoshBow.%{_value}%" with virtual dropper inventory named "&cShosh Bow":      
+                                        make gui slot 0 with air:
+                                                uncancel event
+                                        make gui slot 1 with air:
+                                                uncancel event
+                                        make gui slot 2 with air:
+                                                uncancel event
+                                        make gui slot 3 with air:
+                                                uncancel event
+                                        make gui slot 4 with air:
+                                                uncancel event
+                                        make gui slot 5 with air:
+                                                uncancel event
+                                        make gui slot 6 with air:
+                                                uncancel event
+                                        make gui slot 7 with air:
+                                                uncancel event
+                                        make gui slot 8 with air:
+                                                uncancel event
+                                        run on gui close:
+                                                set {_slot} to 0
+                                                loop 9 times:
+                                                        clear {inv::%{_value}%::%{_slot}%}
+                                                        clear {invbow::%{_value}%::%{_slot}%}
+                                                        if slot {_slot} of player's current inventory is bow:
+                                                                set {invbow::%{_value}%::%{_slot}%} to slot {_slot} of player's current inventory
+                                                        set {inv::%{_value}%::%{_slot}%} to slot {_slot} of player's current inventory
+                                                        add 1 to {_slot}
+                                        exit 2 sections
+                        open gui "ShoshBow.%{_value}%" to player
+                        edit gui with id "ShoshBow.%{_value}%":
+                                make gui slot 0 with {inv::%{_value}%::0}:
+                                        uncancel event
+                                make gui slot 1 with {inv::%{_value}%::1}:
+                                        uncancel event
+                                make gui slot 2 with {inv::%{_value}%::2}:
+                                        uncancel event
+                                make gui slot 3 with {inv::%{_value}%::3}:
+                                        uncancel event
+                                make gui slot 4 with {inv::%{_value}%::4}:
+                                        uncancel event
+                                make gui slot 5 with {inv::%{_value}%::5}:
+                                        uncancel event
+                                make gui slot 6 with {inv::%{_value}%::6}:
+                                        uncancel event
+                                make gui slot 7 with {inv::%{_value}%::7}:
+                                        uncancel event
+                                make gui slot 8 with {inv::%{_value}%::8}:
+                                        uncancel event
+                        play sound "item.axe.scrape" with volume 1 and pitch 0.8 to event-player
+                        wait 6 ticks
+                        play sound "item.axe.scrape" with volume 1 and pitch 0.8 to event-player
+                        wait 6 ticks
+                        play sound "item.axe.scrape" with volume 1 and pitch 0.8 to event-player
+                        wait 10 ticks
+                        play sound "entity.chicken.hurt" with volume 1 and pitch 1 to event-player
+                        wait 10 ticks
+                        play sound "entity.tnt.primed" with volume 1 and pitch 1 to event-player
+                        wait 20 ticks
+                        play sound "block.lever.click" with volume 1 and pitch 1 to event-player
+                        
+
+on tool break:
+        if event-item is bow or crossbow:
+                if nbt of event-item contains "CheesyCraft:""ShoshBow""":
+                        set {_value} to tag "ItemNumID" of nbt of event-item
+                        set {_slot} to 0
+                        loop 9 times:
+                                drop {inv::%{_value}%::%{_slot}%} at location of player
+                                clear {inv::%{_value}%::%{_slot}%}
+                                add 1 to {_slot}
+on inventory click:
+        if nbt of clicked slot contains "CheesyCraft:""ShoshBow""":
+                if name of player's current inventory is "&cShosh Bow":
+                        cancel event

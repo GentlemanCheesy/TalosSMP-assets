@@ -1,0 +1,9 @@
+every 10 seconds:
+    loop all players:
+        if loop-player is in world "world" or "world_the_end" or "world_nether":
+            if loop-player is not "GentlemanCheesy" parsed as player:
+                execute console command "/spawn %loop-player%"
+                wait 10 ticks
+                execute console command "/spawn %loop-player%"
+                send "&cKicked from 1.18 world." to loop-player
+                

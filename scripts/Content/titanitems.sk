@@ -1,0 +1,31 @@
+on player armor change:
+    if nbt of new armor item contains "CheesyCraft:""GolemHelmet""" or "CheesyCraft:""GolemChestplate""" or "CheesyCraft:""GolemLeggings""" or "CheesyCraft:""GolemBoots""":
+        add 1 to {golembonus::%player%}
+    if nbt of old armor item contains "CheesyCraft:""GolemHelmet""" or "CheesyCraft:""GolemChestplate""" or "CheesyCraft:""GolemLeggings""" or "CheesyCraft:""GolemBoots""":
+        add -1 to {golembonus::%player%}
+	    
+on leave:
+    clear {golembonus::%player%}
+	    
+on block damaging:
+    if block is stone or deepslate or andesite or diorite or granite or tuff or calcite:
+        if event-player can build at location of event-block:
+            if {golembonus::%player%} = 4:
+                if durability of player's helmet = max durability of player's helmet - 1:
+                    stop
+                if durability of player's chestplate = max durability of player's chestplate - 1:
+                    stop
+                if durability of player's leggings = max durability of player's leggings - 1:
+                    stop
+                if durability of player's boots = max durability of player's boots - 1:
+                    stop
+                break block with diamond pickaxe
+                set {_num} to random integer between 1 and 4
+                if {_num} is 1:
+                    repair player's helmet by -1
+                if {_num} is 2:
+                    repair player's chestplate by -1
+                if {_num} is 3:
+                    repair player's leggings by -1
+                if {_num} is 4:
+                    repair player's boots by -1

@@ -1,0 +1,857 @@
+on craft of honey block:
+    if type of event-inventory is "WORKBENCH" or "CRAFTING":
+        loop all items in event-inventory:
+            if nbt of loop-item contains "CheesyCraft:""SpikedHoney""":
+                cancel event
+
+on place of brewing stand:
+    if nbt of player's held item contain "CheesyCraft:""DrinkMixer""":
+        set {drinkmixer.place::%event-block's location%} to true
+
+on break of brewing stand:
+    if {drinkmixer.place::%event-block's location%} is true:
+        cancel the drops
+        clear {drinkmixer.place::%event-block's location%}
+        drop {saveditems::DrinkMixer}
+
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {drinkmixer.place::%event-block's location%} is true:
+                cancel event
+                create a gui with virtual chest inventory with 5 rows named "&eDrink Mixer"
+                open the last gui to the player
+                edit gui last gui:
+                    make gui slot 0 with black stained glass pane named "&0 "
+                    make gui slot 1 with black stained glass pane named "&0 "
+                    make gui slot 2 with black stained glass pane named "&0 "
+                    make gui slot 3 with black stained glass pane named "&0 "
+                    make gui slot 4 with black stained glass pane named "&0 "
+                    make gui slot 5 with black stained glass pane named "&0 "
+                    make gui slot 6 with black stained glass pane named "&0 "
+                    make gui slot 7 with black stained glass pane named "&0 "
+                    make gui slot 8 with black stained glass pane named "&0 "
+                    make gui slot 9 with black stained glass pane named "&0 "
+                    make gui slot 10 with yellow stained glass pane named "&eDrink Input"
+                    make gui slot 11 with moveable air
+                    make gui slot 12 with yellow stained glass pane named "&eDrink Input"
+                    make gui slot 13 with {saveditems::InfoDrinkMixer}
+                    make gui slot 14 with orange stained glass pane named "&6Ingredient Input"
+                    make gui slot 15 with moveable air
+                    make gui slot 16 with orange stained glass pane named "&6Ingredient Input"
+                    make gui slot 17 with black stained glass pane named "&0 "
+                    make gui slot 18 with black stained glass pane named "&0 "
+                    make gui slot 19 with black stained glass pane named "&0 "
+                    make gui slot 20 with black stained glass pane named "&0 "
+                    make gui slot 21 with black stained glass pane named "&0 "
+                    make gui slot 22 with black stained glass pane named "&0 "
+                    make gui slot 23 with black stained glass pane named "&0 "
+                    make gui slot 24 with black stained glass pane named "&0 "
+                    make gui slot 25 with black stained glass pane named "&0 "
+                    make gui slot 26 with black stained glass pane named "&0 "
+                    make gui slot 27 with black stained glass pane named "&0 "
+                    make gui slot 28 with black stained glass pane named "&0 "
+                    make gui slot 29 to moveable brewing stand named "&eMix!"
+                    make gui slot 30 with black stained glass pane named "&0 "
+                    make gui slot 31 with lime stained glass pane named "&aOutput"
+                    make gui slot 32 with moveable air
+                    make gui slot 33 with lime stained glass pane named "&aOutput"
+                    make gui slot 34 with black stained glass pane named "&0 "
+                    make gui slot 35 with black stained glass pane named "&0 "
+                    make gui slot 36 with black stained glass pane named "&0 "
+                    make gui slot 37 with black stained glass pane named "&0 "
+                    make gui slot 38 with black stained glass pane named "&0 "
+                    make gui slot 39 with black stained glass pane named "&0 "
+                    make gui slot 40 with black stained glass pane named "&0 "
+                    make gui slot 41 with black stained glass pane named "&0 "
+                    make gui slot 42 with black stained glass pane named "&0 "
+                    make gui slot 43 with black stained glass pane named "&0 "
+                    make gui slot 44 with black stained glass pane named "&0 "
+
+on inventory close:
+    if name of player's current inventory contains "&eDrink Mixer":
+        set {_i} to slot 11 of player's current inventory
+        give player {_i}
+        set {_i} to slot 15 of player's current inventory
+        give player {_i}
+        set {_i} to slot 32 of player's current inventory
+        give player {_i}
+
+on inventory click:
+    if inventory name of player's current inventory is "&eDrink Mixer":
+        if name of event-item is "&eMix!":
+            cancel event
+            if nbt of slot 11 of player's current inventory contains "CheesyCraft:""SpookyCider""" or "CheesyCraft:""SpikedSpookyCider""":
+                if slot 15 of player's current inventory's type is potion:
+                    if slot 32 of player's current inventory is air:
+                        set {_effects} to tag "Potion" of nbt of slot 15 of player's current inventory
+                        replace "minecraft:" with "" in {_effects}
+                        replace "_" with " " in {_effects}
+                        set {_effects} to {_effects} in strict proper case
+                        set {_i} to {saveditems::SpikedSpookyCider}
+                        add 1 to {num::SpookyCider}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::SpookyCider}%}}" to nbt of {_i}
+                        set line 18 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                        if tag "UsesLeft" of nbt of slot 11 of player's current inventory is set:
+                            set {_value} to tag "UsesLeft" of nbt of slot 11 of player's current inventory
+                            set line 2 of lore of {_i} to line 2 of lore of slot 11 of player's current inventory
+                            add "{UsesLeft:%{_value}%}" to nbt of {_i}
+                        set slot 32 of player's current inventory to {_i}
+                        set slot 15 of player's current inventory to glass bottle
+                        remove 1 of slot 11 of player's current inventory from slot 11 of player's current inventory
+                else if nbt of slot 15 of player's current inventory contains "CheesyCraft:""LepusBrew""":
+                    if slot 32 of player's current inventory is air:
+                        set {_i} to {saveditems::SpikedSpookyCider}
+                        add 1 to {num::SpookyCider}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::SpookyCider}%}}" to nbt of {_i}
+                        set line 18 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                        if tag "UsesLeft" of nbt of slot 11 of player's current inventory is set:
+                            set {_value} to tag "UsesLeft" of nbt of slot 11 of player's current inventory
+                            set line 2 of lore of {_i} to line 2 of lore of slot 11 of player's current inventory
+                            add "{UsesLeft:%{_value}%}" to nbt of {_i}
+                        set slot 32 of player's current inventory to {_i}
+                        remove 1 of slot 15 of player's current inventory from slot 15 of player's current inventory
+                        remove 1 of slot 11 of player's current inventory from slot 11 of player's current inventory
+            if nbt of slot 11 of player's current inventory contains "CheesyCraft:""SummervineSoda""" or "CheesyCraft:""SpikedSummervineSoda""":
+                if slot 15 of player's current inventory's type is potion:
+                    if slot 32 of player's current inventory is air:
+                        set {_effects} to tag "Potion" of nbt of slot 15 of player's current inventory
+                        replace "minecraft:" with "" in {_effects}
+                        replace "_" with " " in {_effects}
+                        set {_effects} to {_effects} in strict proper case
+                        set {_i} to {saveditems::SpikedSummervineSoda}
+                        set line 9 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                        set slot 32 of player's current inventory to {_i}
+                        set slot 15 of player's current inventory to glass bottle
+                        remove 1 of slot 11 of player's current inventory from slot 11 of player's current inventory
+                else if nbt of slot 15 of player's current inventory contains "CheesyCraft:""LepusBrew""":
+                    if slot 32 of player's current inventory is air:
+                        set {_i} to {saveditems::SpikedSummervineSoda}
+                        set line 9 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                        set slot 32 of player's current inventory to {_i}
+                        remove 1 of slot 15 of player's current inventory from slot 15 of player's current inventory
+                        remove 1 of slot 11 of player's current inventory from slot 11 of player's current inventory
+            if 1 of slot 11 of player's current inventory is powder snow bucket:
+                if 1 of slot 15 of player's current inventory is golden carrot:
+                    if 1 of slot 32 of player's current inventory is air or {saveditems::LepusBrew}:
+                        if item amount of slot 32 of player's current inventory < 64:
+                            set {_i} to {saveditems::LepusBrew}
+                            add 1 of {_i} to slot 32 of player's current inventory
+                            remove 1 golden carrot from slot 15 of player's current inventory
+                            set slot 11 of player's current inventory to empty bucket
+            if 1 of slot 11 of player's current inventory is carved pumpkin:
+                if 1 of slot 15 of player's current inventory is golden apple:
+                    if slot 32 of player's current inventory is air:
+                        set {_i} to {saveditems::SpookyCider}
+                        add 1 to {num::SpookyCider}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::SpookyCider}%}}" to nbt of {_i}
+                        set slot 32 of player's current inventory to {_i}
+                        remove 1 golden apple from slot 15 of player's current inventory
+                        remove 1 carved pumpkin from slot 11 of player's current inventory
+            if slot 11 of player's current inventory is milk bucket:
+                if nbt of slot 11 of player's current inventory contains "CheesyCraft:""AmericanDream""" or "CheesyCraft:""SpikedAmericanDream""":
+                    if slot 15 of player's current inventory's type is potion:
+                        if slot 32 of player's current inventory is air:
+                            set {_effects} to tag "Potion" of nbt of slot 15 of player's current inventory
+                            replace "minecraft:" with "" in {_effects}
+                            replace "_" with " " in {_effects}
+                            set {_effects} to {_effects} in strict proper case
+                            set {_i} to {saveditems::SpikedAmericanDream}
+                            set line 17 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                            if nbt of slot 11 of player's current inventory contains "UsesLeft:":
+                                if nbt of slot 11 of player's current inventory contains "CheesyCraft:""SpikedAmericanDream""":
+                                    set line 16 of lore of {_i} to line 16 of lore of slot 11 of player's current inventory
+                                if nbt of slot 11 of player's current inventory contains "CheesyCraft:""AmericanDream""":
+                                    set line 16 of lore of {_i} to line 11 of lore of slot 11 of player's current inventory
+                                set {_value2} to tag "UsesLeft" of nbt of slot 11 of player's current inventory
+                                add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                            set slot 32 of player's current inventory to {_i}
+                            set slot 15 of player's current inventory to glass bottle
+                            remove 1 milk bucket from slot 11 of player's current inventory
+                    else if nbt of slot 15 of player's current inventory contains "CheesyCraft:""LepusBrew""":
+                        if slot 32 of player's current inventory is air:
+                            set {_i} to {saveditems::SpikedAmericanDream}
+                            set line 17 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                            if nbt of slot 11 of player's current inventory contains "UsesLeft:":
+                                if nbt of slot 11 of player's current inventory contains "CheesyCraft:""SpikedAmericanDream""":
+                                    set line 16 of lore of {_i} to line 16 of lore of slot 11 of player's current inventory
+                                if nbt of slot 11 of player's current inventory contains "CheesyCraft:""AmericanDream""":
+                                    set line 16 of lore of {_i} to line 11 of lore of slot 11 of player's current inventory
+                                set {_value2} to tag "UsesLeft" of nbt of slot 11 of player's current inventory
+                                add "{UsesLeft:%{_value2}%}" to nbt of {_i}
+                            set slot 32 of player's current inventory to {_i}
+                            remove 1 milk bucket from slot 11 of player's current inventory
+                            remove 1 of slot 15 of player's current inventory from slot 15 of player's current inventory
+            if slot 11 of player's current inventory is milk bucket:
+                if name of slot 11 of player's current inventory is set:
+                    stop
+                if slot 15 of player's current inventory's type is firework rocket:
+                    if slot 32 of player's current inventory is air:
+                        remove 1 milk bucket from slot 11 of player's current inventory
+                        remove 1 firework rocket from slot 15 of player's current inventory
+                        set slot 32 of player's current inventory to {saveditems::AmericanDream}
+                if slot 15 of player's current inventory's type is potion:
+                    if slot 32 of player's current inventory is air:
+                        remove 1 milk bucket from slot 11 of player's current inventory
+                        set {_effects} to tag "Potion" of nbt of slot 15 of player's current inventory
+                        replace "minecraft:" with "" in {_effects}
+                        replace "_" with " " in {_effects}
+                        set {_effects} to {_effects} in strict proper case
+                        set {_i} to {saveditems::SpikedMilk}
+                        set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                        set slot 32 of player's current inventory to {_i}
+                        set slot 15 of player's current inventory to glass bottle
+                else if nbt of slot 15 of player's current inventory contains "CheesyCraft:""LepusBrew""":
+                    if slot 32 of player's current inventory is air:
+                        set {_i} to {saveditems::SpikedMilk}
+                        set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                        set slot 32 of player's current inventory to {_i}
+                        remove 1 of slot 15 of player's current inventory from slot 15 of player's current inventory
+                        remove 1 milk bucket from slot 11 of player's current inventory
+            if 1 of slot 11 of player's current inventory is honey bottle:
+                if slot 15 of player's current inventory's type is potion:
+                    if slot 32 of player's current inventory is air:
+                        set {_effects} to tag "Potion" of nbt of slot 15 of player's current inventory
+                        replace "minecraft:" with "" in {_effects}
+                        replace "_" with " " in {_effects}
+                        set {_effects} to {_effects} in strict proper case
+                        set {_i} to {saveditems::SpikedHoney}
+                        set line 7 of lore of {_i} to "&fSpiked with: &c%{_effects}%"
+                        set slot 32 of player's current inventory to {_i}
+                        set slot 15 of player's current inventory to glass bottle
+                        remove 1 honey bottle from slot 11 of player's current inventory
+                else if nbt of slot 15 of player's current inventory contains "CheesyCraft:""LepusBrew""":
+                    if slot 32 of player's current inventory is air:
+                        set {_i} to {saveditems::SpikedHoney}
+                        set line 7 of lore of {_i} to "&fSpiked with: %name of {saveditems::LepusBrew}%"
+                        set slot 32 of player's current inventory to {_i}
+                        remove 1 of slot 15 of player's current inventory from slot 15 of player's current inventory
+                        remove 1 honey bottle from slot 11 of player's current inventory
+                    
+
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""LepusBrew""":
+        cancel event
+        if player is sneaking:
+            stop
+        if {numbness::%player%} is not true:
+            set {numbness::%player%} to true
+            set {numbness.time::%player%} to 60
+            remove 1 of player's held item from player's held item
+            send "&7[&f!&7] &fYou have obtained numbness for 1 minute!"
+            apply resistance 3 to player for 1 minutes
+            if player can hold 1 bucket:
+                give 1 bucket to player
+            else:
+                drop 1 bucket at player's location
+            
+every 1 second:
+    loop all players:
+        if {numbness.time::%loop-player%} >= 1:
+            add -1 to {numbness.time::%loop-player%}
+            stop
+        if {numbness.time::%loop-player%} is 0:
+            clear {numbness.time::%loop-player%}
+            clear {numbness::%loop-player%}
+            if {numbness.damage::%loop-player%} >= loop-player's health:
+                set {numbness.death::%loop-player%} to true
+                kill loop-player
+            else:
+                damage loop-player by {numbness.damage::%loop-player%}
+                send "&7[&f!&7] &fYour numbness has worn off!" to loop-player
+            wait 3 seconds
+            clear {numbness.damage::%loop-player%}
+            clear {numbness.death::%loop-player%}
+            
+on damage:
+    if {numbness::%victim%} is true:
+        add final damage to {numbness.damage::%victim%}
+        cancel event
+    
+on join:
+    wait 3 ticks
+    while player is online:
+        wait 1 second
+        loop all items in player's inventory:
+            if loop-item is not shulker box:
+                if nbt of loop-item contains "CheesyCraft:""SpookyCider""":
+                    if nbt of loop-item does not contain "ItemNumID" and "PublicBukkitValues":
+                        add 1 to {num::SpookyCider}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::SpookyCider}%}}" to nbt of loop-item
+
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""SpookyCider""" or "CheesyCraft:""SpikedSpookyCider""":
+        cancel event
+        set {_value} to tag "UsesLeft" of nbt of player's held item
+        if {_value} > 0:
+            set {_value} to {_value} - 1
+            add "{UsesLeft:%{_value}%}" to nbt of player's held item
+            set line 2 of lore of player's held item to "&c☠ &7%{_value}%&7 / 10 Souls"
+            set player's food level to 4 + player's food level
+            set saturation of player to 8 + player's saturation
+        if nbt of player's held item contains "CheesyCraft:""SpikedSpookyCider""":
+            if uncolored line 18 of lore of event-item contains "Spiked with: Lepus' Brew":
+                if {numbness::%player%} is not true:
+                    wait 1 tick
+                    set {numbness::%player%} to true
+                    set {numbness.time::%player%} to 60
+                    send "&7[&f!&7] &fYou have obtained numbness for 1 minute!"
+                    apply resistance 3 to player for 1 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Water Breathing":
+                wait 1 tick
+                apply water breathing to player for 3 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Water Breathing":
+                wait 1 tick
+                apply water breathing to player for 8 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Night Vision":
+                wait 1 tick
+                apply night vision to player for 3 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Night Vision":
+                wait 1 tick
+                apply night vision to player for 8 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Invisibility":
+                wait 1 tick
+                apply invisibility to player for 3 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Invisibility":
+                wait 1 tick
+                apply invisibility to player for 8 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Leaping":
+                wait 1 tick
+                apply jump boost to player for 3 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Leaping":
+                wait 1 tick
+                apply jump boost to player for 8 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Strong Leaping":
+                wait 1 tick
+                apply jump boost 2 to player for 1.5 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Swiftness":
+                wait 1 tick
+                apply swiftness to player for 3 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Swiftness":
+                wait 1 tick
+                apply swiftness to player for 8 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Strong Swiftness":
+                wait 1 tick
+                apply swiftness 2 to player for 1.5 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Fire Resistance":
+                wait 1 tick
+                apply fire resistance to player for 3 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Fire Resistance":
+                wait 1 tick
+                apply fire resistance to player for 8 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Turtle Master":
+                wait 1 tick
+                apply slowness 4 to player for 40 seconds
+                apply resistance 3 to player for 40 seconds
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Turtle Master":
+                wait 1 tick
+                apply slowness 4 to player for 40 seconds
+                apply resistance 3 to player for 40 seconds
+            if uncolored line 18 of lore of event-item contains "Spiked with: Strong Turtle Master":
+                wait 1 tick
+                apply slowness 6 to player for 20 seconds
+                apply resistance 4 to player for 20 seconds
+            if uncolored line 18 of lore of event-item contains "Spiked with: Healing":
+                wait 1 tick
+                add 2 to player's health
+            if uncolored line 18 of lore of event-item contains "Spiked with: Strong Healing":
+                wait 1 tick
+                add 4 to player's health
+            if uncolored line 18 of lore of event-item contains "Spiked with: Regeneration":
+                wait 1 tick
+                apply regeneration to player for 45 seconds
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Regeneration":
+                wait 1 tick
+                apply regeneration to player for 90 seconds
+            if uncolored line 18 of lore of event-item contains "Spiked with: Strong Regeneration":
+                wait 1 tick
+                apply regeneration 2 to player for 22 seconds
+            if uncolored line 18 of lore of event-item contains "Spiked with: Strength":
+                wait 1 tick
+                apply strength to player for 3 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Strength":
+                wait 1 tick
+                apply strength to player for 8 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Strong Strength":
+                wait 1 tick
+                apply strength 2 to player for 1.5 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Slow Falling":
+                wait 1 tick
+                apply slow falling to player for 1.5 minutes
+            if uncolored line 18 of lore of event-item contains "Spiked with: Long Slow Falling":
+                wait 1 tick
+                apply slow falling to player for 4 minutes
+            
+
+on death:
+    if victim is player:
+        if attacker is not a player:
+            loop all players:
+                loop all items in loop-player's inventory:
+                    if loop-item is not shulker box:
+                        if nbt of loop-item contains "CheesyCraft:""SpookyCider""" or "CheesyCraft:""SpikedSpookyCider""":
+                            set {_value} to tag "UsesLeft" of nbt of loop-item
+                            if {_value} is not set:
+                                add "{UsesLeft:1}" to nbt of loop-item
+                                set line 2 of lore of loop-item to "&c☠ &71 / 10 Souls"
+                                exit 1 loop
+                            if {_value} < 10:
+                                set {_value} to {_value} + 1
+                                add "{UsesLeft:%{_value}%}" to nbt of loop-item
+                                set line 2 of lore of loop-item to "&c☠ &7%{_value}%&7 / 10 Souls"
+                                exit 1 loop
+                            else:
+                                continue
+
+on death:
+    if victim is player:
+        loop drops:
+            if loop-value is not shulker box:
+                if nbt of loop-value contains "CheesyCraft:""SpookyCider""" or "CheesyCraft:""SpikedSpookyCider""":
+                    set {_i} to loop-value
+                    add "{UsesLeft:0}" to nbt of {_i}
+                    set line 2 of lore of {_i} to "&c☠ &70 / 10 Souls"
+                    remove loop-value from drops
+                    add {_i} to drops
+
+on join:
+    while player is online:
+        wait 3 ticks
+        loop all items in player's inventory:
+            if loop-item is not shulker box:
+                if nbt of loop-item contains "CheesyCraft:""AmericanDream""":
+                    if nbt of loop-item does not contain "ItemNumID:":
+                        add 1 to {num::AmericanDream}
+                        add "{ItemNumID:%{num::AmericanDream}%}" to nbt of loop-item
+                    if nbt of loop-item contains "ItemNumID:0":
+                        add 1 to {num::AmericanDream}
+                        add "{ItemNumID:%{num::AmericanDream}%}" to nbt of loop-item
+
+on join:
+    while player is online:
+        wait 1 seconds
+        loop all items in player's inventory:
+            if loop-item is not shulker box:
+                if nbt of loop-item contains "CheesyCraft:""AmericanDream""":
+                    set {_value} to tag "ItemNumID" of nbt of loop-item
+                    if nbt of loop-item does not contain "UsesLeft:":
+                        add "{UsesLeft:1}" to nbt of loop-item
+                        set line 11 of lore of loop-item to "&f1 Uses Remaining"
+                    add 1 to {Timer.AmericanDream::%{_value}%}
+                    if {Timer.AmericanDream::%{_value}%} is more than 3600:
+                        set {Timer.AmericanDream::%{_value}%} to 0
+                        set {_u} to tag "UsesLeft" of nbt of loop-item
+                        add 1 to {_u}
+                        add "{UsesLeft:%{_u}%}" to nbt of loop-item
+                        set line 11 of lore of loop-item to "&f%{_u}%&f Uses Remaining"
+
+on join:
+    while player is online:
+        wait 3 ticks
+        loop all items in player's inventory:
+            if loop-item is not shulker box:
+                if nbt of loop-item contains "CheesyCraft:""SpikedAmericanDream""":
+                    if nbt of loop-item does not contain "ItemNumID:":
+                        add 1 to {num::SpikedAmericanDream}
+                        add "{ItemNumID:%{num::SpikedAmericanDream}%}" to nbt of loop-item
+                    if nbt of loop-item contains "ItemNumID:0":
+                        add 1 to {num::SpikedAmericanDream}
+                        add "{ItemNumID:%{num::SpikedAmericanDream}%}" to nbt of loop-item
+
+on join:
+    while player is online:
+        wait 1 seconds
+        loop all items in player's inventory:
+            if loop-item is not shulker box:
+                if nbt of loop-item contains "CheesyCraft:""SpikedAmericanDream""":
+                    set {_value} to tag "ItemNumID" of nbt of loop-item
+                    if nbt of loop-item does not contain "UsesLeft:":
+                        add "{UsesLeft:1}" to nbt of loop-item
+                        set line 16 of lore of loop-item to "&f1 Uses Remaining"
+                    add 1 to {Timer.SpikedAmericanDream::%{_value}%}
+                    if {Timer.SpikedAmericanDream::%{_value}%} is more than 3600:
+                        set {Timer.SpikedAmericanDream::%{_value}%} to 0
+                        set {_u} to tag "UsesLeft" of nbt of loop-item
+                        add 1 to {_u}
+                        add "{UsesLeft:%{_u}%}" to nbt of loop-item
+                        set line 16 of lore of loop-item to "&f%{_u}%&f Uses Remaining"
+
+on consume:
+    if event-item is unmodified milk bucket:
+        if {numbness.time::%player%} >= 1:
+            set {numbness.time::%player%} to 0
+            
+on consume:
+    if nbt of event-item contains "CheesyCraft:""SpikedMilk""" or "CheesyCraft:""SpikedHoney""":
+        if uncolored line 7 of lore of event-item contains "Spiked with: Lepus' Brew":
+            if {numbness::%player%} is not true:
+                wait 1 tick
+                set {numbness::%player%} to true
+                set {numbness.time::%player%} to 60
+                send "&7[&f!&7] &fYou have obtained numbness for 1 minute!"
+                apply resistance 3 to player for 1 minutes
+            else:
+                cancel event
+                
+on consume:
+    if nbt of event-item contains "CheesyCraft:""AmericanDream""":
+        cancel event
+        set {_value} to tag "ItemNumID" of nbt of player's held item
+        set {_value2} to tag "UsesLeft" of nbt of player's held item
+        add -1 to {_value2}
+        add "{UsesLeft:%{_value2}%}" to nbt of player's held item
+        set line 11 of lore of player's held item to "&f%{_value2}%&f Uses Remaining"
+        set the player's food level to 10
+        set saturation of player to 20
+        clear player's potion effects
+        if {numbness.time::%player%} >= 1:
+            set {numbness.time::%player%} to 0
+        if {_value2} is less than 1:
+            set player's held item to bucket
+
+on consume:
+    if nbt of event-item contains "CheesyCraft:""SpikedAmericanDream""": 
+        cancel event
+        set {_value} to tag "ItemNumID" of nbt of player's held item
+        set {_value2} to tag "UsesLeft" of nbt of player's held item
+        add -1 to {_value2}
+        add "{UsesLeft:%{_value2}%}" to nbt of player's held item
+        set line 16 of lore of player's held item to "&f%{_value2}%&f Uses Remaining"
+        set the player's food level to 10
+        set saturation of player to 20
+        clear player's potion effects
+        if {numbness.time::%player%} >= 1:
+            set {numbness.time::%player%} to 0
+        if {_value2} is less than 1:
+            set player's held item to bucket
+        if uncolored line 17 of lore of event-item contains "Spiked with: Lepus' Brew":
+            if {numbness::%player%} is not true:
+                wait 1 tick
+                set {numbness::%player%} to true
+                set {numbness.time::%player%} to 60
+                send "&7[&f!&7] &fYou have obtained numbness for 1 minute!"
+                apply resistance 3 to player for 1 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Water Breathing":
+            wait 1 tick
+            apply water breathing to player for 3 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Water Breathing":
+            wait 1 tick
+            apply water breathing to player for 8 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Night Vision":
+            wait 1 tick
+            apply night vision to player for 3 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Night Vision":
+            wait 1 tick
+            apply night vision to player for 8 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Invisibility":
+            wait 1 tick
+            apply invisibility to player for 3 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Invisibility":
+            wait 1 tick
+            apply invisibility to player for 8 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Leaping":
+            wait 1 tick
+            apply jump boost to player for 3 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Leaping":
+            wait 1 tick
+            apply jump boost to player for 8 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Strong Leaping":
+            wait 1 tick
+            apply jump boost 2 to player for 1.5 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Swiftness":
+            wait 1 tick
+            apply swiftness to player for 3 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Swiftness":
+            wait 1 tick
+            apply swiftness to player for 8 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Strong Swiftness":
+            wait 1 tick
+            apply swiftness 2 to player for 1.5 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Fire Resistance":
+            wait 1 tick
+            apply fire resistance to player for 3 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Fire Resistance":
+            wait 1 tick
+            apply fire resistance to player for 8 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Turtle Master":
+            wait 1 tick
+            apply slowness 4 to player for 40 seconds
+            apply resistance 3 to player for 40 seconds
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Turtle Master":
+            wait 1 tick
+            apply slowness 4 to player for 40 seconds
+            apply resistance 3 to player for 40 seconds
+        if uncolored line 17 of lore of event-item contains "Spiked with: Strong Turtle Master":
+            wait 1 tick
+            apply slowness 6 to player for 20 seconds
+            apply resistance 4 to player for 20 seconds
+        if uncolored line 17 of lore of event-item contains "Spiked with: Healing":
+            wait 1 tick
+            add 2 to player's health
+        if uncolored line 17 of lore of event-item contains "Spiked with: Strong Healing":
+            wait 1 tick
+            add 4 to player's health
+        if uncolored line 17 of lore of event-item contains "Spiked with: Regeneration":
+            wait 1 tick
+            apply regeneration to player for 45 seconds
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Regeneration":
+            wait 1 tick
+            apply regeneration to player for 90 seconds
+        if uncolored line 17 of lore of event-item contains "Spiked with: Strong Regeneration":
+            wait 1 tick
+            apply regeneration 2 to player for 22 seconds
+        if uncolored line 17 of lore of event-item contains "Spiked with: Strength":
+            wait 1 tick
+            apply strength to player for 3 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Strength":
+            wait 1 tick
+            apply strength to player for 8 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Strong Strength":
+            wait 1 tick
+            apply strength 2 to player for 1.5 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Slow Falling":
+            wait 1 tick
+            apply slow falling to player for 1.5 minutes
+        if uncolored line 17 of lore of event-item contains "Spiked with: Long Slow Falling":
+            wait 1 tick
+            apply slow falling to player for 4 minutes
+
+on consume:
+    if nbt of event-item contains "CheesyCraft:""SpikedMilk""": 
+        if uncolored line 7 of lore of event-item contains "Spiked with: Water Breathing":
+            wait 1 tick
+            apply water breathing to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Water Breathing":
+            wait 1 tick
+            apply water breathing to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Night Vision":
+            wait 1 tick
+            apply night vision to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Night Vision":
+            wait 1 tick
+            apply night vision to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Invisibility":
+            wait 1 tick
+            apply invisibility to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Invisibility":
+            wait 1 tick
+            apply invisibility to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Leaping":
+            wait 1 tick
+            apply jump boost to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Leaping":
+            wait 1 tick
+            apply jump boost to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Leaping":
+            wait 1 tick
+            apply jump boost 2 to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Swiftness":
+            wait 1 tick
+            apply swiftness to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Swiftness":
+            wait 1 tick
+            apply swiftness to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Swiftness":
+            wait 1 tick
+            apply swiftness 2 to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Fire Resistance":
+            wait 1 tick
+            apply fire resistance to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Fire Resistance":
+            wait 1 tick
+            apply fire resistance to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Turtle Master":
+            wait 1 tick
+            apply slowness 4 to player for 40 seconds
+            apply resistance 3 to player for 40 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Turtle Master":
+            wait 1 tick
+            apply slowness 4 to player for 40 seconds
+            apply resistance 3 to player for 40 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Turtle Master":
+            wait 1 tick
+            apply slowness 6 to player for 20 seconds
+            apply resistance 4 to player for 20 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Healing":
+            wait 1 tick
+            add 2 to player's health
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Healing":
+            wait 1 tick
+            add 4 to player's health
+        if uncolored line 7 of lore of event-item contains "Spiked with: Regeneration":
+            wait 1 tick
+            apply regeneration to player for 45 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Regeneration":
+            wait 1 tick
+            apply regeneration to player for 90 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Regeneration":
+            wait 1 tick
+            apply regeneration 2 to player for 22 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strength":
+            wait 1 tick
+            apply strength to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Strength":
+            wait 1 tick
+            apply strength to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Strength":
+            wait 1 tick
+            apply strength 2 to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Slow Falling":
+            wait 1 tick
+            apply slow falling to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Slow Falling":
+            wait 1 tick
+            apply slow falling to player for 4 minutes
+
+on consume:
+    if nbt of event-item contains "CheesyCraft:""SpikedHoney""": 
+        if uncolored line 7 of lore of event-item contains "Spiked with: Water Breathing":
+            wait 1 tick
+            remove water breathing from player
+            apply water breathing to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Water Breathing":
+            wait 1 tick
+            remove water breathing from player
+            apply water breathing to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Night Vision":
+            wait 1 tick
+            remove night vision from player
+            apply night vision to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Night Vision":
+            wait 1 tick
+            remove night vision from player
+            apply night vision to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Invisibility":
+            wait 1 tick
+            remove invisibility from player
+            apply invisibility to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Invisibility":
+            wait 1 tick
+            remove invisibility from player
+            apply invisibility to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Leaping":
+            wait 1 tick
+            remove jump boost from player
+            apply jump boost to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Leaping":
+            wait 1 tick
+            remove jump boost from player
+            apply jump boost to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Leaping":
+            wait 1 tick
+            remove jump boost from player
+            apply jump boost 2 to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Swiftness":
+            wait 1 tick
+            remove swiftness from player
+            apply swiftness to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Swiftness":
+            wait 1 tick
+            remove swiftness from player
+            apply swiftness to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Swiftness":
+            wait 1 tick
+            remove swiftness from player
+            apply swiftness 2 to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Fire Resistance":
+            wait 1 tick
+            remove fire resistance from player
+            apply fire resistance to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Fire Resistance":
+            wait 1 tick
+            remove fire resistance from player
+            apply fire resistance to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Turtle Master":
+            wait 1 tick
+            remove slowness from player
+            remove resistance from player
+            apply slowness 4 to player for 20 seconds
+            apply resistance 3 to player for 20 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Turtle Master":
+            wait 1 tick
+            remove slowness from player
+            remove resistance from player
+            apply slowness 4 to player for 40 seconds
+            apply resistance 3 to player for 40 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Turtle Master":
+            wait 1 tick
+            remove slowness from player
+            remove resistance from player
+            apply slowness 6 to player for 20 seconds
+            apply resistance 4 to player for 20 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Healing":
+            wait 1 tick
+            add 2 to player's health
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Healing":
+            wait 1 tick
+            add 4 to player's health
+        if uncolored line 7 of lore of event-item contains "Spiked with: Regeneration":
+            wait 1 tick
+            remove regeneration from player
+            apply regeneration to player for 45 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Regeneration":
+            wait 1 tick
+            remove regeneration from player
+            apply regeneration to player for 90 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Regeneration":
+            wait 1 tick
+            remove regeneration from player
+            apply regeneration 2 to player for 22 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strength":
+            wait 1 tick
+            remove strength from player
+            apply strength to player for 3 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Strength":
+            wait 1 tick
+            remove strength from player
+            apply strength to player for 8 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Strength":
+            wait 1 tick
+            remove strength from player
+            apply strength 2 to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Slow Falling":
+            wait 1 tick
+            remove slow falling from player
+            apply slow falling to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Slow Falling":
+            wait 1 tick
+            remove slow falling from player
+            apply slow falling to player for 4 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Weakness":
+            wait 1 tick
+            remove weakness from player
+            apply weakness to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Weakness":
+            wait 1 tick
+            remove weakness from player
+            apply weakness to player for 4 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Slowness":
+            wait 1 tick
+            remove slowness from player
+            apply slowness to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Slowness":
+            wait 1 tick
+            remove slowness from player
+            apply slowness to player for 4 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Slowness":
+            wait 1 tick
+            remove slowness from player
+            apply slowness 2 to player for 20 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Harming":
+            wait 1 tick
+            add -3 to player's health
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Harming":
+            wait 1 tick
+            add -6 to player's health
+        if uncolored line 7 of lore of event-item contains "Spiked with: Poison":
+            wait 1 tick
+            remove poison from player
+            apply poison to player for 45 seconds
+        if uncolored line 7 of lore of event-item contains "Spiked with: Long Poison":
+            wait 1 tick
+            remove poison from player
+            apply poison to player for 1.5 minutes
+        if uncolored line 7 of lore of event-item contains "Spiked with: Strong Poison":
+            wait 1 tick
+            remove poison from player
+            apply poison 2 to player for 21 seconds

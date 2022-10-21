@@ -1,0 +1,490 @@
+on place of lapis block:
+    if player is holding lapis block:
+        if nbt of player's held item contain "CheesyCraft:BluestoneBlock":
+            set {bluestone.place::%event-block's location%} to true
+            
+on break:
+    if {bluestone.place::%event-block's location%} is true:
+        clear {bluestone.place::%event-block's location%}
+        cancel the drops
+        execute console command "mi drop MISCELLANEOUS BLUESTONEBLOCK %world% %x-coordinate of event-block% %y-coordinate of event-block% %z-coordinate of event-block% 100 1-1 0"
+
+on place of tnt:
+    if player is holding tnt:
+        if nbt of player's held item contain "CheesyCraft:BluestoneTNT":
+            set {bluestonetnt.place::%event-block's location%} to true
+            set {bluestonetnt.location::%event-block's location%} to location of event-block
+            set {bluestonetnt.delay::%event-block's location%} to 0
+
+on right click with air:
+    event-block is tnt:
+        if location is {bluestonetnt.location::%event-block's location%}:
+            add 5 to {bluestonetnt.delay::%event-block's location%}
+            send "&bAdded 5 seconds to the timer of this TNT." to player
+                
+on left click:
+    event-block is tnt:
+        if location is {bluestonetnt.location::%event-block's location%}:
+            if {_bluestonetnt.ignite::%event-block's location%} is true:
+                stop
+            if {bluestonetnt.delay::%event-block's location%} is 0:
+                stop
+            player is sneaking:
+                stop
+            set {_bluestonetnt.ignite::%event-block's location%} to true
+            cancel event
+            send "&cYou might want to step back!" to player
+            wait "%{bluestonetnt.delay::%event-block's location%}% seconds" parsed as timespan
+            set event-block to air
+            create an explosion of force 8 at the event-block
+            clear {bluestonetnt.place::%event-block's location%}
+            clear {bluestonetnt.location::%event-block's location%}            
+            clear {bluestonetnt.delay::%event-block's location%} 
+            
+            
+on right click with flint and steel:
+    event-block is tnt:
+        if location is {bluestonetnt.location::%event-block's location%}:
+            cancel event
+            
+on break:
+    if {bluestonetnt.place::%event-block's location%} is true:
+        cancel event
+
+on break:
+    player is sneaking:
+        if {bluestonetnt.place::%event-block's location%} is true:
+            if {_bluestonetnt.ignite::%event-block's location%} is true:
+                stop
+            clear {bluestonetnt.place::%event-block's location%}
+            clear {bluestonetnt.location::%event-block's location%}            
+            clear {bluestonetnt.delay::%event-block's location%} 
+            cancel the drops
+            execute console command "mi drop MISCELLANEOUS BLUESTONETNT %world% %x-coordinate of event-block% %y-coordinate of event-block% %z-coordinate of event-block% 100 1-1 0"
+            
+on place of dark prismarine:
+    if player is holding dark prismarine:
+        if nbt of player's held item contain "CheesyCraft:""BluestoneMobSensor""":
+            set {BSmobsensor.place::%event-block's location%} to true
+            set {BSmobsensor.location::%event-block's location%} to location of event-block
+            set {BSmobsensor.radius::%event-block's location%} to 1
+            
+on break:
+    if {BSmobsensor.place::%event-block's location%} is true:
+        clear {BSmobsensor.place::%event-block's location%}
+        clear {BSmobsensor.location::%event-block's location%}            
+        clear {BSmobsensor.radius::%event-block's location%}
+        cancel the drops
+        drop {saveditems::MobSensor}
+        
+on right click:
+    event-block is dark prismarine or redstone block:
+        if location is {BSmobsensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {BSmobsensor.radius::%event-block's location%} is 11:
+                    send "&cCant go any higher, sorry!" to player
+                    stop
+                add 1 to {BSmobsensor.radius::%event-block's location%}
+                send "&bAdded 1 block to the radius of this Mob Sensor." to player
+
+on left click:
+    event-block is dark prismarine or redstone block:
+        if location is {BSmobsensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {BSmobsensor.radius::%event-block's location%} is 1:
+                    send "&cCant go any lower, sorry!" to player
+                    stop
+                add -1 to {BSmobsensor.radius::%event-block's location%}
+                send "&bSubtracted 1 block from the radius of this Mob Sensor." to player
+    
+every 10 ticks:
+    loop {BSmobsensor.location::*}:
+        if chunk at location of loop-value is loaded:
+            if mobs in radius {BSmobsensor.radius::%loop-value%} of loop-value are set:
+                if {BSmobsensor.place::%loop-value%} is not set:
+                    stop
+                set block at location at loop-value to redstone block
+            else:
+                if {BSmobsensor.place::%loop-value%} is not set:
+                    stop
+                set block at location at loop-value to dark prismarine block
+                        
+on place of light blue wool:
+    if player is holding light blue wool:
+        if nbt of player's held item contain "CheesyCraft:""BluestonePlayerSensor""":
+            set {BSplayersensor.place::%event-block's location%} to true
+            set {BSplayersensor.location::%event-block's location%} to location of event-block
+            set {BSplayersensor.radius::%event-block's location%} to 1
+            
+on break:
+    if {BSplayersensor.place::%event-block's location%} is true:
+        clear {BSplayersensor.place::%event-block's location%}
+        clear {BSplayersensor.location::%event-block's location%}            
+        clear {BSplayersensor.radius::%event-block's location%} 
+        cancel the drops
+        drop {saveditems::PlayerSensor}
+
+on right click:
+    event-block is light blue wool or redstone block:
+        if location is {BSplayersensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {BSplayersensor.radius::%event-block's location%} is 11:
+                    send "&cCant go any higher, sorry!" to player
+                    stop
+                add 1 to {BSplayersensor.radius::%event-block's location%}
+                send "&bAdded 1 block to the radius of this Player Sensor." to player
+
+
+on left click:
+    event-block is light blue wool or redstone block:
+        if location is {BSplayersensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {BSplayersensor.radius::%event-block's location%} is 1:
+                    send "&cCant go any lower, sorry!" to player
+                    stop
+                add -1 to {BSplayersensor.radius::%event-block's location%}
+                send "&bSubtracted 1 block from the radius of this Player Sensor." to player
+
+every 10 ticks:
+    loop {BSplayersensor.location::*}:
+        if chunk at location of loop-value is loaded:
+            if players in radius {BSplayersensor.radius::%loop-value%} of loop-value are set:
+                if {BSplayersensor.place::%loop-value%} is not set:
+                    stop
+                set block at location at loop-value to redstone block
+            else:
+                if {BSplayersensor.place::%loop-value%} is not set:
+                    stop
+                set block at location at loop-value to light blue wool
+                        
+on place of light blue concrete:
+    if player is holding light blue concrete:
+        if nbt of player's held item contain "CheesyCraft:""BluestoneItemSensor""":
+            set {BSitemsensor.place::%event-block's location%} to true
+            set {BSitemsensor.location::%event-block's location%} to location of event-block
+            set {BSitemsensor.radius::%event-block's location%} to 1
+            
+on break:
+    if {BSitemsensor.place::%event-block's location%} is true:
+        clear {BSitemsensor.place::%event-block's location%}
+        clear {BSitemsensor.location::%event-block's location%}            
+        clear {BSitemsensor.radius::%event-block's location%}
+        cancel the drops
+        drop {saveditems::ItemSensor}
+
+on right click:
+    event-block is light blue concrete or redstone block:
+        if location is {BSitemsensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {BSitemsensor.radius::%event-block's location%} is 11:
+                    send "&cCant go any higher, sorry!" to player
+                    stop
+                add 1 to {BSitemsensor.radius::%event-block's location%}
+                send "&bAdded 1 block to the radius of this Item Sensor." to player
+
+
+on left click:
+    event-block is light blue concrete or redstone block:
+        if location is {BSitemsensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {BSitemsensor.radius::%event-block's location%} is 1:
+                    send "&cCant go any lower, sorry!" to player
+                    stop
+                add -1 to {BSitemsensor.radius::%event-block's location%}
+                send "&bSubtracted 1 block from the radius of this Item Sensor." to player
+
+every 10 ticks:
+    loop {BSitemsensor.location::*}:
+        if chunk at location of loop-value is loaded:
+            if dropped items in radius {BSitemsensor.radius::%loop-value%} of loop-value are set:
+                if {BSitemsensor.place::%loop-value%} is not set:
+                    stop
+                set block at location at loop-value to redstone block
+            else:
+                if {BSitemsensor.place::%loop-value%} is not set:
+                    stop
+                set block at location at loop-value to light blue concrete
+                        
+on place of blue wool:
+    if player is holding blue wool:
+        if nbt of player's held item contain "CheesyCraft:""AdvancedBluestonePlayerSensor""":
+            set {ADVplayersensor.place::%event-block's location%} to true
+            set {ADVplayersensor.location::%event-block's location%} to location of event-block
+            set {ADVplayersensor.radius::%event-block's location%} to 1
+            set {ADVplayersensor.setting::%event-block's location%} to "All"
+            
+on break:
+    if {ADVplayersensor.place::%event-block's location%} is true:
+        clear {ADVplayersensor.place::%event-block's location%}
+        clear {ADVplayersensor.location::%event-block's location%}            
+        clear {ADVplayersensor.radius::%event-block's location%}
+        cancel the drops
+        drop {saveditems::AdvancedPlayerSensor}
+
+on right click:
+    player is sneaking:
+        stop
+    event-block is blue wool or redstone block:
+        if location is {ADVplayersensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {ADVplayersensor.radius::%event-block's location%} is 16:
+                    send "&cCant go any higher, sorry!" to player
+                    stop
+                add 1 to {ADVplayersensor.radius::%event-block's location%}
+                send "&bAdded 1 block to the radius of this Advanced Player Sensor." to player
+
+
+on left click:
+    event-block is blue wool or redstone block:
+        if location is {ADVplayersensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {ADVplayersensor.radius::%event-block's location%} is 1:
+                    send "&cCant go any lower, sorry!" to player
+                    stop
+                add -1 to {ADVplayersensor.radius::%event-block's location%}
+                send "&bSubtracted 1 block from the radius of this Advanced Player Sensor." to player
+
+on right click:
+    player is sneaking:
+        if location is {ADVplayersensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            if {ADVplayersensor.setting::%event-block's location%} is "Owner Only":
+                send "&aSet this block to others only."
+                set {ADVplayersensor.setting::%event-block's location%} to "Others Only"
+                stop
+            if {ADVplayersensor.setting::%event-block's location%} is "Others Only":
+                send "&aSet this block to all."
+                set {ADVplayersensor.setting::%event-block's location%} to "All"
+                stop
+            if {ADVplayersensor.setting::%event-block's location%} is "All":
+                send "&aSet this block to owner only."
+                set {ADVplayersensor.setting::%event-block's location%} to "Owner Only"  
+                stop
+                
+every 10 ticks:
+    loop {ADVplayersensor.location::*}:
+        if chunk at location of loop-value is loaded:
+            if {ADVplayersensor.place::%loop-value-1%} is not set:
+                continue
+            if {ADVplayersensor.setting::%loop-value%} is "Owner Only":
+                if players in radius {ADVplayersensor.radius::%loop-value%} of loop-value are set:
+                    loop all players in radius {ADVplayersensor.radius::%loop-value-1%} of loop-value:
+                        if loop-player can build at loop-value-1:
+                            set block at location at loop-value-1 to redstone block
+                            exit loop
+                        else:
+                            set block at location at loop-value-1 to blue wool
+                else:
+                    if {ADVplayersensor.place::%loop-value-1%} is not set:
+                        continue
+                    set block at location at loop-value-1 to blue wool
+                continue
+            if {ADVplayersensor.setting::%loop-value%} is "Others Only":
+                if players in radius {ADVplayersensor.radius::%loop-value%} of loop-value are set:
+                    loop all players in radius {ADVplayersensor.radius::%loop-value-1%} of loop-value:
+                        if loop-player can't build at loop-value-1:
+                            set block at location at loop-value-1 to redstone block
+                            exit loop
+                        else:
+                            set block at location at loop-value-1 to blue wool
+                else:
+                    if {ADVplayersensor.place::%loop-value-1%} is not set:
+                        continue
+                    set block at location at loop-value-1 to blue wool
+                continue
+            if {ADVplayersensor.setting::%loop-value%} is "All":
+                if players in radius {ADVplayersensor.radius::%loop-value%} of loop-value are set:
+                    set block at location at loop-value-1 to redstone block
+                else:
+                    if {ADVplayersensor.place::%loop-value-1%} is not set:
+                        continue
+                    set block at location at loop-value-1 to blue wool
+                    
+on place of blue concrete:
+    if player is holding blue concrete:
+        if nbt of player's held item contain "CheesyCraft:""AdvancedBluestoneItemSensor""":
+            set {ADVitemsensor.place::%event-block's location%} to true
+            set {ADVitemsensor.location::%event-block's location%} to location of event-block
+            set {ADVitemsensor.radius::%event-block's location%} to 1
+            
+on break:
+    if {ADVitemsensor.place::%event-block's location%} is true:
+        clear {ADVitemsensor.place::%event-block's location%}
+        clear {ADVitemsensor.location::%event-block's location%}            
+        clear {ADVitemsensor.radius::%event-block's location%}
+        clear {ADVitemsensor.item.%event-block's location%::*}
+        clear {ADVitemsensorItems::%event-block's location%::*}
+        cancel the drops
+        drop {saveditems::AdvancedItemSensor}
+
+on right click with air:
+    event-block is blue concrete or redstone block:
+        if location is {ADVitemsensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {ADVitemsensor.radius::%event-block's location%} is 16:
+                    send "&cCant go any higher, sorry!" to player
+                    stop
+                add 1 to {ADVitemsensor.radius::%event-block's location%}
+                send "&bAdded 1 block to the radius of this Advanced Item Sensor." to player
+
+
+on left click with air:
+    event-block is blue concrete or redstone block:
+        if location is {ADVitemsensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {ADVitemsensor.radius::%event-block's location%} is 1:
+                    send "&cCant go any lower, sorry!" to player
+                    stop
+                add -1 to {ADVitemsensor.radius::%event-block's location%}
+                send "&bSubtracted 1 block from the radius of this Advanced Item Sensor." to player
+
+on right click:
+    if player's held item is not empty:
+        event-block is blue concrete or redstone block:
+            if location is {ADVitemsensor.location::%event-block's location%}:
+                if player can't build at location of clicked block:
+                    send "&cYou cannot build here!"
+                    stop
+                if {ADVitemsensor.item.%event-block's location%::%1 of player's tool%} is true:
+                    send "&cThis item is already whitelisted from this block."
+                    stop
+                set {ADVitemsensor.item.%event-block's location%::%1 of player's tool%} to true
+                add "%1 of player's tool%" to {ADVitemsensorItems::%event-block's location%::*}
+                send "&aItem added to this Advanced Item Sensor."
+                cancel event
+                
+on left click:
+    if player's held item is not empty:
+        event-block is blue concrete or redstone block:
+            if location is {ADVitemsensor.location::%event-block's location%}:
+                if player can't build at location of clicked block:
+                    send "&cYou cannot build here!"
+                    stop
+                if {ADVitemsensor.item.%event-block's location%::%1 of player's tool%} is not true:
+                    send "&cThis item is already blacklisted from this block."
+                    stop
+                clear {ADVitemsensor.item.%event-block's location%::%1 of player's tool%}
+                remove "%1 of player's tool%" from {ADVitemsensorItems::%event-block's location%::*}
+                send "&cItem removed from this Advanced Item Sensor."
+                cancel event
+                
+every 10 ticks:
+    loop {ADVitemsensor.location::*}:
+        if chunk at location of loop-value is loaded:
+            clear {ADVitemsensor.active::%loop-value-1%}
+            loop dropped items in radius {ADVitemsensor.radius::%loop-value%} around loop-value:
+                if {ADVitemsensorItems::%loop-value-1%::*} contains "%item of loop-value-2%":
+                    if {ADVitemsensor.place::%loop-value-1%} is not set:
+                        stop
+                    set block at location at loop-value-1 to redstone block
+                    set {ADVitemsensor.active::%loop-value-1%} to true
+            if {ADVitemsensor.active::%loop-value-1%} is not set:
+                if {ADVitemsensor.place::%loop-value-1%} is not set:
+                    stop
+                set block at location at loop-value-1 to blue concrete
+                
+on place of chiseled deepslate:
+    if nbt of player's held item contain "CheesyCraft:""HostilitySensor""":
+        set {hostilitysensor.place::%event-block's location%} to true
+        set {hostilitysensor.location::%event-block's location%} to location of event-block
+        set {hostilitysensor.radius::%event-block's location%} to 1
+            
+on break:
+    if {hostilitysensor.place::%event-block's location%} is true:
+        clear {hostilitysensor.place::%event-block's location%}
+        clear {hostilitysensor.location::%event-block's location%}            
+        clear {hostilitysensor.radius::%event-block's location%}
+        cancel the drops
+        drop {saveditems::HostilitySensor}
+
+on right click:
+    event-block is chiseled deepslate or redstone block:
+        if location is {hostilitysensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {hostilitysensor.radius::%event-block's location%} is 31:
+                    send "&cCant go any higher, sorry!" to player
+                    stop
+                add 1 to {hostilitysensor.radius::%event-block's location%}
+                send "&bAdded 1 block to the radius of this Hostility Sensor." to player
+
+
+on left click:
+    event-block is chiseled deepslate or redstone block:
+        if location is {hostilitysensor.location::%event-block's location%}:
+            if player can't build at location of clicked block:
+                send "&cYou cannot build here!"
+                stop
+            else:
+                if {hostilitysensor.radius::%event-block's location%} is 1:
+                    send "&cCant go any lower, sorry!" to player
+                    stop
+                add -1 to {hostilitysensor.radius::%event-block's location%}
+                send "&bSubtracted 1 block from the radius of this Hostility Sensor." to player
+
+every 1 second:
+    loop {hostilitysensor.location::*}:
+        if chunk at loop-value is loaded:
+            if {hostilitysensor.place::%loop-value-1%} is not set:
+                continue loop
+            if block at loop-value is redstone block:
+                set block at loop-value-1 to chiseled deepslate
+            loop all players in radius {hostilitysensor.radius::%loop-value%} of loop-value:
+                if loop-player's held item is any sword or any axe or bow or crossbow or trident or tnt or flint and steel:
+                    if {hostilitysensor.place::%loop-value-1%} is not set:
+                        exit loop
+                    set block at loop-value-1 to redstone block
+                else:
+                    if {hostilitysensor.place::%loop-value-1%} is not set:
+                        exit loop
+                    set block at loop-value-1 to chiseled deepslate
+            
+        
+        
+on damage:
+    loop {hostilitysensor.location::*}:
+        if chunk at loop-value is loaded:
+            loop all entities in radius {hostilitysensor.radius::%loop-value%} of loop-value:
+                if victim or attacker is loop-entity:
+                    if block at loop-value-1 is chiseled deepslate:
+                        if {hostilitysensor.place::%loop-value-1%} is not set:
+                            exit loop
+                        set block at loop-value-1 to redstone block
+                        wait 1 second
+                        if {hostilitysensor.place::%loop-value-1%} is not set:
+                            exit loop
+                        set block at loop-value-1 to chiseled deepslate             

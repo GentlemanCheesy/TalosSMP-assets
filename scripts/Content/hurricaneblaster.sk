@@ -1,0 +1,30 @@
+on right click with diamond horse armor:
+    if nbt of player's held item contains "CheesyCraft:""HurricaneBlaster""":
+        set {_hurricaneblaster::*} to uncoloured line 7 of player's held item's lore
+        loop {_hurricaneblaster::*}:
+            set {_value::*} to loop-value parsed as "%num% / %num% Water Buckets"
+            if {_value::1} is more than 0:
+                add -1 to {_value::1}
+                set line 7 of lore of player's held item to "&f%{_value::1}%&f / %{_value::2}%&f Water Buckets"
+                push player upwards at speed 0.8
+
+every 1 second:
+    loop all players:
+        loop all items in loop-player's inventory:
+            if nbt of loop-item contains "CheesyCraft:""HurricaneBlaster""":
+                if loop-player is in water:
+                    set {_hurricaneblaster::*} to uncoloured line 7 of loop-item's lore
+                    loop {_hurricaneblaster::*}:
+                        set {_value::*} to loop-value-3 parsed as "%num% / %num% Water Buckets"
+                        if {_value::1} is less than 5:
+                            add 1 to {_value::1}
+                            set line 7 of lore of loop-item to "&f%{_value::1}%&f / %{_value::2}%&f Water Buckets"
+                else if loop-player is in rain:
+                    set {_hurricaneblaster::*} to uncoloured line 7 of loop-item's lore
+                    loop {_hurricaneblaster::*}:
+                        set {_value::*} to loop-value-3 parsed as "%num% / %num% Water Buckets"
+                        if {_value::1} is less than 5:
+                            add 1 to {_value::1}
+                            set line 7 of lore of loop-item to "&f%{_value::1}%&f / %{_value::2}%&f Water Buckets"
+
+                    

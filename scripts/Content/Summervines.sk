@@ -1,0 +1,270 @@
+on place of beetroot plant:
+    if nbt of player's held item contain "CheesyCraft:""SummervineSeeds""":
+        set {Summervine.loc::%event-block's location%} to event-block's location
+        set {Summervine.place::%event-block's location%} to true
+        set {Summervine.num::%event-block's location%} to 12
+        set event-block to persistent azalea leaves
+            
+on break of azalea leaves:
+    if {Summervine.place::%event-block's location%} is true:
+        if {Summervine.loc::%event-block's location%} is set:
+            chance of 5%:
+                drop {saveditems::SummervineSeeds}
+        clear {Summervine.loc::%event-block's location%}
+        clear {Summervine.num::%event-block's location%}
+        clear {Summervine.place::%event-block's location%}
+        cancel the drops
+        drop {saveditems::Summervine}
+        
+            
+on break of flowering azalea leaves:
+    if {Summervine.place::%event-block's location%} is true:
+        if {Summervine.loc::%event-block's location%} is set:
+            chance of 50%:
+                drop {saveditems::SummervineSeeds}
+        clear {Summervine.loc::%event-block's location%}
+        clear {Summervine.num::%event-block's location%}
+        clear {Summervine.place::%event-block's location%}
+        cancel the drops
+        drop {saveditems::FloweringSummervine}
+        
+        
+on break of player head:
+    if {SummervineGrape.place::%event-block's location%} is true:
+        clear {SummervineGrape.place::%event-block's location%}
+        cancel the drops
+        drop {saveditems::SummervineGrapes}
+        
+        
+on place:
+    if nbt of player's held item contain "CheesyCraft:""SummervineGrapes""":
+        cancel event
+        
+on place of azalea leaves:
+    if nbt of player's held item contain "CheesyCraft:""Summervine""":
+        set {Summervine.place::%event-block's location%} to true
+        set event-block to persistent azalea leaves
+        
+on place of flowering azalea leaves:
+    if nbt of player's held item contain "CheesyCraft:""FloweringSummervine""":
+        set {Summervine.place::%event-block's location%} to true
+        set event-block to persistent flowering azalea leaves
+        
+every 1 minute:
+    loop {Summervine.loc::*}:
+        if chunk at loop-value is loaded:
+            chance of 5%:
+                if {Summervine.num::%loop-value%} > 0:
+                    loop all blocks in radius 1 around loop-value:
+                        if loop-value-2 is air:
+                            set {_c1::*} to "%region at loop-value-1%"
+                            set {_c2::*} to "%region at location of loop-value-2%"
+                            if {_c1::*} is {_c2::*}:
+                                if block below loop-value-2 is solid:
+                                    if {Summervine.place::%location of block 2 meters below loop-value-2%} is not true:
+                                        set {Summervine.num::%loop-value-1%} to {Summervine.num::%loop-value-1%} - 1
+                                        set {Summervine.loc::%location of loop-value-2%} to location of loop-value-2
+                                        set {Summervine.place::%location of loop-value-2%} to true
+                                        set {Summervine.num::%location of loop-value-2%} to {Summervine.num::%loop-value-1%} - 1
+                                        set loop-value-2 to persistent azalea leaves
+                                        exit loop
+                                else if block 2 meter below loop-value-2 is solid:
+                                    if {Summervine.place::%location of block 3 meters below loop-value-2%} is not true:
+                                        set {Summervine.num::%loop-value-1%} to {Summervine.num::%loop-value-1%} - 1
+                                        set {Summervine.loc::%location of loop-value-2%} to location of loop-value-2
+                                        set {Summervine.place::%location of loop-value-2%} to true
+                                        set {Summervine.num::%location of loop-value-2%} to {Summervine.num::%loop-value-1%} - 1
+                                        set loop-value-2 to persistent azalea leaves
+                                        exit loop
+            
+on right click:
+    if player's held item is unmodified bonemeal:
+        if {Summervine.loc::%event-block's location%} is set:
+            if {Summervine.num::%location of event-block%} > 0:
+                remove 1 of player's held item from player's held item
+                loop all blocks in radius 1 around event-block's location:
+                    if loop-value is air:
+                        set {_c1::*} to "%region at location of event-block%"
+                        set {_c2::*} to "%region at location of loop-value%"
+                        if {_c1::*} is {_c2::*}:
+                            if block below loop-value is solid:
+                                if {Summervine.place::%location of block 2 meters below loop-value%} is not true:
+                                    chance of 20%:
+                                        set {Summervine.num::%location of event-block%} to {Summervine.num::%location of event-block%} - 1
+                                        set {Summervine.loc::%location of loop-value%} to location of loop-value
+                                        set {Summervine.place::%location of loop-value%} to true
+                                        set {Summervine.num::%location of loop-value%} to {Summervine.num::%location of event-block%} - 1
+                                        set loop-value to persistent azalea leaves
+                                        exit loop
+                            else if block 2 meter below loop-value is solid:
+                                if {Summervine.place::%location of block 3 meters below loop-value%} is not true:
+                                    chance of 20%:
+                                        set {Summervine.num::%location of event-block%} to {Summervine.num::%location of event-block%} - 1
+                                        set {Summervine.loc::%location of loop-value%} to location of loop-value
+                                        set {Summervine.place::%location of loop-value%} to true
+                                        set {Summervine.num::%location of loop-value%} to {Summervine.num::%location of event-block%} - 1
+                                        set loop-value to persistent azalea leaves
+                                        exit loop
+            
+every 1 minute:
+    loop {Summervine.loc::*}:
+        if chunk at loop-value is loaded:
+            chance of 5%:
+                if block at loop-value is azalea leaves:
+                    if block above loop-value is air:
+                        loop all blocks in radius 2 of loop-value:
+                            if {Summervine.place::%location of loop-value-2%} is true:
+                                if loop-value-2 is flowering azalea leaves:
+                                    set {_g1} to true
+                        if {_g1} is true:
+                            clear {_g1}
+                            continue loop
+                        set block at loop-value to persistent flowering azalea leaves
+                        continue loop
+                if block at loop-value is flowering azalea leaves:
+                    if block above loop-value is air:
+                        loop all blocks in radius 3 of loop-value:
+                            if {SummervineGrape.place::%location of loop-value-2%} is true:
+                                set {_g2} to true
+                        if {_g2} is true:
+                            clear {_g2}
+                            continue loop
+                        set block at loop-value to persistent azalea leaves
+                        set block above loop-value to player head
+                        set {_b} to block above loop-value
+                        add "{SkullOwner:{Id:[I;440871046,979259357,-1150162889,656058295],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2U4MGM3M2I3NjVkOWYyZTJhMWFlNmQ5ZGY5NmM1ZmJjNjEyNmVlNTRmOWRmMGE0NmJiMWYwMGVmMGIwMjc5ZSJ9fX0=""}]}}}" to nbt of {_b}
+                        set block at location above loop-value to {_b}
+                        set {SummervineGrape.loc::%location above loop-value%} to location above loop-value
+                        set {SummervineGrape.place::%location above loop-value%} to true
+                        
+
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""SummervineGrapes""":
+        cancel event
+        if player's food level < 10:
+            if player's food level >= 9:
+                set player's food level to 10
+            if player's saturation >= 8:
+                set saturation of player to 20
+            else if player's food level < 9:
+                set player's food level to 1 + player's food level
+            else if player's saturation < 8:
+                set saturation of player to 12 + player's saturation
+            remove 1 of player's held item from player's held item
+
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""SummervineSoda""":
+        cancel event
+        if player's food level >= 6:
+            set player's food level to 10
+        if player's saturation >= 4:
+            set saturation of player to 20
+        else if player's food level < 6:
+            set player's food level to 4 + player's food level
+        else if player's saturation < 4:
+            set saturation of player to 16 + player's saturation
+        remove 1 of player's held item from player's held item
+
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""SpikedSummervineSoda""":
+        cancel event
+        if player's food level >= 6:
+            set player's food level to 10
+        if player's saturation >= 4:
+            set saturation of player to 20
+        else if player's food level < 6:
+            set player's food level to 4 + player's food level
+        else if player's saturation < 4:
+            set saturation of player to 16 + player's saturation
+        remove 1 of player's held item from player's held item 
+        if uncolored line 9 of lore of event-item contains "Spiked with: Lepus' Brew":
+            if {numbness::%player%} is not true:
+                wait 1 tick
+                set {numbness::%player%} to true
+                set {numbness.time::%player%} to 60
+                send "&7[&f!&7] &fYou have obtained numbness for 1 minute!"
+                apply resistance 3 to player for 1 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Water Breathing":
+            wait 1 tick
+            apply water breathing to player for 3 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Water Breathing":
+            wait 1 tick
+            apply water breathing to player for 8 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Night Vision":
+            wait 1 tick
+            apply night vision to player for 3 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Night Vision":
+            wait 1 tick
+            apply night vision to player for 8 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Invisibility":
+            wait 1 tick
+            apply invisibility to player for 3 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Invisibility":
+            wait 1 tick
+            apply invisibility to player for 8 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Leaping":
+            wait 1 tick
+            apply jump boost to player for 3 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Leaping":
+            wait 1 tick
+            apply jump boost to player for 8 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Strong Leaping":
+            wait 1 tick
+            apply jump boost 2 to player for 1.5 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Swiftness":
+            wait 1 tick
+            apply swiftness to player for 3 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Swiftness":
+            wait 1 tick
+            apply swiftness to player for 8 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Strong Swiftness":
+            wait 1 tick
+            apply swiftness 2 to player for 1.5 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Fire Resistance":
+            wait 1 tick
+            apply fire resistance to player for 3 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Fire Resistance":
+            wait 1 tick
+            apply fire resistance to player for 8 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Turtle Master":
+            wait 1 tick
+            apply slowness 4 to player for 40 seconds
+            apply resistance 3 to player for 40 seconds
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Turtle Master":
+            wait 1 tick
+            apply slowness 4 to player for 40 seconds
+            apply resistance 3 to player for 40 seconds
+        if uncolored line 9 of lore of event-item contains "Spiked with: Strong Turtle Master":
+            wait 1 tick
+            apply slowness 6 to player for 20 seconds
+            apply resistance 4 to player for 20 seconds
+        if uncolored line 9 of lore of event-item contains "Spiked with: Healing":
+            wait 1 tick
+            add 2 to player's health
+        if uncolored line 9 of lore of event-item contains "Spiked with: Strong Healing":
+            wait 1 tick
+            add 4 to player's health
+        if uncolored line 9 of lore of event-item contains "Spiked with: Regeneration":
+            wait 1 tick
+            apply regeneration to player for 45 seconds
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Regeneration":
+            wait 1 tick
+            apply regeneration to player for 90 seconds
+        if uncolored line 9 of lore of event-item contains "Spiked with: Strong Regeneration":
+            wait 1 tick
+            apply regeneration 2 to player for 22 seconds
+        if uncolored line 9 of lore of event-item contains "Spiked with: Strength":
+            wait 1 tick
+            apply strength to player for 3 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Strength":
+            wait 1 tick
+            apply strength to player for 8 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Strong Strength":
+            wait 1 tick
+            apply strength 2 to player for 1.5 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Slow Falling":
+            wait 1 tick
+            apply slow falling to player for 1.5 minutes
+        if uncolored line 9 of lore of event-item contains "Spiked with: Long Slow Falling":
+            wait 1 tick
+            apply slow falling to player for 4 minutes

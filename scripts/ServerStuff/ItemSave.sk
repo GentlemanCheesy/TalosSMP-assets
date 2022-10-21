@@ -1,0 +1,73 @@
+command /itemsave <text>:
+    usage: /itemsave
+    permission: admin.itemsave
+    executable by: players
+    trigger:
+        if arg-1 is not set:
+            send "&cPlease specify an item ID for your held item."
+        else:
+            if {saveditems::%arg-1%} does not contain player's held item:
+                set {saveditems::%arg-1%} to player's held item
+            if {itemlist::%arg-1%} does not contain arg-1:
+                set  {itemlist::*} to {itemlist::*} and arg-1
+                send "&aSaved!"
+            else:
+                send "&cThis already exists somewhere!"
+
+command /itemdelete <text>:
+    usage: /itemdelete
+    permission: admin.itemdelete
+    executable by: players
+    trigger:
+        delete {saveditems::%arg-1%}
+        remove arg-1 from {itemlist::*}
+        send "&aRemoved!"
+
+command /itemgive <text>:
+    usage: /itemgive
+    permission: admin.itemgive
+    executable by: players
+    trigger:
+        if arg-1 is not set:
+            send "&cPlease specify an item ID to give."
+        else:
+            give 1 of {saveditems::%arg-1%} to player
+            send "&aDone!"
+
+command /setnbt <text>:
+    usage: /setnbt
+    permission: admin.setnbt
+    executable by: players
+    trigger:
+        add "{CheesyCraft:%arg-1%}" to nbt of player's held item
+        send "&aDone!"
+
+command /setdmg <num>:
+    usage: /setdmg
+    permission: admin.setdmg
+    executable by: players
+    trigger:
+        add "{BaseDamage:%arg-1%}" to nbt of player's held item
+        send "&aDone!"
+
+command /nbt:
+    usage: /nbt
+    permission: admin.nbt
+    executable by: players
+    trigger:
+        send "%nbt of player's held item%"
+
+command /clearmodeldata:
+    usage: /clearmodeldata
+    permission: admin.clearmodeldata
+    executable by: players
+    trigger:
+        delete custom model data of player's tool
+        send "&aDone!"
+
+command /itemlist:
+    usage: /itemlist
+    permission: admin.itemlist
+    executable by: players
+    trigger:
+        send "%{itemlist::*}%"

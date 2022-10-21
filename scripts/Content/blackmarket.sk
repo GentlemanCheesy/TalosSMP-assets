@@ -1,0 +1,658 @@
+on place of player head or player wall head:
+    if nbt of player's held item contains "CheesyCraft:""Impossibark""":
+        cancel event
+
+every 1 second:
+    loop all players:
+        if type of loop-player's current inventory is smithing inventory:
+            if slot 0 of loop-player's current inventory is a axe:
+                if nbt of slot 0 of loop-player's current inventory contains "Skill:""NaturesBane""":
+                    continue
+                if 1 of slot 1 of loop-player's current inventory is {saveditems::Impossibark}:
+                    set {_i} to slot 0 of loop-player's current inventory
+                    add "" and "%line 5 of lore of {saveditems::Impossibark}%" and "%line 6 of lore of {saveditems::Impossibark}%" and "%line 7 of lore of {saveditems::Impossibark}%" and "%line 8 of lore of {saveditems::Impossibark}%" and "%line 9 of lore of {saveditems::Impossibark}%" to lore of {_i}
+                    add "{NaturesBane:True}" to nbt of {_i}
+                    set slot 2 of loop-player's current inventory to {_i}
+                    
+on mine of any logs or any leaves:
+    if player's tool is not shulker box:
+        if nbt of player's tool contains "NaturesBane:1":
+            chance of 50%:
+                loop all blocks in radius 1 of event-block:
+                    if loop-block is any logs or any leaves:
+                        if {slimefun.blocks::%loop-block's location%} is not true:
+                            if loop-block's location is not event-block's location:
+                                if block hardness of loop-block > -1:
+                                    add loop-block's location to {_loc::*}
+                set {_l} to random element out of {_loc::*}  
+                if nbt of player's tool contains "Skill:""DigestiveAlchemy""":
+                    set block at location of {_l} to air
+                    chance of 6%:
+                        set {_random} to a random integer between 1 and 125
+                        if {_random} is 1:
+                            drop turtle helmet at {_l}
+                        if {_random} is 2:
+                            drop dragon breath at {_l}
+                        if {_random} is between 2 and 6:
+                            drop magma cream at {_l}
+                        if {_random} is between 7 and 11:
+                            drop ghast tear at {_l}
+                        if {_random} is between 12 and 16:
+                            drop phantom membrane at {_l}
+                        if {_random} is between 17 and 21:
+                            drop blaze powder at {_l}
+                        if {_random} is between 22 and 26:
+                            drop nether wart at {_l}
+                        if {_random} is between 27 and 33:
+                            drop golden carrot at {_l}
+                        if {_random} is between 34 and 40:
+                            drop rabbit foot at {_l}
+                        if {_random} is between 41 and 47:
+                            drop gunpowder at {_l}
+                        if {_random} is between 48 and 60:
+                            drop glowstone dust at {_l}
+                        if {_random} is between 61 and 73:
+                            drop redstone dust at {_l}
+                        if {_random} is between 74 and 86:
+                            drop sugar at {_l}
+                        if {_random} is between 87 and 99:
+                            drop fermented spider eye at {_l}
+                        if {_random} is between 100 and 112:
+                            drop spider eye at {_l}
+                        if {_random} is between 113 and 125:
+                            drop pufferfish at {_l}
+                else:
+                    break block at {_l} naturally using player's tool
+                clear {_loc::*}
+            wait 1 tick
+            while {_l} is set:
+                wait 1 tick
+                chance of 50%:
+                    loop all blocks in radius 1 of {_l}:
+                        if loop-block is any logs or any leaves:
+                            if {slimefun.blocks::%loop-block's location%} is not true:
+                                if loop-block's location is not {_l}:
+                                    if block hardness of loop-block > -1:
+                                        add loop-block's location to {_loc::*}
+                    set {_l} to random element out of {_loc::*}  
+                    clear {_loc::*}  
+                    if nbt of player's tool contains "Skill:""DigestiveAlchemy""":
+                        set block at location of {_l} to air
+                        chance of 6%:
+                            set {_random} to a random integer between 1 and 125
+                            if {_random} is 1:
+                                drop turtle helmet at {_l}
+                            if {_random} is 2:
+                                drop dragon breath at {_l}
+                            if {_random} is between 2 and 6:
+                                drop magma cream at {_l}
+                            if {_random} is between 7 and 11:
+                                drop ghast tear at {_l}
+                            if {_random} is between 12 and 16:
+                                drop phantom membrane at {_l}
+                            if {_random} is between 17 and 21:
+                                drop blaze powder at {_l}
+                            if {_random} is between 22 and 26:
+                                drop nether wart at {_l}
+                            if {_random} is between 27 and 33:
+                                drop golden carrot at {_l}
+                            if {_random} is between 34 and 40:
+                                drop rabbit foot at {_l}
+                            if {_random} is between 41 and 47:
+                                drop gunpowder at {_l}
+                            if {_random} is between 48 and 60:
+                                drop glowstone dust at {_l}
+                            if {_random} is between 61 and 73:
+                                drop redstone dust at {_l}
+                            if {_random} is between 74 and 86:
+                                drop sugar at {_l}
+                            if {_random} is between 87 and 99:
+                                drop fermented spider eye at {_l}
+                            if {_random} is between 100 and 112:
+                                drop spider eye at {_l}
+                            if {_random} is between 113 and 125:
+                                drop pufferfish at {_l}
+                    else:
+                        break block at {_l} naturally using player's tool
+                else:
+                    clear {_l}
+                    clear {_loc::*} 
+        
+on place of player head or player wall head:
+    if nbt of player's held item contains "CheesyCraft:""Spongewich""":
+        cancel event
+        
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""Spongewich""":
+        if item amount of event-item = 1:
+            cancel event
+            if uncoloured line 10 of player's held item's lore contains "Moist":
+                add "{Water:0}" to nbt of player's held item
+                set line 10 of lore of player's held item to "&7Status: &fDry"
+                if player's food level >= 5:
+                    set player's food level to 10
+                if player's saturation >= 10:
+                    set saturation of player to 20
+                else if player's food level < 5:
+                    set player's food level to 5 + player's food level
+                else if player's saturation < 10:
+                    set saturation of player to 10 + player's saturation
+            if uncoloured line 10 of player's held item's lore contains "Wet":
+                add "{Water:0}" to nbt of player's held item
+                set line 10 of lore of player's held item to "&7Status: &fDry"
+                if player's food level >= 4:
+                    set player's food level to 10
+                if player's saturation >= 12:
+                    set saturation of player to 20
+                else if player's food level < 4:
+                    set player's food level to 6 + player's food level
+                else if player's saturation < 12:
+                    set saturation of player to 8 + player's saturation
+            if uncoloured line 10 of player's held item's lore contains "Soggy":
+                add "{Water:0}" to nbt of player's held item
+                if player's world is "world_nether":
+                    set line 10 of lore of player's held item to "&7Status: &fDry"
+                if player's world is not "World2_nether":
+                    remove 1 of player's held item from player's held item
+                if player's food level >= 4:
+                    set player's food level to 10
+                if player's saturation >= 12:
+                    set saturation of player to 20
+                else if player's food level < 4:
+                    set player's food level to 6 + player's food level
+                else if player's saturation < 12:
+                    set saturation of player to 8 + player's saturation
+        
+every 1 second:
+    loop all players:
+        loop all items in loop-player's inventory:
+            if loop-item is not shulker box:
+                if nbt of loop-item contains "CheesyCraft:""Spongewich""":
+                    if item amount of loop-item = 1:
+                        if nbt of loop-item does not contain "Water:":
+                            add "{Water:0}" to nbt of loop-item
+                        if loop-player is in water:
+                            if nbt of loop-item contain "Water:":
+                                set {_value} to tag "Water" of nbt of loop-item
+                                if {_value} < 20:
+                                    add 1 to {_value}
+                                    if {_value} >= 0:
+                                        set line 10 of lore of loop-item to "&7Status: &fDry"
+                                    if {_value} >= 10:
+                                        set line 10 of lore of loop-item to "&7Status: &eMoist"
+                                    if {_value} >= 15:
+                                        set line 10 of lore of loop-item to "&7Status: &aWet"
+                                    if {_value} is 20:
+                                        set line 10 of lore of loop-item to "&7Status: &cSoggy"
+                                add "{Water:%{_value}%}" to nbt of loop-item
+                        else if loop-player is in rain:
+                            if nbt of loop-item contain "Water:":
+                                set {_value} to tag "Water" of nbt of loop-item
+                                if {_value} < 20:
+                                    add 1 to {_value}
+                                    if {_value} >= 0:
+                                        set line 10 of lore of loop-item to "&7Status: &fDry"
+                                    if {_value} >= 10:
+                                        set line 10 of lore of loop-item to "&7Status: &eMoist"
+                                    if {_value} >= 15:
+                                        set line 10 of lore of loop-item to "&7Status: &aWet"
+                                    if {_value} is 20:
+                                        set line 10 of lore of loop-item to "&7Status: &cSoggy"
+                                add "{Water:%{_value}%}" to nbt of loop-item
+                        
+on join:
+    wait 3 ticks
+    while player is online:
+        wait 1 second
+        loop all items in player's inventory:
+            if nbt of loop-item contains "CheesyCraft:""Spongewich""":
+                if item amount of loop-item = 1:
+                    if nbt of loop-item does not contain "ItemNumID" and "PublicBukkitValues":
+                        add 1 to {num::Spongewich}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::Spongewich}%}}" to nbt of loop-item
+                    if nbt of loop-item contains "{PublicBukkitValues: {""ItemNumID"": 0}}":
+                        add 1 to {num::Spongewich}
+                        add "{PublicBukkitValues: {""ItemNumID"": %{num::Spongewich}%}}" to nbt of loop-item
+                    
+on citizen right click:
+    if citizen is named "Frisky Fellow":
+        create a gui with virtual chest inventory with 3 rows named "&8Frisky's Wares" and shape "xxxxyxxxx", "x---a---x", and "xxxxxxxxx":
+            make gui slot "x" with gray stained glass pane named " "
+            make gui slot "y" with {saveditems::Frisky}
+            make gui slot "-" with air
+            make gui slot "a" with {saveditems::Weeklydeal16}:
+                if {rewindtime::%player's uuid%} is not set:
+                    if player has enough space for {saveditems::RewindTime}:
+                        close the player's inventory
+                        give player {saveditems::RewindTime}
+                        set {rewindtime::%player's uuid%} to true
+                    else:
+                        send "&cYou don't have a inventory slot available!"
+            #make gui slot "a" with {saveditems::Weeklyquest5}:
+             #   if {quest5::%player%} is not false:
+              #      set {quest5::%player%} to false
+               #     if {quest5.num::%player%} is not set:
+                #        set {quest5.num::%player%} to 0
+                 #   close the player's inventory
+                  #  send title "&6Accepted Quest!" with subtitle "&eKill 80 Blazes." to player for 5 seconds with fadein 1 second and fade out 3 second
+                   # play sound "BLOCK_NOTE_BLOCK_PLING" with volume 1 and pitch 1 to player
+                    #stop
+            #if {quest5::%player%} is false:
+             #   set {_l::*} to lore of {saveditems::Weeklyquest5}
+              #  make gui slot "a" with {saveditems::Weeklyquest5} with lore {_l::*} and "" and "&7%{quest5.num::%player%}% &8/ &780 Blazes Killed.":
+               #     if {quest5.num::%player%} >= 80:
+                #        if player has enough space for {saveditems::Firebrand}:
+                 #           give player {saveditems::Firebrand}
+                  #          clear {quest5::%player%}
+                   #         add -80 to {quest5.num::%player%}
+                    #        close the player's inventory
+                     #       play sound "ENTITY_PLAYER_LEVELUP" with volume 1 and pitch 1 to player
+                      #  else:
+                       #     send "&cYou don't have a inventory slot available!"
+        open the last gui for the player
+        
+on death:
+    if victim is blaze:
+        if {quest5::%attacker%} is false:
+            add 1 to {quest5.num::%attacker%}
+        
+on damage of player:
+    if attacker is set:
+        victim is blocking:
+            if nbt of victim's tool contains "CheesyCraft:""SlimeShield""":
+                if victim's offhand tool is not shulker box:
+                    if {cooldown.bouncy::%victim%} is not set:
+                        set {cooldown.bouncy::%victim%} to now
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                    if difference between {cooldown.bouncy::%victim%} and now > 5 seconds:
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                        set {cooldown.bouncy::%victim%} to now
+                    if attacker is player:
+                        chance of 5%:
+                            set {_n} to a random integer between 1 and 9
+                            set attacker's selected hotbar slot to slot {_n} of attacker
+                    else:
+                        if attacker's tool is set:
+                            chance of 5%:
+                                drop attacker's tool at location of attacker
+                                set attacker's tool to air
+            else if nbt of victim's offhand tool contains "CheesyCraft:""SlimeShield""":
+                if victim's offhand tool is not shulker box:
+                    if {cooldown.bouncy::%victim%} is not set:
+                        set {cooldown.bouncy::%victim%} to now
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                    if difference between {cooldown.bouncy::%victim%} and now > 5 seconds:
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                        set {cooldown.bouncy::%victim%} to now
+                    if attacker is player:
+                        chance of 5%:
+                            set {_n} to a random integer between 1 and 9
+                            set attacker's selected hotbar slot to slot {_n} of attacker
+                    else:
+                        if attacker's tool is set:
+                            chance of 5%:
+                                drop attacker's tool at location of attacker
+                                set attacker's tool to air
+                    
+on damage of player:
+    victim is blocking:
+        if nbt of victim's tool contains "CheesyCraft:""SlimeShieldPlus""":
+            if victim's offhand tool is not shulker box:
+                if damage cause is attack or projectile or sweep attack:
+                    if {cooldown.bouncy::%victim%} is not set:
+                        set {cooldown.bouncy::%victim%} to now
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                    if difference between {cooldown.bouncy::%victim%} and now > 1 second:
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                        set {cooldown.bouncy::%victim%} to now
+                    if attacker is player:
+                        chance of 5%:
+                            set {_n} to a random integer between 1 and 9
+                            set attacker's selected hotbar slot to slot {_n} of attacker
+                    else:
+                        if attacker's tool is set:
+                            chance of 5%:
+                                drop attacker's tool at location of attacker
+                                set attacker's tool to air
+        else if nbt of victim's offhand tool contains "CheesyCraft:""SlimeShieldPlus""":
+            if victim's offhand tool is not shulker box:
+                if damage cause is attack or projectile or sweep attack:
+                    if {cooldown.bouncy::%victim%} is not set:
+                        set {cooldown.bouncy::%victim%} to now
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                    if difference between {cooldown.bouncy::%victim%} and now > 1 second:
+                        set {_loc1} to location of victim
+                        set {_loc2} to location of attacker
+                        set y-coordinate of {_loc1} to 1
+                        set y-coordinate of {_loc2} to 1
+                        push attacker (direction from {_loc1} to {_loc2}) at speed 3
+                        set {cooldown.bouncy::%victim%} to now
+                    if attacker is player:
+                        chance of 5%:
+                            set {_n} to a random integer between 1 and 9
+                            set attacker's selected hotbar slot to slot {_n} of attacker
+                    else:
+                        if attacker's tool is set:
+                            chance of 5%:
+                                drop attacker's tool at location of attacker
+                                set attacker's tool to air
+                        
+on join:
+    wait 3 ticks
+    while player is online:
+        wait 1 second
+        loop all items in player's inventory:
+            if nbt of loop-item contains "CheesyCraft:""PiggyBank""":
+                if nbt of loop-item does not contain "ItemNumID" and "PublicBukkitValues":
+                    add 1 to {num::PiggyBank}
+                    add "{PublicBukkitValues: {""ItemNumID"": %{num::PiggyBank}%}}" to nbt of loop-item
+                if nbt of loop-item contains "{PublicBukkitValues: {""ItemNumID"": 0}}":
+                    add 1 to {num::PiggyBank}
+                    add "{PublicBukkitValues: {""ItemNumID"": %{num::PiggyBank}%}}" to nbt of loop-item
+                            
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""PiggyBank""":
+        cancel event
+        set {_value} to tag "PublicBukkitValues;ItemNumID" of nbt of player's held item
+        loop {piggybankinv.%{_value}%::*}:
+            add 1 to {_num}
+        if {_num} > 1:
+            add "{Opened:""True""}" to nbt of player's held item
+        if {_num} = 1:
+            add "{Opened:""False""}" to nbt of player's held item
+        if player's inventory can hold {piggybankinv.%{_value}%::%{_num}%}:
+            add {piggybankinv.%{_value}%::%{_num}%} to player's inventory
+            delete {piggybankinv.%{_value}%::%{_num}%}
+        else:
+            drop {piggybankinv.%{_value}%::%{_num}%} at player
+            delete {piggybankinv.%{_value}%::%{_num}%}
+                            
+on left click with player head:
+    if nbt of player's held item contains "CheesyCraft:""PiggyBank""":
+        cancel event
+        set {_value} to tag "PublicBukkitValues;ItemNumID" of nbt of player's held item
+        loop {piggybankinv.%{_value}%::*}:
+            if player's inventory can hold loop-value:
+                add loop-value to player's inventory
+                delete {piggybankinv.%{_value}%::%loop-index%}
+            else:
+                if {_num} >= 100:
+                    stop
+                drop loop-value at player
+                add 1 to {_num}
+                delete {piggybankinv.%{_value}%::%loop-index%}
+        add "{Opened:""False""}" to nbt of player's held item
+        
+on inventory click:
+    if event-item is player head:
+        if nbt of event-item contains "CheesyCraft:""PiggyBank""":
+            if cursor slot of player is not air:
+                if nbt of event-item does not contain "Opened:""True""":
+                    cancel event
+                    set {_value} to tag "PublicBukkitValues;ItemNumID" of nbt of event-item
+                    if {piggybankinv.%{_value}%::*} is not set:
+                        set {piggybankinv.%{_value}%::1} to cursor slot of player
+                        remove cursor slot of player from cursor slot of player
+                        stop
+                    else:
+                        add cursor slot of player to {piggybankinv.%{_value}%::*}
+                        remove cursor slot of player from cursor slot of player
+                        
+on shoot:
+    if nbt of projectile contains "11023595":
+        set {loc.polarityarrow::%event-projectile%} to location of projectile
+        
+on projectile hit:
+    if nbt of projectile contains "11023595":
+        if event-block is set:
+            loop all dropped items in radius 5 around location of event-block:
+                set {_loc1} to loop-entity's location
+                set {_loc2} to {loc.polarityarrow::%event-projectile%}
+                push loop-value (direction from {_loc1} to {_loc2}) at speed 1.35
+            delete projectile
+            drop {saveditems::PolarityArrow}
+            
+on damage:
+    if nbt of projectile contains "11023595":
+        set {_loc1} to victim's location
+        set {_loc2} to {loc.polarityarrow::%event-projectile%}
+        push victim (direction from {_loc1} to {_loc2}) at speed 3
+        if {drop::%event-projectile%} is not true:
+            drop {saveditems::PolarityArrow}
+            set {drop::%event-projectile%} to true
+        
+on entity knockback:
+    if nbt of projectile contains "Duration:20,Id:26b":
+        cancel event
+
+on place of player head or player wall head:
+    if nbt of player's held item contain "CheesyCraft:""HoglinBank""":
+        set {HoglinBank.place::%event-block's location%} to true
+        set {HoglinBank.location::%event-block's location%} to event-block's location
+        
+on place of player head or player wall head:
+    if nbt of player's held item contain "CheesyCraft:""RewindTime""":
+        cancel event
+
+on break of player head or player wall head:
+    if {HoglinBank.place::%event-block's location%} is true:
+        loop {hoglininv.%event-block's location%::*}:
+            if player's inventory can hold loop-value:
+                add loop-value to player's inventory
+                delete {hoglininv.%event-block's location%::%loop-index%}
+            else:
+                if {_num} >= 100:
+                    cancel event
+                    stop
+                drop loop-value at event-block
+                add 1 to {_num}
+                delete {hoglininv.%event-block's location%::%loop-index%}
+        cancel the drops
+        clear {HoglinBank.place::%event-block's location%}
+        clear {HoglinBank.location::%event-block's location%}
+        clear {HoglinBank.open::%event-block's location%}
+        drop {saveditems::HoglinBank}
+        
+on left click:
+    if {HoglinBank.place::%event-block's location%} is true:
+        if event-player can build at location of event-block:
+            if player is not sneaking:
+                loop {hoglininv.%event-block's location%::*}:
+                    add 1 to {_num}
+                if {_num} > 1:
+                    set {HoglinBank.open::%event-block's location%} to true
+                if {_num} = 1:
+                    set {HoglinBank.open::%event-block's location%} to false
+                if player's inventory can hold {hoglininv.%event-block's location%::%{_num}%}:
+                    add {hoglininv.%event-block's location%::%{_num}%} to player's inventory
+                    delete {hoglininv.%event-block's location%::%{_num}%}
+                else:
+                    drop {hoglininv.%event-block's location%::%{_num}%} at block above event-block
+                    delete {hoglininv.%event-block's location%::%{_num}%}
+            else:
+                loop {hoglininv.%event-block's location%::*}:
+                    if player's inventory can hold loop-value:
+                        add loop-value to player's inventory
+                        delete {hoglininv.%event-block's location%::%loop-index%}
+                    else:
+                        if {_num} >= 100:
+                            stop
+                        drop loop-value at event-block
+                        add 1 to {_num}
+                        delete {hoglininv.%event-block's location%::%loop-index%}
+        
+on right click:
+    if {HoglinBank.place::%event-block's location%} is true:
+        if event-player can build at location of event-block:
+            if player is not sneaking:
+                if {HoglinBank.open::%event-block's location%} is not true:
+                    cancel event
+                    if {hoglininv.%event-block's location%::*} is not set:
+                        set {hoglininv.%event-block's location%::1} to player's held item
+                        remove player's held item from player's held item
+                        stop
+                    else:
+                        add player's held item to {hoglininv.%event-block's location%::*}
+                        remove player's held item from player's held item
+                    
+every 1 second:
+    loop {HoglinBank.location::*}:
+        if chunk at loop-value is loaded:
+            if block above loop-value-1 is hopper:
+                if block data tag "facing" of block above loop-value is "down":
+                    if {HoglinBank.open::%loop-value%} is not true:
+                        loop all items in inventory of block above loop-value-1:
+                            if {hoglininv.%loop-value-1%::*} is not set:
+                                set {hoglininv.%loop-value-1%::1} to loop-value-2
+                                remove loop-value-2 from inventory of block above loop-value-1
+                                exit loop
+                            else:
+                                add loop-value-2 to {hoglininv.%loop-value-1%::*}
+                                remove loop-value-2 from inventory of block above loop-value-1
+                                exit loop
+            if block below loop-value is hopper:
+                if check [block below loop-value is not redstone powered]->[block below loop-value is not indirectly redstone powered]:
+                    loop {hoglininv.%loop-value%::*}:
+                        add 1 to {_num}
+                    if {_num} > 1:
+                        set {HoglinBank.open::%loop-value%} to true
+                    if {_num} = 1:
+                        set {HoglinBank.open::%loop-value%} to false
+                    if block below loop-value can hold {hoglininv.%loop-value%::%{_num}%}:
+                        add {hoglininv.%loop-value%::%{_num}%} to inventory of block below loop-value
+                        delete {hoglininv.%loop-value%::%{_num}%}
+              
+on place:
+    if player's tool is not shulker box:
+        if nbt of player's held item contains "CheesyCraft:""Firebrand""":
+            cancel event
+        if nbt of player's held item contains "CheesyCraft:""Thunderhand""":
+            cancel event
+              
+on shoot:
+    if nbt of shooter's held item contains """Firebrand""" and "PublicBukkitValues":
+        set {firebrand::%event-projectile%} to light level of location of shooter
+                        
+on damage:
+    if nbt of attacker's held item contains """Firebrand""" and "PublicBukkitValues":
+        if damage cause is attack:
+            set {_n} to (light level of location of attacker / 4)
+            add {_n} to damage
+    if {firebrand::%event-projectile%} is set:
+        set {_n} to ({firebrand::%event-projectile%} / 4)
+        add {_n} to damage
+        delete {firebrand::%event-projectile%}
+        
+on piston extend:
+    wait 1 tick
+    if block data tag "facing" of event-block is "down":
+        if moved blocks is not set:
+            if block 2 meters below event-block is smithing table:
+                loop dropped items in radius 1 of location 1 meter below event-block:
+                    set {_i} to item of loop-value 
+                    if {_i} is weapon item:
+                        if nbt of {_i} contains """Firebrand""" and "PublicBukkitValues":
+                            continue
+                        else:
+                            loop dropped items in radius 1 of location 1 meter below event-block:
+                                set {_i2} to item of loop-value-2
+                                if 1 of {_i2} is {saveditems::Firebrand}:
+                                    add "" and "%line 5 of lore of {saveditems::Firebrand}%" and "%line 6 of lore of {saveditems::Firebrand}%" and "%line 7 of lore of {saveditems::Firebrand}%" and "%line 8 of lore of {saveditems::Firebrand}%" to lore of {_i}
+                                    add "{PublicBukkitValues: {""Skill"": ""Firebrand""}}" to nbt of {_i}
+                                    set item of loop-value-1 to {_i}
+                                    add -1 to item amount of item of loop-value-2
+                                    make a fake explosion at location of loop-value-1
+                                    exit loop
+                    continue
+    
+on lightning:
+    loop all players in radius 50 of location of event-entity:
+        loop all items in loop-player's inventory:
+            if nbt of loop-item contains "CheesyCraft:""Thunderhand""":
+                clear {thunderhand.tier::%loop-player%}
+                clear {thunderhand.potion::%loop-player%}
+                clear {thunderhand2.tier::%loop-player%}
+                clear {thunderhand2.potion::%loop-player%}
+                clear {thunderhand3.tier::%loop-player%}
+                clear {thunderhand3.potion::%loop-player%}
+                set {_tier} to a random integer from 1 to 2
+                set {_potion} to a random element out of {potions::*}
+                set {thunderhand.potion::%loop-player%} to {_potion}
+                set {thunderhand.tier::%loop-player%} to {_tier}
+                
+every 3 seconds:
+    loop all players:
+        if {thunderhand.potion::%loop-player%} is set:
+            if {thunderhand.tier::%loop-player%} is set:
+                apply potion of {thunderhand.potion::%loop-player%} potion of tier {thunderhand.tier::%loop-player%} to loop-player for 3 seconds
+                apply potion of {thunderhand2.potion::%loop-player%} potion of tier {thunderhand2.tier::%loop-player%} to loop-player for 3 seconds
+                apply potion of {thunderhand3.potion::%loop-player%} potion of tier {thunderhand3.tier::%loop-player%} to loop-player for 3 seconds
+                
+on damage:
+    if damage cause is lightning:
+        wait 2 ticks
+        loop all items in victim's inventory:
+            if nbt of loop-item contains "CheesyCraft:""Thunderhand""":
+                clear {thunderhand.tier::%victim%}
+                clear {thunderhand.potion::%victim%}
+                set {_effects::*} to {potions2::*}
+                set {_tier} to a random integer from 1 to 2
+                set {_potion} to a random element out of {_effects::*}
+                remove {_potion} from {_effects::*}
+                set {thunderhand.potion::%victim%} to {_potion}
+                set {thunderhand.tier::%victim%} to {_tier}
+                set {_tier} to a random integer from 1 to 2
+                set {_potion} to a random element out of {_effects::*}
+                remove {_potion} from {_effects::*}
+                set {thunderhand2.potion::%victim%} to {_potion}
+                set {thunderhand2.tier::%victim%} to {_tier}
+                set {_tier} to a random integer from 1 to 2
+                set {_potion} to a random element out of {_effects::*}
+                remove {_potion} from {_effects::*}
+                set {thunderhand3.potion::%victim%} to {_potion}
+                set {thunderhand3.tier::%victim%} to {_tier}
+                
+on consume of milk bucket:
+    clear {thunderhand.tier::%player%}
+    clear {thunderhand.potion::%player%}
+    clear {thunderhand2.tier::%player%}
+    clear {thunderhand2.potion::%player%}
+    clear {thunderhand3.tier::%player%}
+    clear {thunderhand3.potion::%player%}
+    
+on death:
+    clear {thunderhand.tier::%victim%}
+    clear {thunderhand.potion::%victim%}
+    clear {thunderhand2.tier::%victim%}
+    clear {thunderhand2.potion::%victim%}
+    clear {thunderhand3.tier::%victim%}
+    clear {thunderhand3.potion::%victim%}
+        

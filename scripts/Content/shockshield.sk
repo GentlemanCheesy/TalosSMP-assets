@@ -1,0 +1,54 @@
+on damage of player:
+    victim is blocking:
+        if nbt of victim's tool contains "CheesyCraft:""ShockShield""":
+            if attacker is set:
+                set {_value} to tag "CP" of nbt of victim's tool
+                if {_value} + rounded damage <= 800:
+                    set {_num} to {_value} + rounded damage
+                    add "{""CP"": %{_num}%}" to nbt of victim's tool
+                    set line 11 of lore of victim's tool to "&8→ &6⚡ &7800 CP Capacity &8Holding %{_num}% &8CP" 
+        else if nbt of victim's offhand item contains "CheesyCraft:""ShockShield""":
+            if attacker is set:
+                set {_value} to tag "CP" of nbt of victim's offhand item
+                if {_value} + rounded damage <= 800:
+                    set {_num} to {_value} + rounded damage
+                    add "{""CP"": %{_num}%}" to nbt of victim's offhand item
+                    set line 11 of lore of victim's offhand item to "&8→ &6⚡ &7800 CP Capacity &8Holding %{_num}% &8CP" 
+          
+every 2 second:
+    loop all players:
+        if loop-player is sneaking:
+            if nbt of loop-player's held item contains "CheesyCraft:""ShockShield""":
+                if loop-player's held item is shield:
+                    set {_value} to tag "CP" of nbt of loop-player's held item
+                    if {_value} >= 2:
+                        repair loop-player's held item by 2
+                        set {_value} to {_value} - 2
+                        add "{""CP"": %{_value}%}" to nbt of loop-player's held item
+                        if {_value} is 0:
+                            set line 11 of lore of loop-player's held item to "&8→ &6⚡ &7800 CP Capacity"
+                        else:
+                            set line 11 of lore of loop-player's held item to "&8→ &6⚡ &7800 CP Capacity &8Holding %{_value}% &8CP" 
+                        
+                        
+                
+every 1 second:
+    loop {powerbank.location::*}:
+        loop all players in radius 1.5 of loop-value:
+            loop all items in loop-player's inventory:
+                if nbt of loop-item contains "CheesyCraft:""ShockShield""":
+                    if loop-item is shield:
+                        set {_value} to tag "CP" of nbt of loop-item
+                        if {powerbank.power::%loop-value-1%} < {powerbank.powertotal::%loop-value-1%}:
+                            set {_num} to {powerbank.powertotal::%loop-value-1%} - {powerbank.power::%loop-value-1%}
+                            if {_value} > {_num}:
+                                set {_num} to {_value} - {_num}
+                            else:
+                                set {_num} to {_value}
+                            add {_num} to {powerbank.power::%loop-value-1%}
+                            set {_value} to {_value} - {_num}
+                            add "{""CP"": %{_value}%}" to nbt of loop-item
+                            if {_value} is 0:
+                                set line 11 of lore of loop-item to "&8→ &6⚡ &7800 CP Capacity"
+                            else:
+                                set line 11 of lore of loop-item to "&8→ &6⚡ &7800 CP Capacity &8Holding %{_value}% &8CP" 

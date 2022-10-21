@@ -1,0 +1,7 @@
+command /askill:
+    usage: /itemsave
+    permission: admin.askill
+    executable by: players
+    trigger:
+        loop all armor stands in radius 5 around player:
+            delete loop-value

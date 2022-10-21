@@ -1,0 +1,3 @@
+on citizen right click:
+    if citizen is named "Librarian":
+        send "&fI'm still setting up the library. Come back later please!"

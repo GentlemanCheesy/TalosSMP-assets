@@ -1,0 +1,209 @@
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""MossManager""":
+        if nbt of slot 0 of event-inventory contains "_UI_BACKGROUND":
+            if event-inventory's amount of rows is 6:
+                wait 1 tick
+                if player's current inventory's amount of rows is 3:
+                    set slot 26 of player's current inventory to {saveditems::MachineRecipes} with nbt "{CheesyCraft:""MossManagerRecipes""}"
+                    
+on inventory click:
+    if event-item is {saveditems::smithingpress}:
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            cancel event
+                
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""MossManagerRecipes""":
+        if uncolored inventory name of player's current inventory contains "Slimefun Guide":
+            if event-inventory's amount of rows is 3:
+                cancel event
+                set {_i} to slot 0 of player's current inventory
+                close player's inventory
+                create a gui with virtual chest inventory with 5 rows named "Moss Manager Guide":
+                    set {_num::*} to 1, 2, 3, 4, 5, 6, 7, 8, 37, 38, 39, 40, 41, 42, and 43
+                    loop {_num::*}:
+                        make gui slot loop-value with gray stained glass pane named " "
+                    set {_num2::*} to 18, 19, 20, 21, 22, 23, 24, 25, and 26
+                    loop {_num2::*}:
+                        make gui slot loop-value with {saveditems::io}
+                    make gui slot 0 with {_i}:
+                        close player's inventory
+                        make player execute command "/slimefun open_guide"
+                    make gui slot 44 with arrow named "&aNext Page":
+                        set {page::%player%} to 2
+                        wait 2 tick
+                        clear {page::%player%}
+                    make gui slot 36 with gray stained glass pane named " "
+                    make gui slot 9 with moss block
+                    make next gui slot with moss carpet
+                    make next gui slot with azalea
+                    make next gui slot with flowering azalea
+                    make next gui slot with azalea leaves
+                    make next gui slot with flowering azalea leaves
+                    make next gui slot with vines
+                    make next gui slot with mossy cobblestone
+                    make next gui slot with mossy cobblestone stairs
+                    make gui slot 27 with dirt
+                    make next gui slot with white carpet
+                    make next gui slot with oak sapling
+                    make next gui slot with dark oak sapling
+                    make next gui slot with oak leaves
+                    make next gui slot with dark oak leaves
+                    make next gui slot with string
+                    make next gui slot with cobblestone
+                    make next gui slot with cobblestone stairs
+                open the last gui for the player
+                while nbt of slot 0 of player's current inventory contains "slimefun_item":
+                    edit last gui:
+                        if {page::%player%} is 1:
+                            make gui slot 44 with arrow named "&aNext Page":
+                                set {page::%player%} to 2
+                                wait 2 tick
+                                clear {page::%player%}
+                            make gui slot 36 with gray stained glass pane named " "
+                            make gui slot 9 with moss block
+                            make gui slot 10 with moss carpet
+                            make gui slot 11 with azalea
+                            make gui slot 12 with flowering azalea
+                            make gui slot 13 with azalea leaves
+                            make gui slot 14 with flowering azalea leaves
+                            make gui slot 15 with vines
+                            make gui slot 16 with mossy cobblestone
+                            make gui slot 17 with mossy cobblestone stairs
+                            make gui slot 27 with dirt
+                            make gui slot 28 with white carpet
+                            make gui slot 29 with oak sapling
+                            make gui slot 30 with dark oak sapling
+                            make gui slot 31 with oak leaves
+                            make gui slot 32 with dark oak leaves
+                            make gui slot 33 with string
+                            make gui slot 34 with cobblestone
+                            make gui slot 35 with cobblestone stairs
+                        if {page::%player%} is 2:
+                            make gui slot 36 with arrow named "&cBack":
+                                set {page::%player%} to 1
+                                wait 2 tick
+                                clear {page::%player%}
+                            make gui slot 44 with gray stained glass pane named " "
+                            make gui slot 9 with mossy cobblestone slab
+                            make gui slot 10 with mossy cobblestone wall
+                            make gui slot 11 with mossy stone bricks
+                            make gui slot 12 with mossy stone brick stairs
+                            make gui slot 13 with mossy stone brick slab
+                            make gui slot 14 with mossy stone brick wall
+                            make gui slot 15 with air
+                            make gui slot 16 with air
+                            make gui slot 17 with air
+                            make gui slot 27 with cobblestone slab
+                            make gui slot 28 with cobblestone wall
+                            make gui slot 29 with stone bricks
+                            make gui slot 30 with stone brick stairs
+                            make gui slot 31 with stone brick slab
+                            make gui slot 32 with stone brick wall
+                            make gui slot 33 with air
+                            make gui slot 34 with air
+                            make gui slot 35 with air
+                    wait 1 tick
+                
+on inventory open:
+    wait 1 tick
+    if nbt of slot 16 of player's current inventory contains "CheesyCraft:""MossManager""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 3:
+                wait 1 tick
+                set slot 26 of player's current inventory to {saveditems::MachineRecipes} with nbt "{CheesyCraft:""MossManagerRecipes""}"
+                
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""Impasta""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 6:
+                wait 1 tick
+                if event-inventory's amount of rows is 3:
+                    set slot 26 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory open:
+    wait 1 tick
+    if nbt of slot 16 of player's current inventory contains "CheesyCraft:""Impasta""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 3:
+                wait 1 tick
+                set slot 26 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""InfernoLantern""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 6:
+                wait 1 tick
+                if event-inventory's amount of rows is 3:
+                    set slot 26 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory open:
+    wait 1 tick
+    if nbt of slot 16 of player's current inventory contains "CheesyCraft:""InfernoLantern""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 3:
+                wait 1 tick
+                set slot 26 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""CrimsonFlesh""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 6:
+                wait 1 tick
+                if event-inventory's amount of rows is 3:
+                    set slot 26 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory open:
+    wait 1 tick
+    if nbt of slot 16 of player's current inventory contains "CheesyCraft:""CrimsonFlesh""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 3:
+                wait 1 tick
+                set slot 26 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""ScaldingStaff""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 6:
+                wait 1 tick
+                if event-inventory's amount of rows is 3:
+                    set slot 10 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory open:
+    wait 1 tick
+    if nbt of slot 16 of player's current inventory contains "CheesyCraft:""ScaldingStaff""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 3:
+                wait 1 tick
+                set slot 10 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""WarpingFlute""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 6:
+                wait 1 tick
+                if event-inventory's amount of rows is 3:
+                    set slot 10 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory open:
+    wait 1 tick
+    if nbt of slot 16 of player's current inventory contains "CheesyCraft:""WarpingFlute""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 3:
+                wait 1 tick
+                set slot 10 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory click:
+    if nbt of event-item contains "CheesyCraft:""ShockShield""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 6:
+                wait 1 tick
+                if event-inventory's amount of rows is 3:
+                    set slot 10 of player's current inventory to {saveditems::smithingpress}
+                
+on inventory open:
+    wait 1 tick
+    if nbt of slot 16 of player's current inventory contains "CheesyCraft:""ShockShield""":
+        if nbt of slot 0 of player's current inventory contains "slimefun_item":
+            if event-inventory's amount of rows is 3:
+                wait 1 tick
+                set slot 10 of player's current inventory to {saveditems::smithingpress}

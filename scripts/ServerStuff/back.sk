@@ -1,0 +1,46 @@
+on place of cyan terracotta:
+    if nbt of player's held item contains "tp":
+        set {spawntpblock.place::%event-block's location%} to true
+        set {spawntpblock.loc::%event-block's location%} to event-block's location
+        send "test"
+        
+on place of moss block:
+    if nbt of player's held item contains "tp":
+        set {muesumtpblock.place::%event-block's location%} to true
+        set {muesumtpblock.loc::%event-block's location%} to event-block's location
+        send "test"
+
+
+on command "/rules": 
+    if {rulesread::%player%} is not set:
+        set {rulesread::%player%} to true
+
+on player move:
+    if location of block below player is {spawntpblock.loc::%location of block below player%}:
+        if {rulesread::%player%} is true:
+            create a gui with virtual chest inventory with 3 rows named "World Prompt" and shape "xxxxxxxxx", "x---a---x", and "xxxxxxxxx":
+                make gui slot "x" with air
+                make gui slot "-" with air
+                make gui slot "a" with {saveditems::119}:
+                    set {pickup::%player%} to true
+                    make console execute command "cmi back %player%"
+                    wait 10 ticks
+                    make console execute command "cmi warp Overworld2 %player%"
+                    delete {pickup::%player%}
+                    close player's inventory
+            open the last gui for the player
+        else:
+            if {cooldownrules::%player%} is not set:
+                set {cooldownrules::%player%} to now
+                send "&cPlease read /rules first, then try again. Thank you!"
+            if difference between {cooldownrules::%player%} and now >= 5 seconds:
+                send "&cPlease read /rules first, then try again. Thank you!"
+                set {cooldownrules::%player%} to now
+            else:
+                stop
+    if location of block below player is {muesumtpblock.loc::%location of block below player%}:
+        make console execute command "cmi warp Muesum %player%"
+        
+on pick up:
+    if {pickup::%player%} is true:
+        cancel event

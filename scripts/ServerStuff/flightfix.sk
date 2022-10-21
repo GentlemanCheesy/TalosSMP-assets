@@ -1,0 +1,7 @@
+on world change:
+    wait 1 second
+    if player's gamemode is survival:
+        loop all items in player's inventory:
+            if nbt of loop-item contains "slimefun_item" and "ANGEL_GEM":
+                stop
+        set player's flight mode to false

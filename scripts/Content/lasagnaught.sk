@@ -1,0 +1,87 @@
+on right click with player head:
+    if nbt of player's held item contains "CheesyCraft:""Lasagna""":
+        cancel event
+        if player's food level < 10:
+            if player's food level >= 6:
+                set player's food level to 10
+            else if player's food level < 6:
+                set player's food level to 4 + player's food level
+            if player's saturation >= 12:
+                set saturation of player to 20
+            else if player's saturation < 12:
+                set saturation of player to 8 + player's saturation
+            remove 1 of player's held item from player's held item
+            
+on piston extend:
+    wait 1 tick
+    if block data tag "facing" of event-block is "down":
+        if moved blocks is not set:
+            if block 2 meters below event-block is smithing table:
+                loop dropped items in radius 1 of location 1 meter below event-block:
+                    set {_i} to item of loop-value 
+                    if {_i} is armor item:
+                        if nbt of {_i} contains "Skill:""Impasta""":
+                            continue
+                        else:
+                            loop dropped items in radius 1 of location 1 meter below event-block:
+                                set {_i2} to item of loop-value-2
+                                if 1 of {_i2} is {saveditems::Impasta}:
+                                    add "" and "%line 5 of lore of {saveditems::Impasta}%" and "%line 6 of lore of {saveditems::Impasta}%" and "%line 7 of lore of {saveditems::Impasta}%" and "%line 8 of lore of {saveditems::Impasta}%" and "%line 9 of lore of {saveditems::Impasta}%" to lore of {_i}
+                                    add "{Skill:Impasta}" to nbt of {_i}
+                                    set item of loop-value-1 to {_i}
+                                    add -1 to item amount of item of loop-value-2
+                                    make a fake explosion at location of loop-value-1
+                                    exit loop
+                    continue
+                    
+on damage:
+    if attacker is player:
+        if victim is magma cube:
+            if victim's name contains "Lasagnaught":
+                if nbt of attacker's held item contains "CheesyCraft:""PastaPower""" or "CheesyCraft:""LiguineLance""":
+                    if {pastapowerup::%attacker%::pastapowerup} is true:
+                        set damage to damage * 2
+
+on death:
+    if attacker is player:
+        if victim is magma cube:
+            if victim's name contains "Lasagnaught":
+                if nbt of attacker's held item contains "CheesyCraft:""PastaPower""" or "CheesyCraft:""LiguineLance""":
+                    if {pastapowerup::%attacker%::pastapowerup} is true:
+                        add 1 to {expcombo::%attacker%::pastapowerup}
+                        add 10 + (10 * {expcombo::%attacker%::pastapowerup}) to {expbonus::%attacker%::pastapowerup}
+                        
+on right click with any axe or any sword:
+    if nbt of player's held item contains "CheesyCraft:""PastaPower""" or "CheesyCraft:""LiguineLance""":
+        if {pastapowerup::%player%::pastapowerup} is not set:
+            set {pastapowerup::%player%::pastapowerup} to true
+            set {timer::%player%::pastapowerup} to now
+            send "&cYour Lasagnaught damage bonus was activated."
+
+every 1 second:
+    loop all players:
+        if {pastapowerup::%loop-player%::pastapowerup} is true:
+            if difference between {timer::%loop-player%::pastapowerup} and now > 30 seconds:
+                clear {timer::%loop-player%::pastapowerup}
+                clear {pastapowerup::%loop-player%::pastapowerup}
+                give ("%{expbonus::%loop-player%::pastapowerup}% xp" parsed as experience) to loop-player
+                clear {expcombo::%loop-player%::pastapowerup}
+                clear {expbonus::%loop-player%::pastapowerup}
+                send "&cYour Lasagnaught damage bonus wore off." to loop-player
+                
+on item damage:
+    if nbt of event-item contains "CheesyCraft:""SauceSpade""" or "CheesyCraft:""Pastaxe""":
+        if nbt of helmet of player contains "Skill:""Impasta""":
+            add 1 to {_chance}
+        if nbt of chestplate of player contains "Skill:""Impasta""":
+            add 1 to {_chance}
+        if nbt of leggings of player contains "Skill:""Impasta""":
+            add 1 to {_chance}
+        if nbt of boots of player contains "Skill:""Impasta""":
+            add 1 to {_chance}
+        if {_chance} >= 1:
+            set {_chance} to {_chance} * 25
+            chance of {_chance}%:
+                cancel event
+	    
+                

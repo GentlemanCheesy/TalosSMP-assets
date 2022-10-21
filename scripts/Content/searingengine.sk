@@ -1,0 +1,244 @@
+on place of player head or player wall head:
+    if nbt of player's held item contain "CheesyCraft:""SearingEngine""":
+        set {engine.place::%event-block's location%} to true
+        set {engine.location::%event-block's location%} to event-block's location
+        set {engine.burntime::%event-block's location%} to 0
+
+on break of player head or player wall head:
+    if {engine.place::%event-block's location%} is true:
+        cancel the drops
+        clear {engine.place::%event-block's location%}
+        clear {engine.location::%event-block's location%}
+        clear {engine.burntime::%event-block's location%}
+        drop {saveditems::SearingEngine}
+        loop all items in gui with id "SearingEngine.%event-block's location%":
+            if index of loop-item is 0 or 9 or 18 or 13:
+                drop loop-item
+        delete gui with id "SearingEngine.%event-block's location%"
+        
+on right click:
+    if player is not sneaking:
+        if event-player can build at location of event-block:
+            if {engine.place::%event-block's location%} is true:
+                cancel event
+                if gui with id "SearingEngine.%event-block's location%" is not set:
+                    create a gui with id "SearingEngine.%event-block's location%" with virtual chest inventory with 3 rows named "Searing Engine" with shape "xwbooobbb" and "xwboxobfb" and "xwbooobbb":
+                        make gui slot "x" with moveable air
+                        make gui slot "w" with white stained glass pane named "&fMachine Modifiers"
+                        make gui slot "o" with orange stained glass pane named "&6Fuel Input"
+                        make gui slot "b" with gray stained glass pane named " "
+                open gui with id "SearingEngine.%event-block's location%" to player
+                while name of player's current inventory contains "Searing Engine":
+                    if event-block is air:
+                        close player's inventory
+                    wait 1 tick
+    else:
+        if player's held item is air:
+            cancel event
+            
+every 1 second:
+    loop {engine.location::*}:
+        if chunk at loop-value is loaded:
+            if {engine.maxed::%loop-value%} is true:
+                continue
+            loop 19 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 18:
+                    if nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%" contains "RedstoneSwitchMod":
+                        if check [block at loop-value-1 is not redstone powered]->[block at loop-value-1 is not indirectly redstone powered]:
+                            if {engine.burntime::%loop-value-1%} > 0:
+                                set {_b} to block at loop-value-1
+                                add "{SkullOwner:{Id:[I;-525936229,-1109309554,-1800505079,-810933013],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTU4M2FlNGQ2YjhkMDMzZjUyMDVhNzZlYzNhYjZlZWUxNDUzM2YyMzcyNTE4ODk0OWE0ZGFlYjg5NDA5NTk1MSJ9fX0=""}]}}}" to nbt of {_b}
+                                set block at loop-value-1 to {_b}
+                                edit gui with id "SearingEngine.%loop-value-1%":
+                                    make gui slot 16 with blaze powder named "&aFuel Capacity" with lore "" and "&7This Searing Engine has %{engine.burntime::%loop-value-1%}%&7s of fuel left."
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} <= {powerbank.powertotal::%loop-value-3%} - 3:
+                                            add 3 to {powerbank.power::%loop-value-3%}
+                                            add -1 to {engine.burntime::%loop-value-1%}
+                                            exit loop
+                            else:
+                                set {_b} to block at loop-value-1
+                                add "{SkullOwner:{Id:[I;-1679890864,-757643593,-1347758018,-617631129],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2RmZjQ2MTllZDY2Njk0Mzk3OWNjOTI0YjNjZWI0MWZiYWMwOWVlODNlZDhkMzAyMzJkYWRlZmFhNTk3YTNiYyJ9fX0=""}]}}}" to nbt of {_b}
+                                set block at loop-value-1 to {_b}
+                                if slot 13 of gui with id "SearingEngine.%loop-value-1%" is lava bucket:
+                                    set {engine.burntime::%loop-value-1%} to 100
+                                    set slot 13 of gui with id "SearingEngine.%loop-value-1%" to empty bucket
+                                    set {engine.activated::%loop-value-1%} to true
+                                    set {engine.activated2::%loop-value-1%} to true
+                                else:
+                                    edit gui with id "SearingEngine.%loop-value-1%":
+                                        make gui slot 16 with red stained glass pane named "&cFuel Capacity" with lore "" and "&7This Searing Engine has no fuel."
+                        exit loop
+                    else if nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%" contains "RedstoneActivationMod":
+                        if block at loop-value-1 is redstone powered:
+                            if {engine.burntime::%loop-value-1%} > 0:
+                                set {_b} to block at loop-value-1
+                                add "{SkullOwner:{Id:[I;-525936229,-1109309554,-1800505079,-810933013],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTU4M2FlNGQ2YjhkMDMzZjUyMDVhNzZlYzNhYjZlZWUxNDUzM2YyMzcyNTE4ODk0OWE0ZGFlYjg5NDA5NTk1MSJ9fX0=""}]}}}" to nbt of {_b}
+                                set block at loop-value-1 to {_b}
+                                edit gui with id "SearingEngine.%loop-value-1%":
+                                    make gui slot 16 with blaze powder named "&aFuel Capacity" with lore "" and "&7This Searing Engine has %{engine.burntime::%loop-value-1%}%&7s of fuel left."
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} <= {powerbank.powertotal::%loop-value-3%} - 3:
+                                            add 3 to {powerbank.power::%loop-value-3%}
+                                            add -1 to {engine.burntime::%loop-value-1%}
+                                            exit loop
+                            else:
+                                set {_b} to block at loop-value-1
+                                add "{SkullOwner:{Id:[I;-1679890864,-757643593,-1347758018,-617631129],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2RmZjQ2MTllZDY2Njk0Mzk3OWNjOTI0YjNjZWI0MWZiYWMwOWVlODNlZDhkMzAyMzJkYWRlZmFhNTk3YTNiYyJ9fX0=""}]}}}" to nbt of {_b}
+                                set block at loop-value-1 to {_b}
+                                if slot 13 of gui with id "SearingEngine.%loop-value-1%" is lava bucket:
+                                    set {engine.burntime::%loop-value-1%} to 100
+                                    set slot 13 of gui with id "SearingEngine.%loop-value-1%" to empty bucket
+                                    set {engine.activated::%loop-value-1%} to true
+                                    set {engine.activated2::%loop-value-1%} to true
+                                else:
+                                    edit gui with id "SearingEngine.%loop-value-1%":
+                                        make gui slot 16 with red stained glass pane named "&cFuel Capacity" with lore "" and "&7This Searing Engine has no fuel."
+                        if block at loop-value-1 is indirectly redstone powered:
+                            if {engine.burntime::%loop-value-1%} > 0:
+                                set {_b} to block at loop-value-1
+                                add "{SkullOwner:{Id:[I;-525936229,-1109309554,-1800505079,-810933013],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTU4M2FlNGQ2YjhkMDMzZjUyMDVhNzZlYzNhYjZlZWUxNDUzM2YyMzcyNTE4ODk0OWE0ZGFlYjg5NDA5NTk1MSJ9fX0=""}]}}}" to nbt of {_b}
+                                set block at loop-value-1 to {_b}
+                                edit gui with id "SearingEngine.%loop-value-1%":
+                                    make gui slot 16 with blaze powder named "&aFuel Capacity" with lore "" and "&7This Searing Engine has %{engine.burntime::%loop-value-1%}%&7s of fuel left."
+                                loop {powerbank.location::*}:
+                                    set {_c1::*} to region at loop-value-1
+                                    set {_c2::*} to region at loop-value-3
+                                    if {_c1::*} is not {_c2::*}:
+                                        continue
+                                    if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                        if {powerbank.power::%loop-value-3%} <= {powerbank.powertotal::%loop-value-3%} - 3:
+                                            add 3 to {powerbank.power::%loop-value-3%}
+                                            add -1 to {engine.burntime::%loop-value-1%}
+                                            exit loop
+                            else:
+                                set {_b} to block at loop-value-1
+                                add "{SkullOwner:{Id:[I;-1679890864,-757643593,-1347758018,-617631129],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2RmZjQ2MTllZDY2Njk0Mzk3OWNjOTI0YjNjZWI0MWZiYWMwOWVlODNlZDhkMzAyMzJkYWRlZmFhNTk3YTNiYyJ9fX0=""}]}}}" to nbt of {_b}
+                                set block at loop-value-1 to {_b}
+                                if slot 13 of gui with id "SearingEngine.%loop-value-1%" is lava bucket:
+                                    set {engine.burntime::%loop-value-1%} to 100
+                                    set slot 13 of gui with id "SearingEngine.%loop-value-1%" to empty bucket
+                                    set {engine.activated::%loop-value-1%} to true
+                                    set {engine.activated2::%loop-value-1%} to true
+                                else:
+                                    edit gui with id "SearingEngine.%loop-value-1%":
+                                        make gui slot 16 with red stained glass pane named "&cFuel Capacity" with lore "" and "&7This Searing Engine has no fuel."
+                        exit loop
+                    else:
+                        if {engine.burntime::%loop-value-1%} > 0:
+                            set {_b} to block at loop-value-1
+                            add "{SkullOwner:{Id:[I;-525936229,-1109309554,-1800505079,-810933013],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTU4M2FlNGQ2YjhkMDMzZjUyMDVhNzZlYzNhYjZlZWUxNDUzM2YyMzcyNTE4ODk0OWE0ZGFlYjg5NDA5NTk1MSJ9fX0=""}]}}}" to nbt of {_b}
+                            set block at loop-value-1 to {_b}
+                            edit gui with id "SearingEngine.%loop-value-1%":
+                                make gui slot 16 with blaze powder named "&aFuel Capacity" with lore "" and "&7This Searing Engine has %{engine.burntime::%loop-value-1%}%&7s of fuel left."
+                            loop {powerbank.location::*}:
+                                set {_c1::*} to region at loop-value-1
+                                set {_c2::*} to region at loop-value-3
+                                if {_c1::*} is not {_c2::*}:
+                                    continue
+                                if distance between loop-value-1 and loop-value-3 <= {powerbank.range::%loop-value-3%}:
+                                    if {powerbank.power::%loop-value-3%} <= {powerbank.powertotal::%loop-value-3%} - 3:
+                                        add 3 to {powerbank.power::%loop-value-3%}
+                                        add -1 to {engine.burntime::%loop-value-1%}
+                                        exit loop
+                        else:
+                            set {_b} to block at loop-value-1
+                            add "{SkullOwner:{Id:[I;-1679890864,-757643593,-1347758018,-617631129],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2RmZjQ2MTllZDY2Njk0Mzk3OWNjOTI0YjNjZWI0MWZiYWMwOWVlODNlZDhkMzAyMzJkYWRlZmFhNTk3YTNiYyJ9fX0=""}]}}}" to nbt of {_b}
+                            set block at loop-value-1 to {_b}
+                            if slot 13 of gui with id "SearingEngine.%loop-value-1%" is lava bucket:
+                                set {engine.burntime::%loop-value-1%} to 100
+                                set slot 13 of gui with id "SearingEngine.%loop-value-1%" to empty bucket
+                                set {engine.activated::%loop-value-1%} to true
+                                set {engine.activated2::%loop-value-1%} to true
+                            else:
+                                edit gui with id "SearingEngine.%loop-value-1%":
+                                    make gui slot 16 with red stained glass pane named "&cFuel Capacity" with lore "" and "&7This Searing Engine has no fuel."
+                        exit loop
+        
+every 2 ticks:
+    loop {engine.location::*}:
+        if {engine.activated::%loop-value%} is true:
+            if chunk at loop-value is loaded:
+                loop 19 times:
+                    set {_n} to loop-number - 1
+                    if {_n} is 0 or 9 or 18:
+                        if nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%" contains "CheesyCraft:""EcholomaticMod""":
+                            loop all blocks in radius 9 of loop-value-1:
+                                if loop-value-3 is sculk sensor:
+                                    spawn snowball at location of loop-value-3
+                            delete {engine.activated::%loop-value-1%}
+                            exit loop
+                            
+                                            
+every 2 ticks:
+    loop {engine.location::*}:
+        if chunk at loop-value is loaded:
+            loop 6 times:
+                set {_n} to loop-number - 1
+                if {_n} is 3 or 4 or 5:
+                    if nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%" contains "CheesyCraft:""WardstaticMod""":
+                        set {_total} to tag "Total" of nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%"
+                        set {_max} to tag "Max" of nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%"
+                        if {_total} = {_max}:
+                            set {engine.maxed::%loop-value-1%} to true
+                        if {_total} < {_max}:
+                            if {engine.activated2::%loop-value-1%} is true:
+                                add "{Total:%{_total} + 1%}" to nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%"
+                        loop all blocks in radius 1 of loop-value-1:
+                            if loop-value-3 is sculk:
+                                delete {engine.maxed::%loop-value-1%}
+                                add "{Total:0}" to nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%"
+                        delete {engine.activated2::%loop-value-1%}
+                
+every 2 ticks:
+    loop {engine.location::*}:
+        if nbt of slot 3 of gui with id "SearingEngine.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 3 of gui with id "SearingEngine.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 3 of gui with id "SearingEngine.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 4 of gui with id "SearingEngine.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 4 of gui with id "SearingEngine.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 4 of gui with id "SearingEngine.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        if nbt of slot 5 of gui with id "SearingEngine.%loop-value%" contains "CheesyCraft:""WardstaticMod""":
+            set {_total} to tag "Total" of nbt of slot 5 of gui with id "SearingEngine.%loop-value%"
+            set {_max} to tag "Max" of nbt of slot 5 of gui with id "SearingEngine.%loop-value%"
+            if {_total} = {_max}:
+                continue loop
+        delete {engine.maxed::%loop-value%}
+                            
+every 1 second:
+    loop {engine.location::*}:
+        if chunk at loop-value is loaded:
+            loop 19 times:
+                set {_n} to loop-number - 1
+                if {_n} is 0 or 9 or 18:
+                    if nbt of slot {_n} of gui with id "SearingEngine.%loop-value-1%" contains "CheesyCraft:""HopperMod""":
+                        if block above loop-value-1 is hopper:
+                            if block data tag "facing" of block above loop-value-1 is "down":
+                                loop all items in inventory of block above loop-value-1:
+                                    if 1 of loop-value-3 is lava bucket:
+                                        if 1 of slot 13 of gui with id "SearingEngine.%loop-value-1%" is air:
+                                            set {_i} to 1 of loop-value-3
+                                            remove 1 of loop-value-3 from loop-value-3
+                                            add {_i} to slot 13 of gui with id "SearingEngine.%loop-value-1%"
+                                            exit loop
+                        if block below loop-value-1 is hopper:
+                            if 1 of slot 13 of gui with id "SearingEngine.%loop-value-1%" is empty bucket:
+                                if block below loop-value-1 can hold 1 of slot 13 of gui with id "SearingEngine.%loop-value-1%":
+                                    set {_i} to 1 of slot 13 of gui with id "SearingEngine.%loop-value-1%"
+                                    remove {_i} from slot 13 of gui with id "SearingEngine.%loop-value-1%"
+                                    add {_i} to inventory of block below loop-value-1

@@ -1,0 +1,8 @@
+command /srs <text>:
+	description: Reload the specified skript.
+	usage: /srs
+	executable by: players and console
+	permission: skript.admin
+	trigger:
+		send "&a&lThe script reloaded! Check that you correctly typed it though!"
+		make player execute command "/skript reload Scripts/%arg-1%"
